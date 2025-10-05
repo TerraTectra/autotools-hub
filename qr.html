@@ -3,42 +3,39 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Генератор QR – AutoTools Hub</title>
-  <meta name="description" content="Создавайте QR‑коды из текста или ссылок прямо в браузере.">
+  <title>Генератор QR — AutoTools Hub</title>
+  <meta name="description" content="Создавайте QR-коды из текста или ссылок прямо в браузере.">
+  <meta name="keywords" content="QR код, генератор QR, создать QR, qrcode">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
-  <!-- Используем стабильную версию qrcode, в которой присутствует build/qrcode.min.js -->
+  <!-- Используем стабильную версию библиотеки QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
   <header>
     <h1>AutoTools Hub</h1>
-    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+    <button id="theme-toggle" aria-label="Переключить тему">🌞</button>
   </header>
   <nav>
     <a href="index.html">Главная</a>
     <a href="compress.html">Сжатие</a>
     <a href="merge.html">PDF</a>
-    <a href="qr.html">QR</a>
+    <a href="qr.html" class="active">QR</a>
     <a href="hash.html">Хэш</a>
     <a href="password.html">Пароль</a>
-    <a href="color.html">Цвет</a>
+    <a href="color.html">Цвета</a>
     <a href="quote.html">Цитаты</a>
+    <a href="base64.html">Base64</a>
     <a href="donate.html">Донат</a>
     <a href="about.html">О сайте</a>
   </nav>
   <main>
     <h2>Генератор QR</h2>
     <div class="card">
-      <input type="text" id="qr-text" placeholder="Текст или URL">
+      <input type="text" id="qr-text" placeholder="Введите текст или URL" />
       <button id="qr-go">Создать</button>
       <canvas id="qr-canvas"></canvas>
     </div>
   </main>
-  <footer>
-    <small>&copy; 2025 AutoTools Hub</small>
-  </footer>
 </body>
 </html>
