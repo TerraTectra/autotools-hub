@@ -22,9 +22,11 @@ window.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelectorAll('nav a');
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
-    // Determine current page name (default to index.html for root)
-    const path = window.location.pathname.split('/').pop() || 'index.html';
-    if (href === path) {
+    // Determine current page name (default to index.html for root).
+    // Strip query parameters to ensure matching links like about.html?v=1
+    const fullPath = window.location.pathname.split('/').pop() || 'index.html';
+    const page = fullPath.split('?')[0];
+    if (href === page) {
       link.classList.add('active');
     }
   });
@@ -93,6 +95,79 @@ window.addEventListener('DOMContentLoaded', () => {
       QRCode.toCanvas(qrCanvas, text, { width: 256, margin: 1 }, (err) => {
         if (err) alert('Ошибка генерации QR');
       });
+    });
+  }
+
+  // Password generator functionality
+  const passBtn = document.getElementById('pass-go');
+  if (passBtn) {
+    const passLen = document.getElementById('pass-length');
+    const passUpper = document.getElementById('pass-upper');
+    const passNumber = document.getElementById('pass-number');
+    const passSymbol = document.getElementById('pass-symbol');
+    const passOut = document.getElementById('pass-out');
+    passBtn.addEventListener('click', () => {
+      const length = parseInt(passLen.value) || 8;
+      let chars = 'abcdefghijklmnopqrstuvwxyz';
+      if (passUpper && passUpper.checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (passNumber && passNumber.checked) chars += '0123456789';
+      if (passSymbol && passSymbol.checked) chars += '!@#$%^&*()_+-=[]{},.<>?/';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      passOut.value = result;
+    });
+
+    // Копирование пароля в буфер обмена
+    const passCopy = document.getElementById('pass-copy');
+    if (passCopy) {
+      passCopy.addEventListener('click', () => {
+        if (!passOut.value) { return; }
+        navigator.clipboard.writeText(passOut.value).then(() => {
+          const original = passCopy.textContent;
+          passCopy.textContent = 'Скопировано';
+          setTimeout(() => { passCopy.textContent = original; }, 2000);
+        });
+      });
+    }
+  }
+
+  // Color converter functionality
+  const colorPicker = document.getElementById('color-picker');
+  if (colorPicker) {
+    const colorHex = document.getElementById('color-hex');
+    const colorRgb = document.getElementById('color-rgb');
+    const updateColor = () => {
+      const hex = colorPicker.value;
+      colorHex.textContent = hex;
+      const bigint = parseInt(hex.substring(1), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      colorRgb.textContent = `rgb(${r}, ${g}, ${b})`;
+    };
+    updateColor();
+    colorPicker.addEventListener('input', updateColor);
+  }
+
+  // Random quote functionality
+  const quoteBtn = document.getElementById('quote-go');
+  if (quoteBtn) {
+    const quoteOut = document.getElementById('quote-out');
+    // Список вдохновляющих цитат. Можно расширить при необходимости.
+    const quotes = [
+      'Не бойтесь совершенства — вам его не достичь. (Сальвадор Дали)',
+      'Самое трудное — решить действовать. Остальное — только упорство. (Амелия Эрхарт)',
+      'Успех — это способность идти от поражения к поражению, не теряя энтузиазма. (Уинстон Черчилль)',
+      'Мы становимся тем, о чём думаем. (Наполеон Хилл)',
+      'Секрет продвижения вперёд заключается в том, чтобы начать. (Марка Твен)',
+      'Лучший способ предсказать будущее — создать его самому. (Питер Друкер)' ,
+      'Дорога возникает под шагами идущего. (Франц Кафка)'
+    ];
+    quoteBtn.addEventListener('click', () => {
+      const idx = Math.floor(Math.random() * quotes.length);
+      quoteOut.textContent = quotes[idx];
     });
   }
 

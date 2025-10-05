@@ -3,13 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Генератор QR – AutoTools Hub</title>
-  <meta name="description" content="Создавайте QR‑коды из текста или ссылок прямо в браузере.">
+  <title>Случайная цитата – AutoTools Hub</title>
+  <meta name="description" content="Получите вдохновляющую цитату для настроения и мотивации.">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
-  <!-- Используем стабильную версию qrcode, в которой присутствует build/qrcode.min.js -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -30,11 +26,10 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Генератор QR</h2>
+    <h2>Случайная цитата</h2>
     <div class="card">
-      <input type="text" id="qr-text" placeholder="Текст или URL">
-      <button id="qr-go">Создать</button>
-      <canvas id="qr-canvas"></canvas>
+      <button id="quote-go">Получить цитату</button>
+      <p id="quote-out"></p>
     </div>
   </main>
   <footer>

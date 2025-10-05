@@ -3,13 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Генератор QR – AutoTools Hub</title>
-  <meta name="description" content="Создавайте QR‑коды из текста или ссылок прямо в браузере.">
+  <title>Преобразователь цветов – AutoTools Hub</title>
+  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
-  <!-- Используем стабильную версию qrcode, в которой присутствует build/qrcode.min.js -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -30,11 +26,13 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Генератор QR</h2>
+    <h2>Преобразователь цветов</h2>
     <div class="card">
-      <input type="text" id="qr-text" placeholder="Текст или URL">
-      <button id="qr-go">Создать</button>
-      <canvas id="qr-canvas"></canvas>
+      <label>Выберите цвет:
+        <input type="color" id="color-picker" value="#ff0000">
+      </label>
+      <p>HEX: <span id="color-hex"></span></p>
+      <p>RGB: <span id="color-rgb"></span></p>
     </div>
   </main>
   <footer>
