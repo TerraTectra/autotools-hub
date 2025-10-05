@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Преобразователь цветов – AutoTools Hub</title>
-  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
+  <title>Генератор палитр – AutoTools Hub</title>
+  <meta name="description" content="Создавайте случайные цветовые палитры из 5 цветов и копируйте их HEX-коды одним кликом.">
+  <meta name="keywords" content="палитра, генератор, цвета, hex, rgb, дизайн">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -32,13 +33,11 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Преобразователь цветов</h2>
+    <h2>Генератор палитр</h2>
     <div class="card">
-      <label>Выберите цвет:
-        <input type="color" id="color-picker" value="#ff0000">
-      </label>
-      <p>HEX: <span id="color-hex"></span></p>
-      <p>RGB: <span id="color-rgb"></span></p>
+      <button id="palette-go">Создать палитру</button>
+      <div id="palette-container" class="palette-container" style="margin-top: 1rem;"></div>
+      <p>Нажмите на цвет, чтобы скопировать его HEX‑код.</p>
     </div>
   </main>
   <footer>

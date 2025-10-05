@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Конвертер единиц – AutoTools Hub</title>
+  <meta name="description" content="Переводите длину, массу и температуру между популярными единицами — метры, километры, мили; килограммы, фунты, граммы; градусы Цельсия, Фаренгейты и Кельвины.">
+  <meta name="keywords" content="конвертер, единицы, длина, вес, температура, калькулятор, онлайн">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="compress.html">Сжатие</a>
+    <a href="merge.html">PDF</a>
+    <a href="qr.html">QR</a>
+    <a href="hash.html">Хэш</a>
+    <a href="password.html">Пароль</a>
+    <a href="color.html">Цвет</a>
+    <a href="quote.html">Цитаты</a>
+    <a href="base64.html">Base64</a>
+    <a href="convert.html">Конвертер</a>
+    <a href="palette.html">Палитры</a>
+    <a href="datecalc.html">Даты</a>
+    <a href="lorem.html">Лорем</a>
+    <a href="json.html">JSON</a>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+  </nav>
+  <main>
+    <h2>Конвертер единиц</h2>
+    <div class="card">
+      <label for="conv-type">Тип величины:</label>
+      <select id="conv-type">
+        <option value="length">Длина</option>
+        <option value="weight">Масса</option>
+        <option value="temp">Температура</option>
+      </select>
+      <label for="conv-value">Значение:</label>
+      <input type="number" id="conv-value" placeholder="Введите число">
+      <label for="conv-from">Из:</label>
+      <select id="conv-from"></select>
+      <label for="conv-to">В:</label>
+      <select id="conv-to"></select>
+      <button id="conv-go">Конвертировать</button>
+      <p>Результат: <span id="conv-out"></span></p>
+    </div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+</body>
+</html>

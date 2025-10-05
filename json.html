@@ -3,9 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Преобразователь цветов – AutoTools Hub</title>
-  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
+  <title>Форматирование JSON – AutoTools Hub</title>
+  <meta name="description" content="Форматируйте и проверяйте JSON-данные прямо в вашем браузере.">
+  <meta name="keywords" content="JSON, форматирование, beautify, валидатор, онлайн инструмент">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -32,13 +36,13 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Преобразователь цветов</h2>
+    <h2>Форматирование JSON</h2>
     <div class="card">
-      <label>Выберите цвет:
-        <input type="color" id="color-picker" value="#ff0000">
-      </label>
-      <p>HEX: <span id="color-hex"></span></p>
-      <p>RGB: <span id="color-rgb"></span></p>
+      <label for="json-in">Вставьте JSON:</label>
+      <textarea id="json-in" rows="8" placeholder='{"ключ": "значение"}'></textarea>
+      <button id="json-go">Форматировать</button>
+      <label for="json-out">Результат:</label>
+      <textarea id="json-out" rows="8" readonly></textarea>
     </div>
   </main>
   <footer>

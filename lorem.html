@@ -3,9 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Преобразователь цветов – AutoTools Hub</title>
-  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
+  <title>Генератор Lorem Ipsum – AutoTools Hub</title>
+  <meta name="description" content="Генерируйте текст Lorem Ipsum для макетов и дизайна без сторонних сервисов.">
+  <meta name="keywords" content="lorem ipsum, генератор, текст рыба, макет, дизайн">
   <link rel="stylesheet" href="styles.css">
+  <!-- Подключаем библиотеки, которые могут использоваться на других страницах -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -32,13 +37,13 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Преобразователь цветов</h2>
+    <h2>Генератор Lorem Ipsum</h2>
     <div class="card">
-      <label>Выберите цвет:
-        <input type="color" id="color-picker" value="#ff0000">
+      <label>Количество абзацев:
+        <input type="number" id="lorem-count" min="1" max="10" value="1">
       </label>
-      <p>HEX: <span id="color-hex"></span></p>
-      <p>RGB: <span id="color-rgb"></span></p>
+      <button id="lorem-go">Сгенерировать</button>
+      <textarea id="lorem-out" rows="8" readonly></textarea>
     </div>
   </main>
   <footer>

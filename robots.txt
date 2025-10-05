@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://terratectra.github.io/autotools-hub/sitemap.xml

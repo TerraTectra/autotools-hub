@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Base64 конвертер — AutoTools Hub</title>
-  <meta name="description" content="Кодируйте и декодируйте текст в Base64 прямо в браузере.">
-  <meta name="keywords" content="Base64, кодирование, декодирование, конвертер">
+  <title>Base64 конвертер – AutoTools Hub</title>
+  <meta name="description" content="Кодируйте и декодируйте строки в Base64 прямо в браузере.">
+  <meta name="keywords" content="Base64, конвертер, кодировать, декодировать, онлайн">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
 <body>
   <header>
     <h1>AutoTools Hub</h1>
-    <button id="theme-toggle" aria-label="Переключить тему">🌞</button>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
   </header>
   <nav>
     <a href="index.html">Главная</a>
@@ -21,22 +21,32 @@
     <a href="qr.html">QR</a>
     <a href="hash.html">Хэш</a>
     <a href="password.html">Пароль</a>
-    <a href="color.html">Цвета</a>
+    <a href="color.html">Цвет</a>
     <a href="quote.html">Цитаты</a>
-    <a href="base64.html" class="active">Base64</a>
+    <a href="base64.html">Base64</a>
+    <a href="convert.html">Конвертер</a>
+    <a href="palette.html">Палитры</a>
+    <a href="datecalc.html">Даты</a>
+    <a href="lorem.html">Лорем</a>
+    <a href="json.html">JSON</a>
     <a href="donate.html">Донат</a>
     <a href="about.html">О сайте</a>
   </nav>
   <main>
     <h2>Base64 конвертер</h2>
     <div class="card">
-      <textarea id="b64-input" placeholder="Введите текст"></textarea>
+      <label for="b64-input">Текст:</label>
+      <textarea id="b64-input" rows="4" placeholder="Введите текст для кодирования или декодирования"></textarea>
       <div>
-        <button id="b64-encode">Кодировать</button>
+        <button id="b64-encode">Закодировать</button>
         <button id="b64-decode">Декодировать</button>
       </div>
-      <textarea id="b64-output" placeholder="Результат" readonly></textarea>
+      <label for="b64-out">Результат:</label>
+      <textarea id="b64-out" rows="4" readonly placeholder="Результат появится здесь"></textarea>
     </div>
   </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
 </body>
 </html>

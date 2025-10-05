@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Преобразователь цветов – AutoTools Hub</title>
-  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
+  <title>Калькулятор дат – AutoTools Hub</title>
+  <meta name="description" content="Рассчитайте разницу между двумя датами в днях прямо в браузере.">
+  <meta name="keywords" content="калькулятор дат, разница дат, дни, онлайн">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -32,13 +33,14 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Преобразователь цветов</h2>
+    <h2>Калькулятор дат</h2>
     <div class="card">
-      <label>Выберите цвет:
-        <input type="color" id="color-picker" value="#ff0000">
-      </label>
-      <p>HEX: <span id="color-hex"></span></p>
-      <p>RGB: <span id="color-rgb"></span></p>
+      <label for="date-from">Дата 1:</label>
+      <input type="date" id="date-from">
+      <label for="date-to">Дата 2:</label>
+      <input type="date" id="date-to">
+      <button id="date-go">Вычислить</button>
+      <p id="date-out"></p>
     </div>
   </main>
   <footer>

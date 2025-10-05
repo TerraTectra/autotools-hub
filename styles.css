@@ -143,3 +143,41 @@ footer {
 .hidden {
   display: none;
 }
+
+/* Dark mode button outline for better visibility */
+[data-theme="dark"] button {
+  /* более заметная обводка для кнопок в тёмной теме */
+  border: 1px solid #888;
+}
+
+/* Share links styling */
+.share {
+  margin-top: 1rem;
+}
+.share a {
+  margin-right: 0.5rem;
+  text-decoration: none;
+  color: var(--primary);
+}
+/* В тёмной теме делаем ссылки чуть ярче */
+[data-theme="dark"] .share a {
+  color: #88a;
+}
+
+/* Palette container and swatch styles */
+.palette-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.palette-swatch {
+  flex: 1;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
+}
