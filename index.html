@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoTools Hub – Бесплатные онлайн-инструменты</title>
+  <meta name="description" content="Сжатие изображений, объединение PDF, генерация QR и другие мини-инструменты без серверов и API. Донаты в криптокошелек.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header><h1>AutoTools Hub</h1></header>
+  <nav>
+    <button data-tab="tools" class="active">Инструменты</button>
+    <button data-tab="donate">Донаты</button>
+    <button data-tab="about">О сайте</button>
+  </nav>
+  <main>
+    <section id="tools" class="tab active">
+      <h2>Инструменты</h2>
+      <article id="compress">
+        <h3>Сжатие изображения</h3>
+        <input type="file" id="img-in" accept="image/*">
+        <label>Качество: <input type="range" id="img-q" min="0.1" max="1" step="0.05" value="0.8"></label>
+        <button id="img-go">Сжать</button>
+        <a id="img-dl" class="hidden" download="compressed.webp">Скачать</a>
+        <canvas id="img-cv" class="preview"></canvas>
+      </article>
+      <article id="pdf">
+        <h3>Объединить PDF</h3>
+        <input type="file" id="pdf-in" accept="application/pdf" multiple>
+        <button id="pdf-go">Объединить</button>
+        <a id="pdf-dl" class="hidden" download="merged.pdf">Скачать</a>
+      </article>
+      <article id="qr">
+        <h3>Генератор QR</h3>
+        <input type="text" id="qr-text" placeholder="Текст или URL">
+        <button id="qr-go">Создать</button>
+        <canvas id="qr-canvas"></canvas>
+      </article>
+      <article id="hash">
+        <h3>SHA-256 Хэш</h3>
+        <textarea id="hash-text" placeholder="Введите текст"></textarea>
+        <button id="hash-go">Посчитать</button>
+        <pre id="hash-out"></pre>
+      </article>
+    </section>
+    <section id="donate" class="tab">
+      <h2>Поддержать проект</h2>
+      <p>Подключите MetaMask/другой EVM кошелек и пожертвуйте любое количество нативного токена.</p>
+      <button id="wallet-connect">Подключить кошелек</button>
+      <div id="wallet-area" class="hidden">
+        <p>Адрес отправителя: <span id="from-addr"></span></p>
+        <label>Адрес получателя: <input id="recipient" placeholder="0x..." type="text"></label>
+        <label>Сумма (ETH): <input id="donate-amount" type="number" min="0" step="0.0001" value="0.001"></label>
+        <button id="send-donate">Отправить</button>
+        <p id="tx-status"></p>
+      </div>
+    </section>
+    <section id="about" class="tab">
+      <h2>О сайте</h2>
+      <p>AutoTools Hub — набор простых инструментов, работающих прямо в вашем браузере. Мы не используем серверы, ваши файлы не уходят в облако. Вы можете поддержать разработку, отправив крипто-донат на адрес автора.</p>
+    </section>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+</body>
+</html>
