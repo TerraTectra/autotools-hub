@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Объединение PDF – AutoTools Hub</title>
+  <meta name="description" content="Объединяйте несколько PDF-файлов в один прямо в браузере.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="compress.html">Сжатие</a>
+    <a href="merge.html">PDF</a>
+    <a href="qr.html">QR</a>
+    <a href="hash.html">Хэш</a>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+  </nav>
+  <main>
+    <h2>Объединение PDF</h2>
+    <div class="card">
+      <input type="file" id="pdf-in" accept="application/pdf" multiple>
+      <button id="pdf-go">Объединить</button>
+      <a id="pdf-dl" class="hidden" download="merged.pdf">Скачать</a>
+    </div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+</body>
+</html>

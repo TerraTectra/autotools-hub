@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Поддержать проект – AutoTools Hub</title>
+  <meta name="description" content="Поддержите разработку AutoTools Hub, отправив крипто-донат через MetaMask или другой EVM‑кошелек.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="compress.html">Сжатие</a>
+    <a href="merge.html">PDF</a>
+    <a href="qr.html">QR</a>
+    <a href="hash.html">Хэш</a>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+  </nav>
+  <main>
+    <h2>Поддержать проект</h2>
+    <p>Подключите MetaMask/другой EVM‑кошелек и пожертвуйте любое количество нативного токена.</p>
+    <button id="wallet-connect">Подключить кошелек</button>
+    <div id="wallet-area" class="hidden">
+      <p>Адрес отправителя: <span id="from-addr"></span></p>
+      <label>Адрес получателя: <input id="recipient" placeholder="0x..." type="text"></label>
+      <label>Сумма (ETH): <input id="donate-amount" type="number" min="0" step="0.0001" value="0.001"></label>
+      <button id="send-donate">Отправить</button>
+      <p id="tx-status"></p>
+    </div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+</body>
+</html>
