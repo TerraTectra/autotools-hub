@@ -393,4 +393,28 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+      // BMI calculator functionality
+      const bmiWeight = document.getElementById('bmi-weight');
+      if (bmiWeight) {
+        const bmiHeight = document.getElementById('bmi-height');
+        const bmiGo = document.getElementById('bmi-go');
+        const bmiOut = document.getElementById('bmi-out');
+        bmiGo.addEventListener('click', () => {
+          const weight = parseFloat(bmiWeight.value);
+          const height = parseFloat(bmiHeight.value);
+          if (!weight || !height) {
+            alert('Введите массу и рост');
+            return;
+          }
+          const hM = height / 100;
+          const bmi = weight / (hM * hM);
+          let category = '';
+          if (bmi < 18.5) category = 'Недостаточный вес';
+          else if (bmi < 25) category = 'Норма';
+          else if (bmi < 30) category = 'Избыточный вес';
+          else category = 'Ожирение';
+          bmiOut.textContent = `BMI: ${bmi.toFixed(2)} (${category})`;
+        });
+      }
 });

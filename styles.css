@@ -146,9 +146,10 @@ footer {
 
 /* Dark mode button outline for better visibility */
 [data-theme="dark"] button {
-  /* более заметная обводка для кнопок в тёмной теме */
-  border: 1px solid #888;
-}
+       /* более заметная обводка для кнопок в тёмной теме */
+       /* увеличим толщину и используем более контрастный цвет */
+       border: 2px solid #888;
+     }
 
 /* Share links styling */
 .share {

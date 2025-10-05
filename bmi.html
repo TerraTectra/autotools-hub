@@ -3,13 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Генератор QR – AutoTools Hub</title>
-  <meta name="description" content="Создавайте QR‑коды из текста или ссылок прямо в браузере.">
+  <title>Калькулятор BMI – AutoTools Hub</title>
+  <meta name="description" content="Рассчитайте индекс массы тела (BMI) по росту и весу прямо в браузере.">
+  <meta name="keywords" content="BMI, индекс массы тела, здоровье, калькулятор, вес, рост">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
-  <!-- Используем стабильную версию qrcode, в которой присутствует build/qrcode.min.js -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -37,11 +34,14 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Генератор QR</h2>
+    <h2>Калькулятор BMI</h2>
     <div class="card">
-      <input type="text" id="qr-text" placeholder="Текст или URL">
-      <button id="qr-go">Создать</button>
-      <canvas id="qr-canvas"></canvas>
+      <label for="bmi-weight">Вес (кг):</label>
+      <input type="number" id="bmi-weight" placeholder="Введите вес в кг">
+      <label for="bmi-height">Рост (см):</label>
+      <input type="number" id="bmi-height" placeholder="Введите рост в см">
+      <button id="bmi-go">Рассчитать</button>
+      <p id="bmi-out"></p>
     </div>
   </main>
   <footer>
