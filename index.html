@@ -235,6 +235,22 @@
   </footer>
 
   <!-- Metrics toggle button (appears in bottom right) -->
-  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики">📊</div>
+      <!-- Metrics toggle button (appears in bottom right)
+           The inner emoji (📊) provides a visible icon for the button. -->
+      <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики">📊</div>
+
+      <!-- Password overlay for unlocking metrics
+           This overlay appears when the metrics toggle is clicked and the user
+           hasn’t unlocked metrics yet. It prompts for a password and
+           displays an error message when needed. -->
+      <div id="metrics-overlay" class="metrics-overlay hidden">
+        <div class="metrics-modal">
+          <h3>Доступ к метрикам</h3>
+          <p>Введите пароль, чтобы открыть метрики сайта:</p>
+          <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
+          <button id="metrics-submit">ОК</button>
+          <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
+        </div>
+      </div>
 </body>
 </html>

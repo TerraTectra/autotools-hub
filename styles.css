@@ -46,28 +46,99 @@ body {
 }
 
 /* Metrics toggle button fixed in bottom right */
+/*
+ * Metrics toggle button
+ *
+ * The small square in the bottom‑right corner that toggles access to the
+ * metrics overlay.  Increase the size and border radius compared to the
+ * previous version so that it’s more noticeable. Use a high z‑index to
+ * ensure the button sits above other page elements.  The button uses
+ * the accent colour defined in CSS variables for both light and dark
+ * themes and displays an emoji inside the element via HTML.
+ */
 .metrics-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  background-color: var(--accent);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  font-size: 1.2rem;
-  transition: transform 0.2s ease;
-}
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      background-color: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1500;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      font-size: 1.6rem;
+      transition: transform 0.2s ease;
+    }
 
 .metrics-toggle:hover {
   transform: scale(1.05);
 }
+
+    /*
+     * Metrics overlay modal
+     *
+     * The overlay covers the entire viewport with a semi‑transparent
+     * background when the user needs to enter the metrics password. The modal
+     * box sits in the centre of the screen on top of the overlay.
+     */
+    .metrics-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .metrics-modal {
+      background: var(--secondary);
+      color: var(--text);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .metrics-modal input[type="password"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    .metrics-modal button {
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .metrics-modal button:hover {
+      /* Slightly darken the button on hover for feedback */
+      filter: brightness(0.9);
+    }
+
+    .error-message {
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+    }
 
 /* Metrics page styles */
 .metrics-section {

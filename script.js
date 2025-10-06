@@ -683,27 +683,61 @@ window.addEventListener('DOMContentLoaded', () => {
   // Metrics toggle and unlocking logic
   const metricsToggleEl = document.getElementById('metrics-toggle');
   const metricsLinkEl = document.getElementById('metrics-link');
+  // Elements for the metrics password overlay
+  const overlay = document.getElementById('metrics-overlay');
+  const overlayPwd = document.getElementById('metrics-password');
+  const overlaySubmit = document.getElementById('metrics-submit');
+  const overlayError = document.getElementById('metrics-error');
   if (metricsToggleEl) {
-    // Show metrics link if already unlocked
+    // Reveal the metrics link immediately if metrics were previously unlocked
     if (localStorage.getItem('metricsUnlocked') === 'true' && metricsLinkEl) {
       metricsLinkEl.classList.remove('hidden');
     }
     metricsToggleEl.addEventListener('click', () => {
       const unlocked = localStorage.getItem('metricsUnlocked') === 'true';
       if (!unlocked) {
-        const pwd = prompt('Введите пароль для доступа к метрикам:');
-        if (pwd === '272829Dr') {
-          localStorage.setItem('metricsUnlocked', 'true');
-          alert('Доступ к метрикам открыт.');
-          if (metricsLinkEl) metricsLinkEl.classList.remove('hidden');
-        } else if (pwd !== null) {
-          alert('Неверный пароль');
+        // Show the password overlay if it exists
+        if (overlay) {
+          overlay.classList.remove('hidden');
+          if (overlayPwd) overlayPwd.value = '';
+          if (overlayError) overlayError.classList.add('hidden');
+        } else {
+          // Fallback: use native prompt if overlay missing
+          const pwd = prompt('Введите пароль для доступа к метрикам:');
+          if (pwd === '272829Dr') {
+            localStorage.setItem('metricsUnlocked', 'true');
+            if (metricsLinkEl) metricsLinkEl.classList.remove('hidden');
+          } else if (pwd !== null) {
+            alert('Неверный пароль');
+          }
         }
       } else {
-        // Toggle link visibility if already unlocked
+        // If already unlocked, just toggle metrics link visibility
         if (metricsLinkEl) metricsLinkEl.classList.toggle('hidden');
       }
     });
+    // Password overlay submission handler
+    if (overlaySubmit) {
+      overlaySubmit.addEventListener('click', () => {
+        if (overlayPwd && overlayPwd.value === '272829Dr') {
+          // Correct password: unlock metrics and hide overlay
+          localStorage.setItem('metricsUnlocked', 'true');
+          if (overlay) overlay.classList.add('hidden');
+          if (metricsLinkEl) metricsLinkEl.classList.remove('hidden');
+        } else {
+          // Incorrect password: show error
+          if (overlayError) overlayError.classList.remove('hidden');
+        }
+      });
+    }
+    // Close the overlay when clicking outside the modal
+    if (overlay) {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.add('hidden');
+        }
+      });
+    }
   }
 
   // Display metrics on metrics page
