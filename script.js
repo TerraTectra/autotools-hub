@@ -468,4 +468,21 @@ window.addEventListener('DOMContentLoaded', () => {
           });
         }
       }
+
+      // Search functionality on the index page
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        const cards = Array.from(document.querySelectorAll('.card'));
+        searchInput.addEventListener('input', () => {
+          const query = searchInput.value.toLowerCase();
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(query)) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        });
+      }
 });
