@@ -45,6 +45,55 @@ body {
   line-height: 1.6;
 }
 
+/* Metrics toggle button fixed in bottom right */
+.metrics-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.metrics-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* Metrics page styles */
+.metrics-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.metrics-section h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.metrics-table th,
+.metrics-table td {
+  border: 1px solid var(--border-color, #ccc);
+  padding: 0.5rem;
+  text-align: left;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -159,6 +208,7 @@ main {
 .search-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 1rem;
 }
 .search-container input {
@@ -169,6 +219,89 @@ main {
   border-radius: 4px;
   background: var(--card-bg);
   color: var(--text);
+}
+
+/* Voice search microphone button */
+.voice-btn {
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.voice-btn:hover {
+  background: var(--accent);
+}
+
+/* Poll section styling */
+.poll-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: var(--secondary);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+.poll-container h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+.poll-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.poll-option input {
+  margin-right: 0.5rem;
+}
+.poll-result {
+  margin-top: 1rem;
+}
+.poll-bar {
+  height: 10px;
+  background: var(--accent);
+  margin-top: 0.25rem;
+  border-radius: 5px;
+}
+
+/* Subscribe section styling */
+.subscribe-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: var(--secondary);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  text-align: center;
+}
+.subscribe-container h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+.subscribe-container input[type="email"] {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  width: 80%;
+  max-width: 300px;
+}
+.subscribe-container button {
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.subscribe-container button:hover {
+  background: var(--accent);
 }
 
 /* Card component with soft shadow and gentle lift on hover */
@@ -183,8 +316,8 @@ main {
 }
 
 .card:hover {
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.16);
+  transform: translateY(-4px) scale(1.02);
 }
 
 input[type="file"],
@@ -205,12 +338,13 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 button:hover {
   background: var(--accent);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  transform: translateY(-2px) scale(1.04);
 }
 
 a button {
@@ -285,6 +419,18 @@ footer {
   cursor: pointer;
 }
 
+/* Fade-in animation for elements such as cards */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Заголовки категорий на главной странице */
 .category-heading {
   margin-top: 2rem;
@@ -301,31 +447,42 @@ footer {
 }
 
 /* Hero section on the home page */
+/*
+ * Hero section styling
+ *
+ * The hero uses a parallax background with an overlay to ensure text
+ * remains legible. The background image is defined in the CSS so that
+ * it can be cached and loaded efficiently. Parallax scrolling
+ * provides a sense of depth and movement, which research shows helps
+ * capture user attention and keep them engaged【356078534154251†L544-L579】.
+ */
 .hero {
+  position: relative;
   text-align: center;
-  padding: 2rem 1rem;
-  background: var(--secondary);
+  padding: 4rem 1rem;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   border-radius: 8px;
   margin-bottom: 2rem;
 }
 
 .hero h2 {
-  font-size: 2.25rem;
-  margin-bottom: 0.5rem;
-  color: var(--primary);
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
 }
 
 .hero p {
-  font-size: 1.125rem;
-  color: var(--text);
+  font-size: 1.25rem;
   max-width: 700px;
   margin: 0 auto;
 }
 
-/* Adjust hero colours in dark mode for better contrast */
-[data-theme="dark"] .hero h2 {
-  color: var(--accent);
-}
-[data-theme="dark"] .hero p {
-  color: var(--text);
+/* Dark mode adjustments: use a darker overlay to maintain contrast */
+[data-theme="dark"] .hero {
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('images/hero.png');
 }

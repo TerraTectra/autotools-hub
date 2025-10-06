@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoTools Hub – Метрики</title>
+  <meta name="description" content="Просмотр статистики использования инструментов AutoTools Hub.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <details class="nav-dropdown">
+      <summary>Инструменты</summary>
+      <ul>
+        <li><a href="compress.html">Сжатие</a></li>
+        <li><a href="merge.html">PDF</a></li>
+        <li><a href="qr.html">QR</a></li>
+        <li><a href="hash.html">Хэш</a></li>
+        <li><a href="password.html">Пароль</a></li>
+        <li><a href="color.html">Цвет</a></li>
+        <li><a href="palette.html">Палитры</a></li>
+        <li><a href="base64.html">Base64</a></li>
+        <li><a href="convert.html">Конвертер</a></li>
+        <li><a href="lorem.html">Лорем</a></li>
+        <li><a href="json.html">JSON</a></li>
+        <li><a href="datecalc.html">Даты</a></li>
+        <li><a href="bmi.html">BMI</a></li>
+      </ul>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Развлечения</summary>
+      <ul>
+        <li><a href="jokes.html">Шутки</a></li>
+        <li><a href="guess.html">Игра</a></li>
+        <li><a href="quiz.html">Викторина</a></li>
+      </ul>
+    </details>
+    <a href="blog.html">Блог</a>
+    <!-- Show metrics link as active here -->
+    <a href="metrics.html" class="active">Метрики</a>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+    <a href="contact.html">Контакты</a>
+  </nav>
+  <main>
+    <div class="hero">
+      <h2>Статистика использования</h2>
+      <p>Ниже приведены показатели посещений страниц, использования инструментов и другие параметры.</p>
+    </div>
+    <div class="metrics-section">
+      <h3>Посещения страниц</h3>
+      <table class="metrics-table" id="page-metrics-table">
+        <tr><th>Страница</th><th>Просмотры</th></tr>
+      </table>
+      <h3>Использование инструментов</h3>
+      <table class="metrics-table" id="tool-metrics-table">
+        <tr><th>Инструмент</th><th>Использования</th></tr>
+      </table>
+      <h3>Другие показатели</h3>
+      <ul id="other-metrics"></ul>
+    </div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+  <!-- Metrics toggle button is not shown on metrics page -->
+</body>
+</html>

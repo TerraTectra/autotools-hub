@@ -1,4 +1,10 @@
-// Script to handle theme toggling, navigation highlighting and tool functionality
+// Script to handle theme toggling, navigation highlighting, metrics and tool functionality
+
+// Increment a metric counter stored in localStorage
+function incrementMetric(key) {
+  const current = parseInt(localStorage.getItem(key) || '0', 10);
+  localStorage.setItem(key, current + 1);
+}
 
 window.addEventListener('DOMContentLoaded', () => {
   // Theme toggle setup
@@ -15,6 +21,8 @@ window.addEventListener('DOMContentLoaded', () => {
       const next = current === 'dark' ? 'light' : 'dark';
       applyTheme(next);
       localStorage.setItem('theme', next);
+      // Count theme toggles
+      incrementMetric('themeToggles');
     });
   }
 
@@ -31,6 +39,21 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Increment page view metric based on current page
+  {
+    const pageName = page.replace('.html', '') || 'index';
+    incrementMetric(pageName + 'Views');
+  }
+
+  // Session duration tracking
+  const sessionStart = Date.now();
+  window.addEventListener('beforeunload', () => {
+    const duration = Math.round((Date.now() - sessionStart) / 1000);
+    const durations = JSON.parse(localStorage.getItem('sessionDurations') || '[]');
+    durations.push(duration);
+    localStorage.setItem('sessionDurations', JSON.stringify(durations));
+  });
+
   // Image compression functionality
   const imgInput = document.getElementById('img-in');
   if (imgInput) {
@@ -38,7 +61,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const imgGo = document.getElementById('img-go');
     const imgCanvas = document.getElementById('img-cv');
     const imgDownload = document.getElementById('img-dl');
-    imgGo.addEventListener('click', () => {
+        imgGo.addEventListener('click', () => {
+          incrementMetric('imgCompressUses');
       const file = imgInput.files[0];
       if (!file) { alert('Выберите изображение'); return; }
       const reader = new FileReader();
@@ -67,7 +91,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (pdfInput) {
     const pdfGo = document.getElementById('pdf-go');
     const pdfDownload = document.getElementById('pdf-dl');
-    pdfGo.addEventListener('click', async () => {
+        pdfGo.addEventListener('click', async () => {
+          incrementMetric('pdfMergeUses');
       const files = pdfInput.files;
       if (!files.length) { alert('Выберите PDF'); return; }
       const mergedPdf = await PDFLib.PDFDocument.create();
@@ -89,7 +114,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (qrText) {
     const qrGo = document.getElementById('qr-go');
     const qrCanvas = document.getElementById('qr-canvas');
-    qrGo.addEventListener('click', () => {
+        qrGo.addEventListener('click', () => {
+          incrementMetric('qrGenerateUses');
       const text = qrText.value.trim();
       if (!text) { alert('Введите текст'); return; }
       QRCode.toCanvas(qrCanvas, text, { width: 256, margin: 1 }, (err) => {
@@ -106,7 +132,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const passNumber = document.getElementById('pass-number');
     const passSymbol = document.getElementById('pass-symbol');
     const passOut = document.getElementById('pass-out');
-    passBtn.addEventListener('click', () => {
+        passBtn.addEventListener('click', () => {
+          incrementMetric('passGenerateUses');
       const length = parseInt(passLen.value) || 8;
       let chars = 'abcdefghijklmnopqrstuvwxyz';
       if (passUpper && passUpper.checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -148,7 +175,10 @@ window.addEventListener('DOMContentLoaded', () => {
       colorRgb.textContent = `rgb(${r}, ${g}, ${b})`;
     };
     updateColor();
-    colorPicker.addEventListener('input', updateColor);
+        colorPicker.addEventListener('input', () => {
+          incrementMetric('colorConvertUses');
+          updateColor();
+        });
   }
 
   // Random quote functionality
@@ -166,6 +196,7 @@ window.addEventListener('DOMContentLoaded', () => {
       'Дорога возникает под шагами идущего. (Франц Кафка)'
     ];
     quoteBtn.addEventListener('click', () => {
+      incrementMetric('quoteUses');
       const idx = Math.floor(Math.random() * quotes.length);
       quoteOut.textContent = quotes[idx];
     });
@@ -474,6 +505,8 @@ window.addEventListener('DOMContentLoaded', () => {
       if (searchInput) {
         const cards = Array.from(document.querySelectorAll('.card'));
         searchInput.addEventListener('input', () => {
+          // Increment search usage metric
+          incrementMetric('searchUses');
           const query = searchInput.value.toLowerCase();
           cards.forEach(card => {
             const text = card.textContent.toLowerCase();
@@ -485,4 +518,254 @@ window.addEventListener('DOMContentLoaded', () => {
           });
         });
       }
+
+  // Voice search functionality using Web Speech API
+  const voiceBtn = document.getElementById('voice-btn');
+  if (voiceBtn && searchInput) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ru-RU';
+      // Start recognition on button click
+      voiceBtn.addEventListener('click', () => {
+        // Count voice search usage
+        incrementMetric('voiceSearchUses');
+        try {
+          recognition.start();
+        } catch (e) {
+          console.error(e);
+        }
+      });
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        searchInput.value = transcript;
+        searchInput.dispatchEvent(new Event('input'));
+      };
+      recognition.onerror = (event) => {
+        console.warn('Voice recognition error:', event.error);
+      };
+    } else {
+      voiceBtn.disabled = true;
+      voiceBtn.title = 'Голосовой поиск не поддерживается в этом браузере';
+    }
+  }
+
+  // Poll functionality on the index page
+  const pollVoteBtn = document.getElementById('poll-vote');
+  if (pollVoteBtn) {
+    const pollResultsDiv = document.getElementById('poll-results');
+    const pollOptions = document.querySelectorAll('input[name="poll"]');
+    const loadVotes = () => {
+      let votes;
+      try {
+        votes = JSON.parse(localStorage.getItem('poll-votes'));
+      } catch {
+        votes = null;
+      }
+      if (!votes) votes = {};
+      if (typeof votes.news !== 'number') votes.news = 0;
+      if (typeof votes.weather !== 'number') votes.weather = 0;
+      if (typeof votes.currency !== 'number') votes.currency = 0;
+      return votes;
+    };
+    const renderVotes = () => {
+      const votes = loadVotes();
+      const total = votes.news + votes.weather + votes.currency || 1;
+      pollResultsDiv.innerHTML = '';
+      const items = [
+        { key: 'news', label: 'Новости' },
+        { key: 'weather', label: 'Погода' },
+        { key: 'currency', label: 'Калькулятор валют' }
+      ];
+      items.forEach(item => {
+        const container = document.createElement('div');
+        container.style.marginBottom = '0.5rem';
+        const label = document.createElement('div');
+        label.textContent = `${item.label}: ${votes[item.key]}`;
+        const bar = document.createElement('div');
+        bar.className = 'poll-bar';
+        bar.style.width = (votes[item.key] / total * 100) + '%';
+        container.appendChild(label);
+        container.appendChild(bar);
+        pollResultsDiv.appendChild(container);
+      });
+      pollResultsDiv.classList.remove('hidden');
+    };
+    // initial render
+    renderVotes();
+    pollVoteBtn.addEventListener('click', () => {
+      let selected = null;
+      pollOptions.forEach(opt => {
+        if (opt.checked) selected = opt.value;
+      });
+      if (!selected) {
+        alert('Выберите вариант');
+        return;
+      }
+      const votes = loadVotes();
+      votes[selected] = (votes[selected] || 0) + 1;
+      localStorage.setItem('poll-votes', JSON.stringify(votes));
+      renderVotes();
+    });
+  }
+
+  // Subscribe functionality: open email client with mailto
+  const subscribeBtn = document.getElementById('subscribe-btn');
+  if (subscribeBtn) {
+    const emailInput = document.getElementById('subscribe-email');
+    subscribeBtn.addEventListener('click', () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        alert('Введите email');
+        return;
+      }
+      const subject = encodeURIComponent('Подписка на обновления AutoTools Hub');
+      const body = encodeURIComponent('Здравствуйте! Пожалуйста, добавьте меня в список рассылки. Мой email: ' + email);
+      // Используем mailto для открытия почтового клиента; замените адрес на актуальный
+      window.location.href = 'mailto:autotools@example.com?subject=' + subject + '&body=' + body;
+    });
+  }
+
+  // Apply fade-in animation to cards when they come into view
+  const cardElements = document.querySelectorAll('.card');
+  cardElements.forEach(card => {
+    card.classList.add('fade-in');
+  });
+  const fadeObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  cardElements.forEach(card => fadeObserver.observe(card));
+
+  // Parallax effect for hero background
+  const heroSection = document.querySelector('.hero');
+  if (heroSection) {
+    window.addEventListener('scroll', () => {
+      // Adjust the vertical background position based on scroll; slower movement for parallax
+      const offset = window.scrollY * 0.3;
+      heroSection.style.backgroundPosition = `center ${-offset}px`;
+    });
+  }
+
+  // Quiz functionality
+  const quizForm = document.getElementById('quiz-form');
+  if (quizForm) {
+    const quizSubmit = document.getElementById('quiz-submit');
+    const quizResult = document.getElementById('quiz-result');
+    quizSubmit.addEventListener('click', () => {
+      // Collect selected values
+      const q1 = quizForm.elements['q1'].value;
+      const q2 = quizForm.elements['q2'].value;
+      const q3 = quizForm.elements['q3'].value;
+      let resultMessage = '';
+      // Simple logic: suggest a category or tool based on answers
+      if (q1 === 'compress' || q3 === 'data') {
+        resultMessage = 'Вы любите оптимизировать файлы! Попробуйте наш инструмент сжатия изображений.';
+      } else if (q1 === 'qr' || q3 === 'code') {
+        resultMessage = 'Вы тяготеете к кодированию. Генератор QR-кодов и хэшей вам точно понравится!';
+      } else if (q1 === 'datecalc' || q3 === 'health') {
+        resultMessage = 'Вас привлекают расчёты и здоровье. Оцените калькуляторы дат и BMI.';
+      } else {
+        resultMessage = 'Спасибо за участие! Исследуйте все наши инструменты и найдите свой любимый.';
+      }
+      if (q2 === 'dark') {
+        resultMessage += ' Кажется, вы поклонник тёмной темы — переключите её в правом верхнем углу!';
+      }
+      quizResult.textContent = resultMessage;
+      quizResult.classList.remove('hidden');
+    });
+  }
+
+  // Metrics toggle and unlocking logic
+  const metricsToggleEl = document.getElementById('metrics-toggle');
+  const metricsLinkEl = document.getElementById('metrics-link');
+  if (metricsToggleEl) {
+    // Show metrics link if already unlocked
+    if (localStorage.getItem('metricsUnlocked') === 'true' && metricsLinkEl) {
+      metricsLinkEl.classList.remove('hidden');
+    }
+    metricsToggleEl.addEventListener('click', () => {
+      const unlocked = localStorage.getItem('metricsUnlocked') === 'true';
+      if (!unlocked) {
+        const pwd = prompt('Введите пароль для доступа к метрикам:');
+        if (pwd === '272829Dr') {
+          localStorage.setItem('metricsUnlocked', 'true');
+          alert('Доступ к метрикам открыт.');
+          if (metricsLinkEl) metricsLinkEl.classList.remove('hidden');
+        } else if (pwd !== null) {
+          alert('Неверный пароль');
+        }
+      } else {
+        // Toggle link visibility if already unlocked
+        if (metricsLinkEl) metricsLinkEl.classList.toggle('hidden');
+      }
+    });
+  }
+
+  // Display metrics on metrics page
+  if (page === 'metrics.html') {
+    const pageTable = document.getElementById('page-metrics-table');
+    const toolTable = document.getElementById('tool-metrics-table');
+    const otherList = document.getElementById('other-metrics');
+    if (pageTable && toolTable && otherList) {
+      const keys = Object.keys(localStorage);
+      // Page views
+      keys.filter(k => k.endsWith('Views')).forEach(k => {
+        const tr = document.createElement('tr');
+        const pageName = k.replace('Views', '');
+        const tdName = document.createElement('td');
+        tdName.textContent = pageName;
+        const tdValue = document.createElement('td');
+        tdValue.textContent = localStorage.getItem(k);
+        tr.appendChild(tdName);
+        tr.appendChild(tdValue);
+        pageTable.appendChild(tr);
+      });
+      // Tool uses
+      keys.filter(k => k.endsWith('Uses')).forEach(k => {
+        const tr = document.createElement('tr');
+        const toolName = k.replace('Uses', '');
+        const tdName = document.createElement('td');
+        tdName.textContent = toolName;
+        const tdValue = document.createElement('td');
+        tdValue.textContent = localStorage.getItem(k);
+        tr.appendChild(tdName);
+        tr.appendChild(tdValue);
+        toolTable.appendChild(tr);
+      });
+      // Other metrics: theme toggles, search uses, voice search uses, poll results, average session duration
+      const otherMetrics = [];
+      if (localStorage.getItem('themeToggles')) otherMetrics.push(['Переключения темы', localStorage.getItem('themeToggles')]);
+      if (localStorage.getItem('searchUses')) otherMetrics.push(['Поиски', localStorage.getItem('searchUses')]);
+      if (localStorage.getItem('voiceSearchUses')) otherMetrics.push(['Голосовой поиск', localStorage.getItem('voiceSearchUses')]);
+      const newsVotes = parseInt(localStorage.getItem('poll-news') || '0', 10);
+      const weatherVotes = parseInt(localStorage.getItem('poll-weather') || '0', 10);
+      const currencyVotes = parseInt(localStorage.getItem('poll-currency') || '0', 10);
+      const totalVotes = newsVotes + weatherVotes + currencyVotes;
+      if (totalVotes > 0) {
+        otherMetrics.push(['Голоса - Новости/Погода/Валюты', `${newsVotes}/${weatherVotes}/${currencyVotes}`]);
+      }
+      const durations = JSON.parse(localStorage.getItem('sessionDurations') || '[]');
+      if (durations.length > 0) {
+        const sum = durations.reduce((a, b) => a + b, 0);
+        const avg = Math.round(sum / durations.length);
+        otherMetrics.push(['Средняя продолжительность сессии (с)', avg.toString()]);
+      }
+      otherMetrics.forEach(([name, value]) => {
+        const li = document.createElement('li');
+        li.textContent = `${name}: ${value}`;
+        otherList.appendChild(li);
+      });
+    }
+  }
 });
+// Register service worker for offline caching and PWA support
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/autotools-hub/sw.js').catch(err => {
+    console.error('Service Worker registration failed:', err);
+  });
+}

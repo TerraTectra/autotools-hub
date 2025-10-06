@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Викторина – AutoTools Hub</title>
+  <meta name="description" content="Пройдите нашу викторину, чтобы узнать, какой инструмент AutoTools Hub вам подходит больше всего.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <details class="nav-dropdown">
+      <summary>Инструменты</summary>
+      <ul>
+        <li><a href="compress.html">Сжатие</a></li>
+        <li><a href="merge.html">PDF</a></li>
+        <li><a href="qr.html">QR</a></li>
+        <li><a href="hash.html">Хэш</a></li>
+        <li><a href="password.html">Пароль</a></li>
+        <li><a href="color.html">Цвет</a></li>
+        <li><a href="palette.html">Палитры</a></li>
+        <li><a href="base64.html">Base64</a></li>
+        <li><a href="convert.html">Конвертер</a></li>
+        <li><a href="lorem.html">Лорем</a></li>
+        <li><a href="json.html">JSON</a></li>
+        <li><a href="datecalc.html">Даты</a></li>
+        <li><a href="bmi.html">BMI</a></li>
+      </ul>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Развлечения</summary>
+      <ul>
+        <li><a href="jokes.html">Шутки</a></li>
+        <li><a href="guess.html">Игра</a></li>
+        <li><a href="quiz.html" class="active">Викторина</a></li>
+      </ul>
+    </details>
+    <a href="blog.html">Блог</a>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+    <a href="contact.html">Контакты</a>
+  </nav>
+  <main>
+    <h2>Викторина</h2>
+    <p>Ответьте на несколько вопросов, чтобы узнать, какие инструменты вам подходят лучше всего.</p>
+    <form id="quiz-form">
+      <div class="card">
+        <p><strong>1. Какой инструмент вам нравится больше всего?</strong></p>
+        <label><input type="radio" name="q1" value="compress" required> Сжатие изображений</label><br>
+        <label><input type="radio" name="q1" value="qr"> Генератор QR</label><br>
+        <label><input type="radio" name="q1" value="datecalc"> Калькулятор дат</label>
+      </div>
+      <div class="card">
+        <p><strong>2. Какой режим оформления вы предпочитаете?</strong></p>
+        <label><input type="radio" name="q2" value="light" required> Светлый</label><br>
+        <label><input type="radio" name="q2" value="dark"> Тёмный</label>
+      </div>
+      <div class="card">
+        <p><strong>3. Какие категории инструментов вас больше всего интересуют?</strong></p>
+        <label><input type="radio" name="q3" value="data" required> Файлы и данные</label><br>
+        <label><input type="radio" name="q3" value="code"> Коды и шифрование</label><br>
+        <label><input type="radio" name="q3" value="health"> Время и здоровье</label>
+      </div>
+      <button type="button" id="quiz-submit">Отправить</button>
+    </form>
+    <div id="quiz-result" class="hidden" style="margin-top:1rem;font-weight:bold;"></div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoTools Hub – Контакты</title>
+  <meta name="description" content="Свяжитесь с командой AutoTools Hub. Мы рады получить ваши отзывы и предложения.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <details class="nav-dropdown">
+      <summary>Инструменты</summary>
+      <ul>
+        <li><a href="compress.html">Сжатие</a></li>
+        <li><a href="merge.html">PDF</a></li>
+        <li><a href="qr.html">QR</a></li>
+        <li><a href="hash.html">Хэш</a></li>
+        <li><a href="password.html">Пароль</a></li>
+        <li><a href="color.html">Цвет</a></li>
+        <li><a href="palette.html">Палитры</a></li>
+        <li><a href="base64.html">Base64</a></li>
+        <li><a href="convert.html">Конвертер</a></li>
+        <li><a href="lorem.html">Лорем</a></li>
+        <li><a href="json.html">JSON</a></li>
+        <li><a href="datecalc.html">Даты</a></li>
+        <li><a href="bmi.html">BMI</a></li>
+      </ul>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Развлечения</summary>
+      <ul>
+        <li><a href="jokes.html">Шутки</a></li>
+        <li><a href="guess.html">Игра</a></li>
+        <li><a href="quiz.html">Викторина</a></li>
+      </ul>
+    </details>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+    <a href="contact.html" class="active">Контакты</a>
+  </nav>
+  <main>
+    <div class="hero">
+      <h2>Контакты</h2>
+      <p>У вас есть вопросы, предложения или вы хотите сотрудничать? Напишите нам!</p>
+    </div>
+    <div class="card fade-in">
+      <h3>Связаться с нами</h3>
+      <form action="mailto:example@example.com" method="post" enctype="text/plain">
+        <label for="contact-name">Имя</label>
+        <input type="text" id="contact-name" name="name" required>
+        <label for="contact-email">Email</label>
+        <input type="email" id="contact-email" name="email" required>
+        <label for="contact-message">Сообщение</label>
+        <textarea id="contact-message" name="message" rows="5" required></textarea>
+        <button type="submit">Отправить</button>
+      </form>
+      <p>Или напишите нам напрямую: <a href="mailto:example@example.com">example@example.com</a></p>
+    </div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+</body>
+</html>
