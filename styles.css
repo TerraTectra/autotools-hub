@@ -182,3 +182,11 @@ footer {
   border-radius: 3px;
   cursor: pointer;
 }
+
+/* Заголовки категорий на главной странице */
+.category-heading {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--primary);
+}

@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Преобразователь цветов – AutoTools Hub</title>
-  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
+  <title>Угадай число – AutoTools Hub</title>
+  <meta name="description" content="Играйте в угадай число: попробуйте угадать число, загаданное компьютером.">
+  <meta name="keywords" content="игра, угадай число, развлечения, числа">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -35,13 +36,13 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Преобразователь цветов</h2>
+    <h2>Игра: Угадай число</h2>
     <div class="card">
-      <label>Выберите цвет:
-        <input type="color" id="color-picker" value="#ff0000">
-      </label>
-      <p>HEX: <span id="color-hex"></span></p>
-      <p>RGB: <span id="color-rgb"></span></p>
+      <p>Компьютер загадал число от 1 до 100. Попробуйте угадать!</p>
+      <input type="number" id="guess-input" placeholder="Введите число от 1 до 100">
+      <button id="guess-go">Угадать</button>
+      <p id="guess-result"></p>
+      <button id="guess-reset">Новая игра</button>
     </div>
   </main>
   <footer>

@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Преобразователь цветов – AutoTools Hub</title>
-  <meta name="description" content="Конвертируйте HEX-цвета в RGB, выбирайте цвет и узнавайте его значения.">
+  <title>Случайные шутки – AutoTools Hub</title>
+  <meta name="description" content="Получайте случайные шутки и анекдоты для поднятия настроения.">
+  <meta name="keywords" content="шутки, анекдоты, юмор, развлечение">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -35,13 +36,11 @@
     <a href="about.html">О сайте</a>
   </nav>
   <main>
-    <h2>Преобразователь цветов</h2>
+    <h2>Случайные шутки</h2>
     <div class="card">
-      <label>Выберите цвет:
-        <input type="color" id="color-picker" value="#ff0000">
-      </label>
-      <p>HEX: <span id="color-hex"></span></p>
-      <p>RGB: <span id="color-rgb"></span></p>
+      <p>Нажмите кнопку, чтобы получить случайную шутку.</p>
+      <button id="joke-go">Показать шутку</button>
+      <p id="joke-out"></p>
     </div>
   </main>
   <footer>

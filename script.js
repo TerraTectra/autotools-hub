@@ -417,4 +417,55 @@ window.addEventListener('DOMContentLoaded', () => {
           bmiOut.textContent = `BMI: ${bmi.toFixed(2)} (${category})`;
         });
       }
+
+      // Jokes functionality
+      const jokeBtn = document.getElementById('joke-go');
+      if (jokeBtn) {
+        const jokeOut = document.getElementById('joke-out');
+        const jokes = [
+          'Почему программисты путают Хэллоуин и Рождество? Потому что 31 Oct = 25 Dec.',
+          'К битам подходит байт и говорит: «Останешься за старшего?» – «Извините, я сегодня не по знаку».',
+          '«Сейчас я играю музыку в стиле хип-хоп» – сказал программист и стал писать код, качаясь головой.',
+          'Нужно ли вам тестировать свой код? Только если вы не хотите, чтобы пользователи стали вашими тестировщиками.',
+          'Как называется программист без девушки? Бэкендер.',
+          'Девять женщин не могут родить одного ребёнка за месяц. Но девять программистов могут родить один баг за минуту.',
+          'Баг – это не ошибка, это неожиданный побочный эффект предусмотренной функциональности.'
+        ];
+        jokeBtn.addEventListener('click', () => {
+          const idx = Math.floor(Math.random() * jokes.length);
+          jokeOut.textContent = jokes[idx];
+        });
+      }
+
+      // Guess the number game functionality
+      const guessInput = document.getElementById('guess-input');
+      if (guessInput) {
+        let secret = Math.floor(Math.random() * 100) + 1;
+        const guessBtn = document.getElementById('guess-go');
+        const guessOut = document.getElementById('guess-result');
+        const resetBtn = document.getElementById('guess-reset');
+        const doGuess = () => {
+          const guess = parseInt(guessInput.value);
+          if (!guess) { alert('Введите число'); return; }
+          if (guess < 1 || guess > 100) {
+            alert('Число должно быть от 1 до 100');
+            return;
+          }
+          if (guess === secret) {
+            guessOut.textContent = 'Верно! Вы угадали число.';
+          } else if (guess < secret) {
+            guessOut.textContent = 'Слишком мало!';
+          } else {
+            guessOut.textContent = 'Слишком много!';
+          }
+        };
+        guessBtn.addEventListener('click', doGuess);
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            secret = Math.floor(Math.random() * 100) + 1;
+            guessInput.value = '';
+            guessOut.textContent = '';
+          });
+        }
+      }
 });
