@@ -1,4 +1,5 @@
-// Script to handle theme toggling, navigation highlighting, metrics and tool functionality
+/script.js
+  // Script to handle theme toggling, navigation highlighting, metrics and tool functionality
 
 // Increment a metric counter stored in localStorage
 function incrementMetric(key) {
@@ -799,7 +800,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 // Register service worker for offline caching and PWA support
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/autotools-hub/sw.js').catch(err => {
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(err => {
     console.error('Service Worker registration failed:', err);
   });
 }
