@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мини‑редактор изображений – AutoTools Hub</title>
+  <meta name="description" content="Редактируйте изображения: обрезка, вращение, фильтры и добавление текста прямо в браузере.">
+  <meta property="og:title" content="Мини‑редактор изображений – AutoTools Hub">
+  <meta property="og:description" content="Редактируйте изображения: обрезка, вращение, фильтры и добавление текста прямо в браузере.">
+  <meta property="og:url" content="https://terratectra.github.io/autotools-hub/editor.html">
+  <meta property="og:image" content="icons/icon-512.png">
+  <link rel="stylesheet" href="styles.css">
+  <!-- TOAST UI Image Editor styles -->
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.css">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+  <script src="script.js" defer></script>
+  <script src="custom.js" defer></script>
+  <!-- TOAST UI Image Editor library -->
+  <script src="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.js" defer></script>
+  <!-- Structured data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Мини‑редактор изображений",
+    "operatingSystem": "Web",
+    "applicationCategory": "ImageEditingApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Инструмент для обрезки, поворота и применения фильтров к изображениям.",
+    "url": "https://terratectra.github.io/autotools-hub/editor.html"
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>AutoTools Hub</h1>
+    <button id="theme-toggle" aria-label="Переключить тему"></button>
+  </header>
+  <nav>
+    <a href="index.html">Главная</a>
+    <details class="nav-dropdown">
+      <summary>Инструменты</summary>
+      <ul>
+        <li><a href="compress.html">Сжатие</a></li>
+        <li><a href="merge.html">PDF</a></li>
+        <li><a href="qr.html">QR</a></li>
+        <li><a href="hash.html">Хэш</a></li>
+        <li><a href="password.html">Пароль</a></li>
+        <li><a href="color.html">Цвет</a></li>
+        <li><a href="palette.html">Палитры</a></li>
+        <li><a href="base64.html">Base64</a></li>
+        <li><a href="convert.html">Конвертер</a></li>
+        <li><a href="lorem.html">Лорем</a></li>
+        <li><a href="json.html">JSON</a></li>
+        <li><a href="datecalc.html">Даты</a></li>
+        <li><a href="bmi.html">BMI</a></li>
+        <li><a href="currency.html">Валюты</a></li>
+        <li><a href="qrlogo.html">QR+Лого</a></li>
+        <li><a href="editor.html" class="active">Редактор</a></li>
+      </ul>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Развлечения</summary>
+      <ul>
+        <li><a href="jokes.html">Шутки</a></li>
+        <li><a href="guess.html">Игра</a></li>
+        <li><a href="quiz.html">Викторина</a></li>
+      </ul>
+    </details>
+    <a href="blog.html">Блог</a>
+    <a href="metrics.html" id="metrics-link" class="hidden">Метрики</a>
+    <a href="donate.html">Донат</a>
+    <a href="about.html">О сайте</a>
+    <a href="contact.html">Контакты</a>
+  </nav>
+  <main>
+    <div class="hero">
+      <h2>Мини‑редактор изображений</h2>
+      <p>Загрузите изображение и используйте встроенные инструменты для обрезки, поворота и применения фильтров. После редактирования вы сможете скачать результат.</p>
+    </div>
+    <div class="tool-section">
+      <input type="file" id="editor-file" accept="image/*" aria-label="Выберите изображение">
+      <div id="editor-container" style="height: 500px; margin-top: 1rem;"></div>
+      <button id="editor-download" class="hidden">Скачать отредактированное изображение</button>
+    </div>
+  </main>
+  <footer>
+    <small>&copy; 2025 AutoTools Hub</small>
+  </footer>
+  <!-- Metrics toggle button -->
+  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики"></div>
+  <div id="metrics-overlay" class="metrics-overlay hidden">
+    <div class="metrics-modal">
+      <h3>Доступ к метрикам</h3>
+      <p>Введите пароль, чтобы открыть метрики сайта:</p>
+      <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
+      <button id="metrics-submit">ОК</button>
+      <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
+    </div>
+  </div>
+</body>
+</html>

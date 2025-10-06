@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AutoTools Hub – Главная</title>
-  <meta name="description" content="Набор бесплатных онлайн-инструментов: сжатие изображений, объединение PDF, генерация QR и подсчет хэшей. Все работает в вашем браузере.">
+  <meta name="description" content="Набор бесплатных онлайн‑инструментов: сжатие изображений, объединение PDF, генерация QR, хэширование и многое другое. Работает прямо в вашем браузере.">
   <meta property="og:title" content="AutoTools Hub – Набор онлайн‑инструментов">
   <meta property="og:description" content="Набор бесплатных онлайн‑инструментов: сжатие изображений, PDF, QR‑коды, хэш, генератор паролей и развлечения.">
   <meta property="og:image" content="icons/icon-512.png">
@@ -17,20 +17,19 @@
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
-  <!-- Подключаем стабильную версию библиотеки QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
-
-  <!-- Google Analytics integration: replace G-XXXXXXXX with your actual Measurement ID to track traffic -->
+  <!-- Custom script to fix metrics bug and implement additional tools -->
+  <script src="custom.js" defer></script>
+  <!-- Google Analytics placeholder (replace ID when enabling) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
   <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXX');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXX');
   </script>
-
   <!-- Structured data to help search engines understand the site and enable search actions -->
   <script type="application/ld+json">
   {
@@ -49,10 +48,10 @@
 <body>
   <header>
     <h1>AutoTools Hub</h1>
-    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+    <button id="theme-toggle" aria-label="Переключить тему"></button>
   </header>
   <nav>
-    <a href="index.html">Главная</a>
+    <a href="index.html" class="active">Главная</a>
     <details class="nav-dropdown">
       <summary>Инструменты</summary>
       <ul>
@@ -69,6 +68,9 @@
         <li><a href="json.html">JSON</a></li>
         <li><a href="datecalc.html">Даты</a></li>
         <li><a href="bmi.html">BMI</a></li>
+        <li><a href="currency.html">Валюты</a></li>
+        <li><a href="qrlogo.html">QR+Лого</a></li>
+        <li><a href="editor.html">Редактор</a></li>
       </ul>
     </details>
     <details class="nav-dropdown">
@@ -91,38 +93,38 @@
       <h2>Добро пожаловать в AutoTools Hub</h2>
       <p>Набор бесплатных онлайн‑инструментов для повседневных задач — от сжатия файлов до генераторов паролей и развлечений. Всё работает прямо в вашем браузере.</p>
     </div>
-    <!-- Search bar -->
+    <!-- Поиск -->
     <div class="search-container">
       <input type="text" id="search-input" placeholder="Поиск инструментов..." aria-label="Поиск инструментов">
-      <button id="voice-btn" class="voice-btn" aria-label="Голосовой поиск">🎤</button>
+      <button id="voice-btn" class="voice-btn" aria-label="Голосовой поиск"></button>
     </div>
     <!-- Категории -->
     <!-- Файлы и данные -->
     <h3 class="category-heading">Файлы и данные</h3>
     <div class="category-group">
       <div class="card">
-        <h3>🗜️ Сжатие изображений</h3>
+        <h3>️ Сжатие изображений</h3>
         <p>Уменьшайте размер изображений прямо в браузере.</p>
         <a href="compress.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>📄 Объединение PDF</h3>
+        <h3> Объединение PDF</h3>
         <p>Соберите несколько PDF‑файлов в один.</p>
         <a href="merge.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>🔢 Base64 конвертер</h3>
+        <h3> Base64 конвертер</h3>
         <p>Кодируйте и декодируйте строки в Base64 без сторонних сервисов.</p>
         <a href="base64.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>🧾 Форматирование JSON</h3>
+        <h3> Форматирование JSON</h3>
         <p>Форматируйте и проверяйте JSON‑данные прямо в браузере.</p>
         <a href="json.html"><button>Перейти</button></a>
       </div>
       <div class="card">
         <h3>↔️ Конвертер единиц</h3>
-        <p>Переводите длину, массу и температуру между популярными единицами.</p>
+        <p>Перевод длины, массы и температуры между популярными единицами.</p>
         <a href="convert.html"><button>Перейти</button></a>
       </div>
     </div>
@@ -130,12 +132,12 @@
     <h3 class="category-heading">Коды и шифрование</h3>
     <div class="category-group">
       <div class="card">
-        <h3>🔳 Генератор QR</h3>
+        <h3> Генератор QR</h3>
         <p>Создавайте QR‑код для любого текста или ссылки.</p>
         <a href="qr.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>🔒 SHA‑256 Хэш</h3>
+        <h3> SHA‑256 Хэш</h3>
         <p>Быстрый подсчёт хэша для текстовых данных.</p>
         <a href="hash.html"><button>Перейти</button></a>
       </div>
@@ -144,17 +146,17 @@
     <h3 class="category-heading">Текст и код</h3>
     <div class="category-group">
       <div class="card">
-        <h3>🔐 Генератор паролей</h3>
+        <h3> Генератор паролей</h3>
         <p>Создавайте надёжные случайные пароли с нужной длиной и символами.</p>
         <a href="password.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>🧾 Генератор Lorem Ipsum</h3>
+        <h3> Генератор Lorem Ipsum</h3>
         <p>Создавайте текст‑рыбу для макетов и дизайна.</p>
         <a href="lorem.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>💬 Случайная цитата</h3>
+        <h3> Случайная цитата</h3>
         <p>Получайте вдохновляющие цитаты и делитесь ими.</p>
         <a href="quote.html"><button>Перейти</button></a>
       </div>
@@ -163,12 +165,12 @@
     <h3 class="category-heading">Цвет и дизайн</h3>
     <div class="category-group">
       <div class="card">
-        <h3>🎨 Преобразователь цветов</h3>
+        <h3> Преобразователь цветов</h3>
         <p>Преобразуйте HEX в RGB и наоборот, а также выбирайте цвета.</p>
         <a href="color.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>🌈 Генератор палитр</h3>
+        <h3> Генератор палитр</h3>
         <p>Создавайте случайные цветовые палитры и копируйте цвета одним кликом.</p>
         <a href="palette.html"><button>Перейти</button></a>
       </div>
@@ -177,7 +179,7 @@
     <h3 class="category-heading">Время и здоровье</h3>
     <div class="category-group">
       <div class="card">
-        <h3>📅 Калькулятор дат</h3>
+        <h3> Калькулятор дат</h3>
         <p>Узнайте разницу между двумя датами в днях.</p>
         <a href="datecalc.html"><button>Перейти</button></a>
       </div>
@@ -187,26 +189,45 @@
         <a href="bmi.html"><button>Перейти</button></a>
       </div>
     </div>
+    <!-- Дополнительные инструменты -->
+    <h3 class="category-heading">Дополнительные инструменты</h3>
+    <div class="category-group">
+      <div class="card">
+        <h3> Конвертер валют</h3>
+        <p>Переводите суммы между популярными валютами офлайн.</p>
+        <a href="currency.html"><button>Перейти</button></a>
+      </div>
+      <div class="card">
+        <h3> QR с логотипом</h3>
+        <p>Создавайте QR‑коды с собственным логотипом и стилями.</p>
+        <a href="qrlogo.html"><button>Перейти</button></a>
+      </div>
+      <div class="card">
+        <h3> Редактор изображений</h3>
+        <p>Простой редактор для обрезки, вращения и фильтров изображений.</p>
+        <a href="editor.html"><button>Перейти</button></a>
+      </div>
+    </div>
     <!-- Развлечения -->
     <h3 class="category-heading">Развлечения</h3>
     <div class="category-group">
       <div class="card">
-        <h3>😂 Случайные шутки</h3>
+        <h3> Случайные шутки</h3>
         <p>Получайте случайные шутки и анекдоты для поднятия настроения.</p>
         <a href="jokes.html"><button>Перейти</button></a>
       </div>
       <div class="card">
-        <h3>🎯 Игра «Угадай число»</h3>
+        <h3> Игра «Угадай число»</h3>
         <p>Попробуйте угадать число, загаданное компьютером.</p>
         <a href="guess.html"><button>Перейти</button></a>
       </div>
-    <div class="card">
-      <h3>🧠 Викторина</h3>
-      <p>Ответьте на несколько вопросов и узнайте что-то новое о себе.</p>
-      <a href="quiz.html"><button>Перейти</button></a>
+      <div class="card">
+        <h3> Викторина</h3>
+        <p>Ответьте на несколько вопросов и узнайте что‑то новое о себе.</p>
+        <a href="quiz.html"><button>Перейти</button></a>
+      </div>
     </div>
-    </div>
-    <!-- Poll section to engage users and gather feedback on new tools -->
+    <!-- Опрашиваем пользователей о будущем функционале -->
     <div class="poll-container">
       <h3>Голосование: какой инструмент добавить?</h3>
       <div class="poll-option"><input type="radio" id="poll-news" name="poll" value="news"><label for="poll-news">Новости</label></div>
@@ -215,42 +236,33 @@
       <button id="poll-vote">Голосовать</button>
       <div id="poll-results" class="poll-result hidden"></div>
     </div>
-
-    <!-- Subscribe section encourages visitors to stay updated via email (opens mail client) -->
+    <!-- Подписка на новости -->
     <div class="subscribe-container">
       <h3>Подписаться на обновления</h3>
       <input type="email" id="subscribe-email" placeholder="Ваш email" aria-label="Ваш email">
       <button id="subscribe-btn">Подписаться</button>
     </div>
-
+    <!-- Блок "Поделиться" (Telegram, X/Twitter, WhatsApp) -->
     <div class="share">
-      <p>Поделиться AutoTools Hub:</p>
-      <a href="https://t.me/share/url?url=https://terratectra.github.io/autotools-hub/&text=AutoTools%20Hub%20-%20набор%20полезных%20онлайн-инструментов">Telegram</a>
-      <a href="https://twitter.com/intent/tweet?url=https://terratectra.github.io/autotools-hub/&text=AutoTools%20Hub%20-%20набор%20полезных%20онлайн-инструментов">Twitter</a>
-      <a href="https://wa.me/?text=https://terratectra.github.io/autotools-hub/">WhatsApp</a>
+      <a href="https://t.me/share/url?url=https://terratectra.github.io/autotools-hub/&text=Посмотрите%20AutoTools%20Hub!" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://twitter.com/intent/tweet?url=https://terratectra.github.io/autotools-hub/&text=Посмотрите%20AutoTools%20Hub!" target="_blank" rel="noopener">X/Twitter</a>
+      <a href="https://wa.me/?text=https://terratectra.github.io/autotools-hub/" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </main>
   <footer>
     <small>&copy; 2025 AutoTools Hub</small>
   </footer>
-
   <!-- Metrics toggle button (appears in bottom right) -->
-      <!-- Metrics toggle button (appears in bottom right)
-           The inner emoji (📊) provides a visible icon for the button. -->
-      <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики">📊</div>
-
-      <!-- Password overlay for unlocking metrics
-           This overlay appears when the metrics toggle is clicked and the user
-           hasn’t unlocked metrics yet. It prompts for a password and
-           displays an error message when needed. -->
-      <div id="metrics-overlay" class="metrics-overlay hidden">
-        <div class="metrics-modal">
-          <h3>Доступ к метрикам</h3>
-          <p>Введите пароль, чтобы открыть метрики сайта:</p>
-          <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
-          <button id="metrics-submit">ОК</button>
-          <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
-        </div>
-      </div>
+  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики"></div>
+  <!-- Password overlay for unlocking metrics -->
+  <div id="metrics-overlay" class="metrics-overlay hidden">
+    <div class="metrics-modal">
+      <h3>Доступ к метрикам</h3>
+      <p>Введите пароль, чтобы открыть метрики сайта:</p>
+      <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
+      <button id="metrics-submit">ОК</button>
+      <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
+    </div>
+  </div>
 </body>
 </html>

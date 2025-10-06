@@ -8,12 +8,19 @@
   <link rel="stylesheet" href="styles.css">
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
+  <!-- Redirect visitors who have not unlocked metrics -->
+  <script>
+    if (localStorage.getItem('metricsUnlocked') !== 'true') {
+      window.location.href = 'index.html';
+    }
+  </script>
   <script src="script.js" defer></script>
+  <script src="custom.js" defer></script>
 </head>
 <body>
   <header>
     <h1>AutoTools Hub</h1>
-    <button id="theme-toggle" aria-label="Переключить тему">🌙</button>
+    <button id="theme-toggle" aria-label="Переключить тему"></button>
   </header>
   <nav>
     <a href="index.html">Главная</a>
@@ -33,6 +40,9 @@
         <li><a href="json.html">JSON</a></li>
         <li><a href="datecalc.html">Даты</a></li>
         <li><a href="bmi.html">BMI</a></li>
+        <li><a href="currency.html">Валюты</a></li>
+        <li><a href="qrlogo.html">QR+Лого</a></li>
+        <li><a href="editor.html">Редактор</a></li>
       </ul>
     </details>
     <details class="nav-dropdown">
@@ -66,6 +76,8 @@
       </table>
       <h3>Другие показатели</h3>
       <ul id="other-metrics"></ul>
+      <!-- Canvas for future chart implementations -->
+      <canvas id="metrics-chart" width="600" height="300" style="margin-top:2rem;"></canvas>
     </div>
   </main>
   <footer>

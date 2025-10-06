@@ -1,559 +1,237 @@
-/*
- * Design system variables and typography
- *
- * A cohesive colour palette improves consistency and user experience. According to
- * web design best practices, you should limit your palette to one primary
- * colour, a secondary colour for backgrounds and neutrals, and a contrasting
- * accent. A limited palette reduces cognitive load and creates a unified
- * look【527993748826153†L297-L323】. We define both light and dark theme values.
- */
-
-/* Import a modern, legible font family for headings and body text */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-/* Default (light) theme variables */
-:root {
-  --bg: #f5f7fa;            /* very light background for sufficient contrast */
-  --text: #333333;         /* dark grey text for readability */
-  --primary: #0077b6;      /* primary brand colour (blue) */
-  --secondary: #ffffff;    /* secondary background (cards, nav dropdown) */
-  --card-bg: #ffffff;      /* card background matches secondary */
-  --card-border: #e1e8f0;  /* subtle border colour for cards */
-  --accent: #ff6f61;       /* accent colour (salmon) for highlights and links */
-}
-
-/* Dark theme overrides */
-[data-theme="dark"] {
-  --bg: #0d1117;           /* dark background similar to GitHub dark */
-  --text: #e6edf0;        /* off-white text for readability */
-  --primary: #161b22;     /* primary container colour */
-  --secondary: #0d1117;   /* secondary background for nav dropdowns */
-  --card-bg: #161b22;     /* card background matches primary */
-  --card-border: #30363d; /* dark border for cards */
-  --accent: #4790ff;      /* bright blue accent for dark mode */
-}
-
+/* Basic styles for AutoTools Hub demonstration. This stylesheet provides
+   minimal layout and appearance to support the demo pages. For the full
+   production design, import the original styles from the repository. */
 body {
-  font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  line-height: 1.6;
-}
-
-/* Metrics toggle button fixed in bottom right */
-/*
- * Metrics toggle button
- *
- * The small square in the bottom‑right corner that toggles access to the
- * metrics overlay.  Increase the size and border radius compared to the
- * previous version so that it’s more noticeable. Use a high z‑index to
- * ensure the button sits above other page elements.  The button uses
- * the accent colour defined in CSS variables for both light and dark
- * themes and displays an emoji inside the element via HTML.
- */
-.metrics-toggle {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 50px;
-      height: 50px;
-      border-radius: 8px;
-      background-color: var(--accent);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 1500;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      font-size: 1.6rem;
-      transition: transform 0.2s ease;
-    }
-
-.metrics-toggle:hover {
-  transform: scale(1.05);
-}
-
-    /*
-     * Metrics overlay modal
-     *
-     * The overlay covers the entire viewport with a semi‑transparent
-     * background when the user needs to enter the metrics password. The modal
-     * box sits in the centre of the screen on top of the overlay.
-     */
-    .metrics-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .metrics-modal {
-      background: var(--secondary);
-      color: var(--text);
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      max-width: 90%;
-      width: 400px;
-    }
-
-    .metrics-modal input[type="password"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid var(--card-border);
-      border-radius: 4px;
-      background: var(--card-bg);
-      color: var(--text);
-    }
-
-    .metrics-modal button {
-      padding: 0.5rem 1rem;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .metrics-modal button:hover {
-      /* Slightly darken the button on hover for feedback */
-      filter: brightness(0.9);
-    }
-
-    .error-message {
-      color: var(--accent);
-      font-size: 0.9rem;
-      margin-top: -0.5rem;
-    }
-
-/* Metrics page styles */
-.metrics-section {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.metrics-section h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.metrics-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
-}
-
-.metrics-table th,
-.metrics-table td {
-  border: 1px solid var(--border-color, #ccc);
-  padding: 0.5rem;
-  text-align: left;
+  font-family: system-ui, sans-serif;
+  background-color: var(--bg, #f5f5f5);
+  color: var(--text, #333);
+  line-height: 1.5;
 }
 
 header {
+  background-color: #0067b8;
+  color: white;
+  padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--primary);
-  color: #ffffff;
-  padding: 1rem;
 }
 
-/* Highlight the active nav link */
+nav {
+  background-color: #007acc;
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.5rem 1rem;
+}
+
+nav a {
+  color: white;
+  margin-right: 1rem;
+  text-decoration: none;
+}
+
 nav a.active {
-  color: var(--accent);
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid #ffce00;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
+details.nav-dropdown {
+  position: relative;
+  margin-right: 1rem;
 }
 
-#theme-toggle {
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-size: 1.5rem;
+details.nav-dropdown summary {
+  list-style: none;
   cursor: pointer;
 }
 
-/* Navigation styles using dropdowns to organise many tools */
-nav {
-  background: var(--primary);
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
+details.nav-dropdown ul {
+  position: absolute;
+  background-color: #007acc;
+  padding: 0.5rem;
+  margin: 0;
+  list-style: none;
+  display: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
 
-nav a,
-nav summary {
-  color: #ffffff;
-  font-weight: 600;
-  padding: 0.5rem 0.75rem;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 4px;
-  white-space: nowrap;
-  transition: background 0.2s ease;
-}
-
-nav a:hover,
-nav summary:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Dropdown container for grouped nav items */
-.nav-dropdown {
-  position: relative;
-}
-
-.nav-dropdown summary {
-  list-style: none;
-  outline: none;
-  user-select: none;
-}
-
-.nav-dropdown ul {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: var(--secondary);
-  border: 1px solid var(--card-border);
-  border-radius: 4px;
-  margin: 0;
-  padding: 0.5rem 0;
-  display: none;
-  min-width: 200px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  z-index: 100;
-}
-
-.nav-dropdown[open] ul {
+details.nav-dropdown[open] ul {
   display: block;
-}
-
-.nav-dropdown ul li {
-  list-style: none;
-}
-
-.nav-dropdown ul li a {
-  display: block;
-  padding: 0.5rem 1rem;
-  color: var(--text);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.nav-dropdown ul li a:hover {
-  background: var(--card-bg);
-  color: var(--accent);
 }
 
 main {
-  flex: 1 0 auto;
   padding: 1rem;
 }
 
-/* search bar on index page */
+.hero {
+  background-color: #eee;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
 .search-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   margin-bottom: 1rem;
 }
 .search-container input {
-  width: 100%;
-  max-width: 400px;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--card-border);
-  border-radius: 4px;
-  background: var(--card-bg);
-  color: var(--text);
-}
-
-/* Voice search microphone button */
-.voice-btn {
-  margin-left: 0.5rem;
-  padding: 0.5rem;
-  background: var(--primary);
-  color: #ffffff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.voice-btn:hover {
-  background: var(--accent);
-}
-
-/* Poll section styling */
-.poll-container {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: var(--secondary);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-}
-.poll-container h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: var(--accent);
-}
-.poll-option {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-.poll-option input {
-  margin-right: 0.5rem;
-}
-.poll-result {
-  margin-top: 1rem;
-}
-.poll-bar {
-  height: 10px;
-  background: var(--accent);
-  margin-top: 0.25rem;
-  border-radius: 5px;
-}
-
-/* Subscribe section styling */
-.subscribe-container {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: var(--secondary);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  text-align: center;
-}
-.subscribe-container h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: var(--accent);
-}
-.subscribe-container input[type="email"] {
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  border: 1px solid var(--card-border);
-  border-radius: 4px;
-  width: 80%;
-  max-width: 300px;
-}
-.subscribe-container button {
-  padding: 0.5rem 1rem;
-  background: var(--primary);
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.subscribe-container button:hover {
-  background: var(--accent);
-}
-
-/* Card component with soft shadow and gentle lift on hover */
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.16);
-  transform: translateY(-4px) scale(1.02);
-}
-
-input[type="file"],
-input[type="text"],
-input[type="range"],
-input[type="number"],
-textarea {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  margin-top: 0.5rem;
-  background: var(--primary);
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background: var(--accent);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  transform: translateY(-2px) scale(1.04);
-}
-
-a button {
-  /* allow anchor buttons to look like buttons */
-  text-decoration: none;
-}
-
-.preview,
-#qr-canvas {
-  display: block;
-  margin-top: 1rem;
-  max-width: 100%;
-  border: 1px solid var(--card-border);
-}
-
-pre {
-  background: var(--secondary);
-  padding: 0.5rem;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  border-radius: 3px;
-  overflow-x: auto;
-}
-
-footer {
-  background: var(--primary);
-  color: #ffffff;
-  text-align: center;
-  padding: 1rem;
-  flex-shrink: 0;
-}
-
-/* Utility class for hidden elements */
-.hidden {
-  display: none;
-}
-
-/* Dark mode button outline for better visibility */
-[data-theme="dark"] button {
-  border: 2px solid #4790ff;
-}
-
-/* Share links styling */
-.share {
-  margin-top: 1rem;
-}
-.share a {
-  margin-right: 0.5rem;
-  text-decoration: none;
-  color: var(--primary);
-}
-/* В тёмной теме делаем ссылки чуть ярче */
-[data-theme="dark"] .share a {
-  color: #88a;
-}
-
-/* Palette container and swatch styles */
-.palette-container {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.palette-swatch {
   flex: 1;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-weight: bold;
-  border-radius: 3px;
-  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+.search-container button {
+  padding: 0.5rem;
+  margin-left: 0.5rem;
 }
 
-/* Fade-in animation for elements such as cards */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.fade-in.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Заголовки категорий на главной странице */
 .category-heading {
   margin-top: 2rem;
   margin-bottom: 0.5rem;
   font-size: 1.25rem;
-  color: var(--accent);
+  color: #0067b8;
 }
 
-/* Category group grid layout */
 .category-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
-/* Hero section on the home page */
-/*
- * Hero section styling
- *
- * The hero uses a parallax background with an overlay to ensure text
- * remains legible. The background image is defined in the CSS so that
- * it can be cached and loaded efficiently. Parallax scrolling
- * provides a sense of depth and movement, which research shows helps
- * capture user attention and keep them engaged【356078534154251†L544-L579】.
- */
-.hero {
-  position: relative;
+.card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  flex: 1 1 250px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.card h3 {
+  margin-top: 0;
+}
+.card button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #0067b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.card button:hover {
+  background-color: #004f8a;
+}
+
+footer {
+  background-color: #f1f1f1;
   text-align: center;
-  padding: 4rem 1rem;
-  color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+/* Metrics toggle button */
+.metrics-toggle {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: 40px;
+  height: 40px;
+  background-color: #ffce00;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+.metrics-toggle::before {
+  content: '\1F4CA'; /* bar chart emoji */
+  font-size: 1.25rem;
+}
+
+/* Metrics overlay */
+.metrics-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.metrics-overlay.hidden {
+  display: none;
+}
+
+.metrics-modal {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  width: 90%;
+  max-width: 400px;
+}
+.metrics-modal input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.metrics-modal button {
+  padding: 0.5rem 1rem;
+  background-color: #0067b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.metrics-modal button:hover {
+  background-color: #004f8a;
+}
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+}
+.error-message.hidden {
+  display: none;
+}
+
+/* Miscellaneous styles for tool sections */
+.tool-section {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
   margin-bottom: 2rem;
 }
 
-.hero h2 {
-  font-size: 2.5rem;
-  margin-bottom: 0.75rem;
-  line-height: 1.2;
+#qrlogo-result canvas {
+  margin-top: 1rem;
 }
 
-.hero p {
-  font-size: 1.25rem;
-  max-width: 700px;
-  margin: 0 auto;
+#editor-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-/* Dark mode adjustments: use a darker overlay to maintain contrast */
-[data-theme="dark"] .hero {
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('images/hero.png');
+.hidden {
+  display: none !important;
+}
+
+.poll-container, .subscribe-container {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+.share a {
+  margin-right: 1rem;
+  color: #0067b8;
 }
