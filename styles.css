@@ -1,4 +1,5 @@
 /* Improved styles for AutoTools Hub. This stylesheet adds a modern aesthetic with accessible colors, rounded cards, hover effects, and a custom font. */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 /* Color variables */
@@ -13,6 +14,7 @@
   --text-light: #333333;
   --card-bg: #ffffff;
   --card-border: #e0e0e0;
+  
   --card-shadow: rgba(0, 0, 0, 0.05);
 }
 
@@ -83,7 +85,8 @@ details.nav-dropdown {
   margin-right: 1rem;
 }
 
-details.nav-dropdown summary {
+det
+ails.nav-dropdown summary {
   list-style: none;
   cursor: pointer;
 }
@@ -287,4 +290,9 @@ footer {
   .category-group {
     flex-direction: column;
   }
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none !important;
 }
