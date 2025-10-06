@@ -27,6 +27,45 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    // ------------------- Global fixes before tools --------------------
+    // Ensure the latest stylesheet is loaded by appending a version query. This
+    // bypasses the service worker cache which may otherwise serve an old file.
+    const styleLink = document.querySelector('link[rel="stylesheet"][href*="styles.css"]');
+    if (styleLink && !styleLink.href.includes('?v=')) {
+      styleLink.href = styleLink.getAttribute('href') + '?v=2';
+    }
+
+    // Fix the theme toggle icon. The main script only toggles the data-theme
+    // attribute and sometimes clears the button text, making the icon disappear.
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      const updateIcon = () => {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        // Show a sun icon when dark mode is active (to indicate switching back)
+        // and a moon icon when light mode is active.
+        themeToggle.textContent = theme === 'dark' ? '☀' : '🌙';
+      };
+      // Set the icon on initial load
+      updateIcon();
+      // Update the icon after the main script toggles the theme
+      themeToggle.addEventListener('click', () => {
+        setTimeout(updateIcon, 0);
+      });
+    }
+
+    // Increment the page view metric manually because the existing script
+    // references an undefined `page` variable. Determine the current page name
+    // (without extension) and call incrementMetric.
+    try {
+      const current = window.location.pathname.split('/').pop() || 'index.html';
+      const base = current.split('?')[0];
+      const name = base.replace('.html', '') || 'index';
+      if (typeof window.incrementMetric === 'function') {
+        window.incrementMetric(name + 'Views');
+      }
+    } catch (e) {
+      // Ignore errors silently
+    }
     /* ------------------- Metrics toggle and unlocking -------------------- */
     // Handle the floating metrics button, password overlay and metrics link
     {
