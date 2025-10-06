@@ -51,6 +51,20 @@
       themeToggle.addEventListener('click', () => {
         setTimeout(updateIcon, 0);
       });
+
+      // Also handle the theme switching logic here in case the main script
+      // fails to toggle themes correctly. This listener explicitly toggles
+      // the data-theme attribute and stores the selection in localStorage.
+      // It runs after the existing event listeners to ensure we override
+      // incorrect behaviour but still allow metric counting from script.js.
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('theme', nextTheme);
+        // Immediately update the toggle icon to reflect the change
+        updateIcon();
+      });
     }
 
     // Increment the page view metric manually because the existing script
