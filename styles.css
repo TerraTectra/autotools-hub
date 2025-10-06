@@ -1,39 +1,60 @@
-/* Basic styles for AutoTools Hub demonstration. This stylesheet provides
-   minimal layout and appearance to support the demo pages. For the full
-   production design, import the original styles from the repository. */
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background-color: var(--bg, #f5f5f5);
-  color: var(--text, #333);
-  line-height: 1.5;
+/* Improved styles for AutoTools Hub. This stylesheet adds a modern aesthetic with accessible colors, rounded cards, hover effects, and a custom font. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* Color variables */
+:root {
+  --color-primary: #0067b8;
+  --color-secondary: #ffce00;
+  --color-nav: #007acc;
+  --bg-light: #f5f5f5;
+  --text-light: #333333;
+  --card-bg: #ffffff;
+  --card-border: #e0e0e0;
+  --card-shadow: rgba(0,0,0,0.05);
 }
 
+/* Base styles */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* Header and navigation */
 header {
-  background-color: #0067b8;
-  color: white;
-  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 nav {
-  background-color: #007acc;
-  color: white;
+  background-color: var(--color-nav);
+  color: #ffffff;
   display: flex;
   flex-wrap: wrap;
   padding: 0.5rem 1rem;
 }
 
 nav a {
-  color: white;
+  color: #ffffff;
   margin-right: 1rem;
   text-decoration: none;
+  padding: 0.25rem 0;
+  transition: border-color 0.2s;
+}
+
+nav a:hover,
+nav a:focus {
+  border-bottom: 2px solid var(--color-secondary);
 }
 
 nav a.active {
-  border-bottom: 2px solid #ffce00;
+  border-bottom: 2px solid var(--color-secondary);
 }
 
 details.nav-dropdown {
@@ -48,7 +69,7 @@ details.nav-dropdown summary {
 
 details.nav-dropdown ul {
   position: absolute;
-  background-color: #007acc;
+  background-color: var(--color-nav);
   padding: 0.5rem;
   margin: 0;
   list-style: none;
@@ -66,31 +87,44 @@ main {
 }
 
 .hero {
-  background-color: #eee;
+  background-color: #eaeaea;
   padding: 1rem;
   margin-bottom: 1rem;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .search-container {
   display: flex;
   margin-bottom: 1rem;
 }
+
 .search-container input {
   flex: 1;
   padding: 0.5rem;
   font-size: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
 }
+
 .search-container button {
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   margin-left: 0.5rem;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #004f8a;
 }
 
 .category-heading {
   margin-top: 2rem;
   margin-bottom: 0.5rem;
-  font-size: 1.25rem;
-  color: #0067b8;
+  font-size: 1.5rem;
+  color: var(--color-primary);
 }
 
 .category-group {
@@ -99,30 +133,48 @@ main {
   gap: 1rem;
 }
 
+/* Card component */
 .card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
   padding: 1rem;
   flex: 1 1 250px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .card h3 {
   margin-top: 0;
+  margin-bottom: 0.5rem;
 }
+
+.card p {
+  margin: 0.5rem 0 1rem 0;
+  color: #555555;
+}
+
 .card button {
-  margin-top: 0.5rem;
+  display: inline-block;
   padding: 0.5rem 1rem;
-  background-color: #0067b8;
-  color: white;
+  background-color: var(--color-primary);
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+
 .card button:hover {
   background-color: #004f8a;
 }
 
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Footer */
 footer {
   background-color: #f1f1f1;
   text-align: center;
@@ -135,23 +187,24 @@ footer {
   position: fixed;
   right: 1rem;
   bottom: 1rem;
-  width: 40px;
-  height: 40px;
-  background-color: #ffce00;
-  border-radius: 4px;
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-secondary);
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
+
 .metrics-toggle::before {
   content: '\1F4CA'; /* bar chart emoji */
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 }
 
-/* Metrics overlay */
+/* Metrics overlay modal */
 .metrics-overlay {
   position: fixed;
   top: 0;
@@ -170,68 +223,47 @@ footer {
 }
 
 .metrics-modal {
-  background-color: white;
+  background-color: #ffffff;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   width: 90%;
   max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .metrics-modal input {
   width: 100%;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
 }
+
 .metrics-modal button {
   padding: 0.5rem 1rem;
-  background-color: #0067b8;
-  color: white;
+  background-color: var(--color-primary);
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
+
 .metrics-modal button:hover {
   background-color: #004f8a;
 }
+
 .error-message {
   color: red;
   font-size: 0.875rem;
 }
+
 .error-message.hidden {
   display: none;
 }
 
-/* Miscellaneous styles for tool sections */
-.tool-section {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 1rem;
-  margin-bottom: 2rem;
-}
-
-#qrlogo-result canvas {
-  margin-top: 1rem;
-}
-
-#editor-container {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.poll-container, .subscribe-container {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 1rem;
-  margin-top: 2rem;
-}
-
-.share a {
-  margin-right: 1rem;
-  color: #0067b8;
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .category-group {
+    flex-direction: column;
+  }
 }
