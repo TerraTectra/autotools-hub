@@ -8,12 +8,6 @@
   <link rel="stylesheet" href="styles.css">
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
-  <!-- Redirect visitors who have not unlocked metrics -->
-  <script>
-    if (localStorage.getItem('metricsUnlocked') !== 'true') {
-      window.location.href = 'index.html';
-    }
-  </script>
   <script src="script.js" defer></script>
   <script src="custom.js" defer></script>
 </head>
@@ -63,21 +57,52 @@
   <main>
     <div class="hero">
       <h2>Статистика использования</h2>
-      <p>Ниже приведены показатели посещений страниц, использования инструментов и другие параметры.</p>
+      <p>Просмотр статистики посещений и использования инструментов.</p>
     </div>
     <div class="metrics-section">
-      <h3>Посещения страниц</h3>
-      <table class="metrics-table" id="page-metrics-table">
-        <tr><th>Страница</th><th>Просмотры</th></tr>
-      </table>
-      <h3>Использование инструментов</h3>
-      <table class="metrics-table" id="tool-metrics-table">
-        <tr><th>Инструмент</th><th>Использования</th></tr>
-      </table>
-      <h3>Другие показатели</h3>
-      <ul id="other-metrics"></ul>
-      <!-- Canvas for future chart implementations -->
-      <canvas id="metrics-chart" width="600" height="300" style="margin-top:2rem;"></canvas>
+      <h3>📊 Яндекс.Метрика</h3>
+      <div class="yandex-metrics-card">
+        <p>Подробная статистика доступна в Яндекс.Метрике</p>
+        <a href="https://metrika.yandex.ru/stat/?id=109814423" target="_blank" class="metrics-link-button">
+          Открыть Яндекс.Метрику
+        </a>
+        <div class="metrics-info">
+          <p><strong>Счётчик:</strong> 109814423</p>
+          <p><strong>Статус:</strong> Активен</p>
+          <p><strong>Вебвизор:</strong> Включён</p>
+          <p><strong>Карта кликов:</strong> Включена</p>
+        </div>
+      </div>
+
+      <h3>📈 Локальная статистика</h3>
+      <div class="local-metrics">
+        <h4>Посещения страниц</h4>
+        <table class="metrics-table" id="page-metrics-table">
+          <tr><th>Страница</th><th>Просмотры</th></tr>
+        </table>
+        <h4>Использование инструментов</h4>
+        <table class="metrics-table" id="tool-metrics-table">
+          <tr><th>Инструмент</th><th>Использования</th></tr>
+        </table>
+        <h4>Другие показатели</h4>
+        <ul id="other-metrics"></ul>
+      </div>
+
+      <h3>🔗 Быстрые ссылки</h3>
+      <div class="quick-links">
+        <a href="https://metrika.yandex.ru/dashboard?id=109814423" target="_blank" class="quick-link">
+          📊 Дашборд
+        </a>
+        <a href="https://metrika.yandex.ru/report/visits?id=109814423" target="_blank" class="quick-link">
+          👥 Посетители
+        </a>
+        <a href="https://metrika.yandex.ru/report/content?id=109814423" target="_blank" class="quick-link">
+          📄 Контент
+        </a>
+        <a href="https://metrika.yandex.ru/report/sources?id=109814423" target="_blank" class="quick-link">
+          🔍 Источники
+        </a>
+      </div>
     </div>
   </main>
   <footer>

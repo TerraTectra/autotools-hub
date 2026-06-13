@@ -89,43 +89,16 @@
       const pwdInput = document.getElementById('metrics-password');
       const submitBtn = document.getElementById('metrics-submit');
       const errorMsg = document.getElementById('metrics-error');
+      // Always show metrics link - no password required
+      if (navLink) {
+        navLink.classList.remove('hidden');
+      }
+      // Remove password protection - metrics are now public
       if (toggle) {
-        // If metrics were already unlocked in this browser, reveal the link
-        if (localStorage.getItem('metricsUnlocked') === 'true' && navLink) {
-          navLink.classList.remove('hidden');
-        }
         toggle.addEventListener('click', () => {
-          const unlocked = localStorage.getItem('metricsUnlocked') === 'true';
-          if (!unlocked) {
-            // Show overlay for password input
-            if (overlay) {
-              overlay.classList.remove('hidden');
-              if (pwdInput) pwdInput.value = '';
-              if (errorMsg) errorMsg.classList.add('hidden');
-            }
-          } else {
-            // Toggle visibility of the metrics link
-            if (navLink) navLink.classList.toggle('hidden');
-          }
+          // Toggle visibility of the metrics link
+          if (navLink) navLink.classList.toggle('hidden');
         });
-        if (submitBtn) {
-          submitBtn.addEventListener('click', () => {
-            if (pwdInput && pwdInput.value === '272829Dr') {
-              localStorage.setItem('metricsUnlocked', 'true');
-              if (overlay) overlay.classList.add('hidden');
-              if (navLink) navLink.classList.remove('hidden');
-            } else {
-              if (errorMsg) errorMsg.classList.remove('hidden');
-            }
-          });
-        }
-        if (overlay) {
-          overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-              overlay.classList.add('hidden');
-            }
-          });
-        }
       }
     }
     /* ------------------- Currency converter -------------------- */

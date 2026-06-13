@@ -408,3 +408,107 @@ footer {
   margin: 0.5rem 0;
   color: var(--text-light);
 }
+
+/* Metrics page styles */
+.yandex-metrics-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.metrics-link-button {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 1rem 0;
+  transition: background-color 0.2s ease;
+}
+
+.metrics-link-button:hover {
+  background-color: #004f8a;
+}
+
+.metrics-info {
+  background-color: var(--bg-light);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.metrics-info p {
+  margin: 0.5rem 0;
+  color: var(--text-light);
+}
+
+.local-metrics {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.local-metrics h4 {
+  margin-top: 1.5rem;
+  color: var(--color-primary);
+}
+
+.local-metrics h4:first-child {
+  margin-top: 0;
+}
+
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.metrics-table th,
+.metrics-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.metrics-table th {
+  background-color: var(--bg-light);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.metrics-table tr:hover {
+  background-color: var(--bg-light);
+}
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.quick-link {
+  display: block;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--text-light);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.quick-link:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--card-shadow);
+}
