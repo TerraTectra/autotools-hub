@@ -87,7 +87,8 @@
       </ul>
     </details>
     <a href="blog.html">Блог</a>
-    <a href="metrics.html">Метрики</a>
+    <!-- Hidden metrics link will appear when password is entered -->
+    <a href="metrics.html" id="metrics-link" class="hidden">Метрики</a>
     <a href="donate.html">Донат</a>
     <a href="about.html">О сайте</a>
     <a href="contact.html">Контакты</a>
@@ -288,7 +289,6 @@
           <li><a href="about.html">О сайте</a></li>
           <li><a href="donate.html">Донат</a></li>
           <li><a href="contact.html">Контакты</a></li>
-          <li><a href="metrics.html">Метрики</a></li>
         </ul>
       </div>
     </div>
@@ -296,5 +296,17 @@
       <small>&copy; 2025 AutoTools Hub | Сделано в России 🇷🇺</small>
     </div>
   </footer>
+  <!-- Metrics toggle button (appears in bottom right) -->
+  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики"></div>
+  <!-- Password overlay for unlocking metrics -->
+  <div id="metrics-overlay" class="metrics-overlay hidden">
+    <div class="metrics-modal">
+      <h3>Доступ к метрикам</h3>
+      <p>Введите пароль, чтобы открыть метрики сайта:</p>
+      <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
+      <button id="metrics-submit">ОК</button>
+      <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
+    </div>
+  </div>
 </body>
 </html>

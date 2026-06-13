@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="styles.css">
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
+  <!-- Redirect visitors who have not unlocked metrics -->
+  <script>
+    if (localStorage.getItem('metricsUnlocked') !== 'true') {
+      window.location.href = 'index.html';
+    }
+  </script>
   <script src="script.js" defer></script>
   <script src="custom.js" defer></script>
 </head>
