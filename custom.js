@@ -40,7 +40,7 @@
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
       const updateIcon = () => {
-        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        const theme = document.documentElement.getAttribute('data-theme') || 'dark';
         // Show a sun icon when dark mode is active (to indicate switching back)
         // and a moon icon when light mode is active.
         themeToggle.textContent = theme === 'dark' ? '☀' : '🌙';
