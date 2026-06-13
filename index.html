@@ -87,8 +87,7 @@
       </ul>
     </details>
     <a href="blog.html">Блог</a>
-    <!-- Hidden metrics link will appear when password is entered -->
-    <a href="metrics.html" id="metrics-link" class="hidden">Метрики</a>
+    <a href="metrics.html">Метрики</a>
     <a href="donate.html">Донат</a>
     <a href="about.html">О сайте</a>
     <a href="contact.html">Контакты</a>
@@ -237,7 +236,7 @@
       <h3>Голосование: какой инструмент добавить?</h3>
       <div class="poll-option"><input type="radio" id="poll-news" name="poll" value="news"><label for="poll-news">Новости</label></div>
       <div class="poll-option"><input type="radio" id="poll-weather" name="poll" value="weather"><label for="poll-weather">Погода</label></div>
-      <div class="poll-option"><input type="radio" id="poll-currency" name="poll" value="currency"><label for="poll-currency">Калькулятор валют</label></div>
+      <div class="poll-option"><input type="radio" id="poll-calculator" name="poll" value="calculator"><label for="poll-calculator">Калькулятор</label></div>
       <button id="poll-vote">Голосовать</button>
       <div id="poll-results" class="poll-result hidden"></div>
     </div>
@@ -257,17 +256,5 @@
   <footer>
     <small>&copy; 2025 AutoTools Hub</small>
   </footer>
-  <!-- Metrics toggle button (appears in bottom right) -->
-  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики"></div>
-  <!-- Password overlay for unlocking metrics -->
-  <div id="metrics-overlay" class="metrics-overlay hidden">
-    <div class="metrics-modal">
-      <h3>Доступ к метрикам</h3>
-      <p>Введите пароль, чтобы открыть метрики сайта:</p>
-      <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
-      <button id="metrics-submit">ОК</button>
-      <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
-    </div>
-  </div>
 </body>
 </html>
