@@ -4,32 +4,32 @@
 
 /* Color variables */
 :root {
-  /* Primary brand colours - modern gradient-inspired palette */
-  --color-primary: #6366f1;
-  --color-secondary: #8b5cf6;
-  --color-accent: #ec4899;
+  /* Primary brand colours - warm gradient-inspired palette */
+  --color-primary: #f97316;
+  --color-secondary: #ef4444;
+  --color-accent: #eab308;
   /* Navigation background */
-  --color-nav: #4f46e5;
+  --color-nav: #ea580c;
   /* Light theme neutrals */
-  --bg-light: #f8fafc;
-  --text-light: #1e293b;
+  --bg-light: #fffbeb;
+  --text-light: #1c1917;
   --card-bg: #ffffff;
-  --card-border: #e2e8f0;
+  --card-border: #fed7aa;
 
-  --card-shadow: rgba(99, 102, 241, 0.1);
+  --card-shadow: rgba(249, 115, 22, 0.15);
 }
 
-/* Dark theme overrides. Modern dark palette with better contrast and eye comfort */
+/* Dark theme overrides. Warm dark palette with better contrast and eye comfort */
 :root[data-theme='dark'] {
-  --bg-light: #0f172a;
-  --text-light: #f1f5f9;
-  --card-bg: #1e293b;
-  --card-border: #334155;
-  --card-shadow: rgba(99, 102, 241, 0.2);
-  --color-primary: #818cf8;
-  --color-secondary: #a78bfa;
-  --color-accent: #f472b6;
-  --color-nav: #6366f1;
+  --bg-light: #1c1917;
+  --text-light: #fef3c7;
+  --card-bg: #292524;
+  --card-border: #78350f;
+  --card-shadow: rgba(249, 115, 22, 0.25);
+  --color-primary: #fb923c;
+  --color-secondary: #f87171;
+  --color-accent: #facc15;
+  --color-nav: #ea580c;
 }
 
 /* Base styles */
