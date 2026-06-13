@@ -99,7 +99,36 @@
     </div>
   </main>
   <footer>
-    <small>&copy; 2025 AutoTools Hub</small>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>AutoTools Hub</h4>
+        <p>Бесплатные онлайн‑инструменты для повседневных задач</p>
+      </div>
+      <div class="footer-section">
+        <h4>Проект</h4>
+        <ul>
+          <li><a href="about.html">О сайте</a></li>
+          <li><a href="donate.html">Донат</a></li>
+          <li><a href="contact.html">Контакты</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <small>&copy; 2025 AutoTools Hub</small>
+    </div>
   </footer>
+  <!-- Metrics toggle button (appears in bottom right) -->
+  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики"></div>
+  <!-- Password overlay for unlocking metrics -->
+  <div id="metrics-overlay" class="metrics-overlay hidden">
+    <div class="metrics-modal">
+      <h3>Доступ к метрикам</h3>
+      <p>Введите пароль, чтобы открыть метрики сайта:</p>
+      <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
+      <button id="metrics-submit">ОК</button>
+      <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
+    </div>
+  </div>
+  <script src="custom.js" defer></script>
 </body>
 </html>
