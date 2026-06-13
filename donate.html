@@ -4,13 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Поддержать проект – AutoTools Hub</title>
-  <meta name="description" content="Поддержите разработку AutoTools Hub, отправив крипто-донат через MetaMask или другой EVM‑кошелек.">
+  <meta name="description" content="Поддержите разработку AutoTools Hub через СБП, банковский перевод или ЮKassa.">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js" defer></script>
-  <!-- Используем стабильную версию qrcode -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js" defer></script>
   <script src="script.js" defer></script>
+  <script src="donate.js" defer></script>
 </head>
 <body>
   <header>
@@ -49,14 +48,44 @@
   </nav>
   <main>
     <h2>Поддержать проект</h2>
-    <p>Подключите MetaMask/другой EVM‑кошелек и пожертвуйте любое количество нативного токена.</p>
-    <button id="wallet-connect">Подключить кошелек</button>
-    <div id="wallet-area" class="hidden">
-      <p>Адрес отправителя: <span id="from-addr"></span></p>
-      <label>Адрес получателя: <input id="recipient" placeholder="0x..." type="text"></label>
-      <label>Сумма (ETH): <input id="donate-amount" type="number" min="0" step="0.0001" value="0.001"></label>
-      <button id="send-donate">Отправить</button>
-      <p id="tx-status"></p>
+    <p>Выберите удобный способ поддержки разработки AutoTools Hub:</p>
+
+    <div class="donation-methods">
+      <div class="donation-card">
+        <h3>📱 СБП (Система быстрых платежей)</h3>
+        <p>Мгновенный перевод по номеру телефона</p>
+        <div class="phone-number">+7 XXX XXX XX XX</div>
+        <p class="note">Замените на ваш номер телефона для приёма переводов</p>
+        <div id="sbp-qr" class="qr-placeholder"></div>
+      </div>
+
+      <div class="donation-card">
+        <h3>💳 Банковские реквизиты</h3>
+        <p>Перевод на карту любого российского банка</p>
+        <div class="bank-details">
+          <p><strong>Сбербанк:</strong> XXXX XXXX XXXX XXXX</p>
+          <p><strong>Тинькофф:</strong> XXXX XXXX XXXX XXXX</p>
+          <p><strong>ВТБ:</strong> XXXX XXXX XXXX XXXX</p>
+        </div>
+        <p class="note">Замените на ваши реквизиты</p>
+      </div>
+
+      <div class="donation-card">
+        <h3>🔵 ЮKassa</h3>
+        <p>Безопасный онлайн-платёж (карта МИР)</p>
+        <button id="yookassa-pay" class="donate-button">Оплатить онлайн</button>
+        <p class="note">Требуется настройка ЮKassa</p>
+      </div>
+    </div>
+
+    <div class="donation-info">
+      <h3>💡 Куда пойдут средства?</h3>
+      <ul>
+        <li>Поддержка серверов и хостинга</li>
+        <li>Разработка новых инструментов</li>
+        <li>Улучшение существующих функций</li>
+        <li>Поддержка проекта в активном развитии</li>
+      </ul>
     </div>
   </main>
   <footer>

@@ -296,3 +296,115 @@ footer {
 .hidden {
   display: none !important;
 }
+
+/* Donation page styles */
+.donation-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.donation-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.donation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px var(--card-shadow);
+}
+
+.donation-card h3 {
+  margin-top: 0;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.donation-card p {
+  margin-bottom: 1rem;
+  color: var(--text-light);
+}
+
+.phone-number {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 1rem 0;
+  letter-spacing: 2px;
+}
+
+.bank-details {
+  background-color: var(--bg-light);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.bank-details p {
+  margin: 0.5rem 0;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.note {
+  font-size: 0.875rem;
+  color: #666;
+  font-style: italic;
+}
+
+.qr-placeholder {
+  width: 200px;
+  height: 200px;
+  background-color: var(--bg-light);
+  border: 2px dashed var(--card-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+  color: var(--text-light);
+}
+
+.donate-button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.donate-button:hover {
+  background-color: #004f8a;
+}
+
+.donation-info {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.donation-info h3 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.donation-info ul {
+  padding-left: 1.5rem;
+}
+
+.donation-info li {
+  margin: 0.5rem 0;
+  color: var(--text-light);
+}
