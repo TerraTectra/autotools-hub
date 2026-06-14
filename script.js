@@ -29,12 +29,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Highlight current nav link
   const navLinks = document.querySelectorAll('nav a');
+  // Determine current page name (default to index.html for root).
+  // Strip query parameters to ensure matching links like about.html?v=1
+  const fullPath = window.location.pathname.split('/').pop() || 'index.html';
+  const page = fullPath.split('?')[0];
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
-    // Determine current page name (default to index.html for root).
-    // Strip query parameters to ensure matching links like about.html?v=1
-    const fullPath = window.location.pathname.split('/').pop() || 'index.html';
-    const page = fullPath.split('?')[0];
     if (href === page) {
       link.classList.add('active');
     }

@@ -21,7 +21,6 @@
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
   <script src="script.js" defer></script>
-  <script src="custom.js" defer></script>
   <!-- TOAST UI Image Editor library -->
   <script src="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.js" defer></script>
   <!-- Yandex.Metrica counter -->
@@ -52,23 +51,6 @@
       "price": "0",
       "priceCurrency": "RUB"
     }
-  }
-  </script>
-  <!-- Structured data for SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Мини‑редактор изображений",
-    "operatingSystem": "Web",
-    "applicationCategory": "ImageEditingApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Инструмент для обрезки, поворота и применения фильтров к изображениям.",
-    "url": "https://terratectra.github.io/autotools-hub/editor.html"
   }
   </script>
 </head>
@@ -155,5 +137,6 @@
       <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
     </div>
   </div>
+  <script src="custom.js" defer></script>
 </body>
 </html>
