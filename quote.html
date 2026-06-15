@@ -5,8 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Случайная цитата – AutoTools Hub</title>
   <meta name="description" content="Получите вдохновляющую цитату для настроения и мотивации.">
+  <meta name="keywords" content="цитата, мотивация, вдохновение">
+  <meta property="og:title" content="Случайная цитата – AutoTools Hub">
+  <meta property="og:description" content="Получите вдохновляющую цитату для настроения и мотивации.">
+  <meta property="og:image" content="icons/icon-512.png">
+  <meta property="og:url" content="https://terratectra.github.io/autotools-hub/quote.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Случайная цитата – AutoTools Hub">
+  <meta name="twitter:description" content="Получите вдохновляющую цитату для настроения и мотивации.">
+  <meta name="twitter:image" content="icons/icon-512.png">
+  <link rel="canonical" href="https://terratectra.github.io/autotools-hub/quote.html">
   <link rel="stylesheet" href="styles.css">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
   <script src="script.js" defer></script>
+  <!-- Yandex.Metrica counter -->
+  <script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109814423', 'ym');
+
+    ym(109814423, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/109814423" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <!-- /Yandex.Metrica counter -->
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Случайная цитата",
+    "url": "https://terratectra.github.io/autotools-hub/quote.html",
+    "description": "Получите вдохновляющую цитату для настроения и мотивации"
+  }
+  </script>
 </head>
 <body>
   <header>
@@ -31,6 +66,9 @@
         <li><a href="json.html">JSON</a></li>
         <li><a href="datecalc.html">Даты</a></li>
         <li><a href="bmi.html">BMI</a></li>
+        <li><a href="currency.html">Валюты</a></li>
+        <li><a href="qrlogo.html">QR+Лого</a></li>
+        <li><a href="editor.html">Редактор</a></li>
       </ul>
     </details>
     <details class="nav-dropdown">
@@ -38,10 +76,14 @@
       <ul>
         <li><a href="jokes.html">Шутки</a></li>
         <li><a href="guess.html">Игра</a></li>
+        <li><a href="quiz.html">Викторина</a></li>
       </ul>
     </details>
+    <a href="blog.html">Блог</a>
+    <a href="metrics.html" id="metrics-link" class="hidden">Метрики</a>
     <a href="donate.html">Донат</a>
     <a href="about.html">О сайте</a>
+    <a href="contact.html">Контакты</a>
   </nav>
   <main>
     <h2>Случайная цитата</h2>
@@ -51,7 +93,36 @@
     </div>
   </main>
   <footer>
-    <small>&copy; 2025 AutoTools Hub</small>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>AutoTools Hub</h4>
+        <p>Бесплатные онлайн‑инструменты для повседневных задач</p>
+      </div>
+      <div class="footer-section">
+        <h4>Проект</h4>
+        <ul>
+          <li><a href="about.html">О сайте</a></li>
+          <li><a href="donate.html">Донат</a></li>
+          <li><a href="contact.html">Контакты</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <small>&copy; 2025 AutoTools Hub</small>
+    </div>
   </footer>
+  <!-- Metrics toggle button (appears in bottom right) -->
+  <div id="metrics-toggle" class="metrics-toggle" aria-label="Метрики"></div>
+  <!-- Password overlay for unlocking metrics -->
+  <div id="metrics-overlay" class="metrics-overlay hidden">
+    <div class="metrics-modal">
+      <h3>Доступ к метрикам</h3>
+      <p>Введите пароль, чтобы открыть метрики сайта:</p>
+      <input id="metrics-password" type="password" placeholder="Пароль" aria-label="Пароль">
+      <button id="metrics-submit">ОК</button>
+      <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
+    </div>
+  </div>
+  <script src="custom.js" defer></script>
 </body>
 </html>

@@ -227,6 +227,26 @@
         <a href="quiz.html"><button>Открыть</button></a>
       </div>
     </div>
+    <!-- Поиск и подписка -->
+    <div class="card">
+      <h3>Поиск инструментов</h3>
+      <input type="text" id="search-input" placeholder="Поиск по инструментам...">
+      <button id="voice-btn" aria-label="Голосовой поиск">🎤</button>
+    </div>
+    <div class="card">
+      <h3>Опрос</h3>
+      <p>Какой инструмент вам нравится больше всего?</p>
+      <label><input type="radio" name="poll" value="news"> Новости</label><br>
+      <label><input type="radio" name="poll" value="weather"> Погода</label><br>
+      <label><input type="radio" name="poll" value="currency"> Калькулятор валют</label><br>
+      <button id="poll-vote">Голосовать</button>
+      <div id="poll-results" class="hidden"></div>
+    </div>
+    <div class="card">
+      <h3>Подписка</h3>
+      <input type="email" id="subscribe-email" placeholder="Ваш email">
+      <button id="subscribe-btn">Подписаться</button>
+    </div>
   </main>
   <footer>
     <div class="footer-content">
@@ -259,5 +279,6 @@
       <p id="metrics-error" class="error-message hidden">Неверный пароль</p>
     </div>
   </div>
+  <script src="custom.js" defer></script>
 </body>
 </html>

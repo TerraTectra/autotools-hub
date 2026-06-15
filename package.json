@@ -1,0 +1,24 @@
+{
+  "name": "autotools-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "custom.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TerraTectra/autotools-hub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TerraTectra/autotools-hub/issues"
+  },
+  "homepage": "https://github.com/TerraTectra/autotools-hub#readme",
+  "dependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
