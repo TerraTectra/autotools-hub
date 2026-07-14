@@ -1,0 +1,25 @@
+name: CRM Pipeline Audit
+
+on:
+  push:
+    paths:
+      - "prototypes/crm-pipeline-audit/**"
+      - ".github/workflows/crm-pipeline-audit.yml"
+  pull_request:
+    paths:
+      - "prototypes/crm-pipeline-audit/**"
+      - ".github/workflows/crm-pipeline-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+        working-directory: prototypes/crm-pipeline-audit
+      - run: node src/index.js --input sample/leads.csv --output output/sample-report.html
+        working-directory: prototypes/crm-pipeline-audit
