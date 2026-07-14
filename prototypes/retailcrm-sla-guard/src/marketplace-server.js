@@ -11,11 +11,14 @@ import {
 import {
   buildIntegrationModuleForm,
   buildMarketplaceConfig,
+  decryptSecret,
+  encryptSecret,
   generateClientId,
   getPayloadField,
   normalizePublicBaseUrl,
   parseAllowedDomains,
   parseBoolean,
+  parseEncryptionKey,
   publicErrorMessage,
   validateRetailCrmSystemUrl,
   verifyRegisterToken,
@@ -26,6 +29,7 @@ const config = {
   port: Number(process.env.PORT || 8080),
   publicBaseUrl: process.env.PUBLIC_BASE_URL,
   marketplaceSecret: process.env.MARKETPLACE_SECRET,
+  tenantEncryptionKey: process.env.TENANT_ENCRYPTION_KEY,
   moduleCode: process.env.MARKETPLACE_MODULE_CODE || "retailcrm-sla-guard",
   tenantsFile: process.env.TENANTS_FILE || "data/tenants.json",
   auditLogFile: process.env.AUDIT_LOG_FILE || "data/audit.log",
@@ -38,11 +42,13 @@ const config = {
 
 const store = new TenantStore(config.tenantsFile);
 let polling = false;
+let domainCache = { domains: null, expiresAt: 0 };
 
 function validateStartupConfig() {
   if (!config.publicBaseUrl) throw new Error("PUBLIC_BASE_URL is required");
   config.publicBaseUrl = normalizePublicBaseUrl(config.publicBaseUrl);
   if (!config.marketplaceSecret) throw new Error("MARKETPLACE_SECRET is required");
+  config.tenantEncryptionKey = parseEncryptionKey(config.tenantEncryptionKey);
   if (!/^[a-z0-9][a-z0-9._-]{2,63}$/i.test(config.moduleCode)) {
     throw new Error("MARKETPLACE_MODULE_CODE has invalid format");
   }
@@ -112,29 +118,78 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(url, options = {}, attempts = 3) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(15_000),
+      });
+      const retryable = response.status === 429 || response.status >= 500;
+      if (retryable && attempt < attempts) {
+        await response.body?.cancel().catch(() => {});
+        await sleep(attempt * 750);
+        continue;
+      }
+      return response;
+    } catch (error) {
+      lastError = error;
+      if (attempt >= attempts) throw error;
+      await sleep(attempt * 750);
+    }
+  }
+  throw lastError;
+}
+
 async function fetchAllowedDomains() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
+  if (domainCache.domains && Date.now() < domainCache.expiresAt) {
+    return domainCache.domains;
+  }
+
   try {
-    const response = await fetch(config.domainsUrl, {
-      signal: controller.signal,
-      headers: { accept: "application/json" },
-    });
+    const response = await fetchWithRetry(
+      config.domainsUrl,
+      { headers: { accept: "application/json" } },
+      3,
+    );
     if (!response.ok) throw new Error(`RetailCRM domains returned ${response.status}`);
-    return parseAllowedDomains(await response.json());
-  } finally {
-    clearTimeout(timeout);
+    const domains = parseAllowedDomains(await response.json());
+    domainCache = { domains, expiresAt: Date.now() + 60 * 60 * 1000 };
+    return domains;
+  } catch (error) {
+    if (domainCache.domains) return domainCache.domains;
+    throw error;
   }
 }
 
-async function callRetailCrm(tenant, path, options = {}) {
-  const url = new URL(path, `${tenant.crmUrl}/`);
+function hydrateTenant(tenant) {
+  return {
+    ...tenant,
+    apiKey: decryptSecret(tenant.apiKeyEncrypted, config.tenantEncryptionKey),
+    telegramBotToken: decryptSecret(
+      tenant.telegramBotTokenEncrypted,
+      config.tenantEncryptionKey,
+    ),
+  };
+}
+
+async function callRetailCrm(tenant, pathOrUrl, options = {}) {
+  const { retryAttempts = 2, ...fetchOptions } = options;
+  const url =
+    pathOrUrl instanceof URL
+      ? new URL(pathOrUrl)
+      : new URL(pathOrUrl, `${tenant.crmUrl}/`);
   url.searchParams.set("apiKey", tenant.apiKey);
   const startedAt = Date.now();
-  const response = await fetch(url, options);
+  const response = await fetchWithRetry(url, fetchOptions, retryAttempts);
   await audit("retailcrm_api", {
     clientId: tenant.clientId.slice(0, 12),
-    method: options.method || "GET",
+    method: fetchOptions.method || "GET",
     path: url.pathname,
     status: response.status,
     durationMs: Date.now() - startedAt,
@@ -158,25 +213,38 @@ async function registerModule(payload) {
   }
 
   const crmUrl = validateRetailCrmSystemUrl(rawSystemUrl, await fetchAllowedDomains());
-  const clientId = generateClientId();
+  const previousTenant = (await store.list()).find((tenant) => tenant.crmUrl === crmUrl) || null;
+  const clientId = previousTenant?.clientId || generateClientId();
   const accountUrl = new URL(
     "/marketplace/account",
     `${config.publicBaseUrl}/`,
   ).toString();
 
-  const tenant = await store.upsert(clientId, {
-    crmUrl,
-    apiKey,
-    active: false,
-    frozen: false,
-    configured: false,
-    slaRules: "new:30,assembling:120,delivery:1440",
-    telegramBotToken: null,
-    telegramChatId: null,
-    sentKeys: [],
-    createdAt: new Date().toISOString(),
-    registrationState: "pending",
-  });
+  const pendingChanges = previousTenant
+    ? {
+        crmUrl,
+        apiKeyEncrypted: encryptSecret(apiKey, config.tenantEncryptionKey),
+        active: false,
+        frozen: false,
+        registrationState: "pending",
+        registrationAttemptAt: new Date().toISOString(),
+      }
+    : {
+        crmUrl,
+        apiKeyEncrypted: encryptSecret(apiKey, config.tenantEncryptionKey),
+        active: false,
+        frozen: false,
+        configured: false,
+        slaRules: "new:30,assembling:120,delivery:1440",
+        telegramBotTokenEncrypted: null,
+        telegramChatId: null,
+        sentKeys: [],
+        createdAt: new Date().toISOString(),
+        registrationState: "pending",
+        registrationAttemptAt: new Date().toISOString(),
+      };
+
+  const pendingTenant = await store.upsert(clientId, pendingChanges);
 
   try {
     const form = buildIntegrationModuleForm({
@@ -185,10 +253,11 @@ async function registerModule(payload) {
       publicBaseUrl: config.publicBaseUrl,
     });
     const response = await callRetailCrm(
-      tenant,
+      hydrateTenant(pendingTenant),
       `/api/v5/integration-modules/${encodeURIComponent(config.moduleCode)}/edit`,
       {
         method: "POST",
+        retryAttempts: 2,
         headers: {
           accept: "application/json",
           "content-type": "application/x-www-form-urlencoded",
@@ -210,13 +279,17 @@ async function registerModule(payload) {
       registrationState: "registered",
       registeredAt: new Date().toISOString(),
     });
-    await audit("tenant_registered", {
+    await audit(previousTenant ? "tenant_reregistered" : "tenant_registered", {
       clientId: clientId.slice(0, 12),
       crmHost: new URL(crmUrl).hostname,
     });
     return { success: true, accountUrl };
   } catch (error) {
-    await store.remove(clientId);
+    if (previousTenant) {
+      await store.upsert(clientId, previousTenant);
+    } else {
+      await store.remove(clientId);
+    }
     await audit("tenant_registration_failed", {
       clientId: clientId.slice(0, 12),
       error: publicErrorMessage(error),
@@ -272,7 +345,7 @@ async function handleActivity(payload) {
 }
 
 function accountPage(tenant, message = "") {
-  const tokenState = tenant.telegramBotToken ? "настроен" : "не настроен";
+  const tokenState = tenant.telegramBotTokenEncrypted ? "настроен" : "не настроен";
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RetailCRM SLA Guard</title><style>
@@ -300,13 +373,15 @@ async function saveAccount(payload) {
   ).trim();
   parseRules(slaRules);
   if (!telegramChatId) throw new Error("Telegram chat ID is required");
-  const telegramBotToken = suppliedToken || tenant.telegramBotToken;
-  if (!telegramBotToken) throw new Error("Telegram bot token is required");
+  const telegramBotTokenEncrypted = suppliedToken
+    ? encryptSecret(suppliedToken, config.tenantEncryptionKey)
+    : tenant.telegramBotTokenEncrypted;
+  if (!telegramBotTokenEncrypted) throw new Error("Telegram bot token is required");
 
   return store.upsert(clientId, {
     slaRules,
     telegramChatId,
-    telegramBotToken,
+    telegramBotTokenEncrypted,
     configured: true,
     lastConfigurationAt: new Date().toISOString(),
   });
@@ -318,11 +393,8 @@ async function fetchOrders(tenant) {
   while (true) {
     const response = await callRetailCrm(
       tenant,
-      buildOrdersUrl(tenant.crmUrl, tenant.apiKey, page).pathname +
-        buildOrdersUrl(tenant.crmUrl, tenant.apiKey, page).search.replace(
-          new RegExp(`([?&])apiKey=[^&]*&?`),
-          "$1",
-        ).replace(/[?&]$/, ""),
+      buildOrdersUrl(tenant.crmUrl, tenant.apiKey, page),
+      { retryAttempts: 3 },
     );
     if (!response.ok) throw new Error(`RetailCRM orders returned ${response.status}`);
     const result = await response.json();
@@ -336,30 +408,41 @@ async function fetchOrders(tenant) {
 
 async function sendTelegram(tenant, text) {
   if (config.dryRun) return;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
-  try {
-    const response = await fetch(
-      `https://api.telegram.org/bot${tenant.telegramBotToken}/sendMessage`,
-      {
-        method: "POST",
-        signal: controller.signal,
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ chat_id: tenant.telegramChatId, text }),
-      },
-    );
-    await audit("telegram_api", {
-      clientId: tenant.clientId.slice(0, 12),
-      status: response.status,
-    });
-    if (!response.ok) throw new Error(`Telegram returned ${response.status}`);
-  } finally {
-    clearTimeout(timeout);
-  }
+  const response = await fetchWithRetry(
+    `https://api.telegram.org/bot${tenant.telegramBotToken}/sendMessage`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ chat_id: tenant.telegramChatId, text }),
+    },
+    3,
+  );
+  await audit("telegram_api", {
+    clientId: tenant.clientId.slice(0, 12),
+    status: response.status,
+  });
+  if (!response.ok) throw new Error(`Telegram returned ${response.status}`);
 }
 
-async function pollTenant(tenant) {
-  if (!tenant.active || tenant.frozen || !tenant.configured) return;
+async function pollTenant(rawTenant) {
+  if (!rawTenant.active || rawTenant.frozen || !rawTenant.configured) return;
+
+  let tenant;
+  try {
+    tenant = hydrateTenant(rawTenant);
+  } catch (error) {
+    const message = publicErrorMessage(error);
+    await store.upsert(rawTenant.clientId, {
+      lastPollAt: new Date().toISOString(),
+      lastError: message,
+    });
+    await audit("tenant_secret_error", {
+      clientId: rawTenant.clientId.slice(0, 12),
+      error: message,
+    });
+    return;
+  }
+
   const sentKeys = new Set(Array.isArray(tenant.sentKeys) ? tenant.sentKeys : []);
   try {
     const orders = await fetchOrders(tenant);
@@ -368,9 +451,8 @@ async function pollTenant(tenant) {
       await sendTelegram(tenant, buildAlert(order));
       sentKeys.add(alertKey(order));
     }
-    const compactKeys = [...sentKeys].slice(-5000);
     await store.upsert(tenant.clientId, {
-      sentKeys: compactKeys,
+      sentKeys: [...sentKeys].slice(-5000),
       lastPollAt: new Date().toISOString(),
       lastPollOrders: orders.length,
       lastPollAlerts: alerts.length,
@@ -415,12 +497,9 @@ async function handleRequest(request, response) {
       await handleActivity(await readPayload(request));
       return sendJson(response, 200, { success: true });
     }
-    if (
-      (request.method === "POST" || request.method === "GET") &&
-      url.pathname === "/marketplace/account"
-    ) {
-      const payload = request.method === "POST" ? await readPayload(request) : {};
-      const clientId = getPayloadField(payload, "clientId", ["clientId"]) || url.searchParams.get("clientId");
+    if (request.method === "POST" && url.pathname === "/marketplace/account") {
+      const payload = await readPayload(request);
+      const clientId = getPayloadField(payload, "clientId", ["clientId"]);
       const tenant = clientId ? await store.get(clientId) : null;
       if (!tenant) return sendHtml(response, 404, "<h1>Настройки не найдены</h1>");
       return sendHtml(response, 200, accountPage(tenant));
@@ -449,11 +528,14 @@ async function main() {
       sendJson(response, 500, { success: false, errorMsg: publicErrorMessage(error) });
     });
   });
+  server.requestTimeout = 20_000;
+  server.headersTimeout = 10_000;
+  server.keepAliveTimeout = 5_000;
   server.listen(config.port, "0.0.0.0", () => {
     console.log(`RetailCRM SLA Guard listening on port ${config.port}`);
   });
   setTimeout(() => pollCycle().catch(console.error), 1_000);
-  setInterval(() => pollCycle().catch(console.error), config.pollIntervalMs);
+  setInterval(() => pollCycle().catch(console.error), config.pollIntervalMs).unref();
 }
 
 main().catch((error) => {
