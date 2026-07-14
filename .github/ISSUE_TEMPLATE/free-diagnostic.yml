@@ -1,0 +1,77 @@
+name: Бесплатная диагностика CSV
+
+description: Запросить краткую проверку обезличенной выборки до 100 строк
+
+title: "[Диагностика] "
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Бесплатная диагностика предназначена для проверки совместимости данных с CRM Pipeline Audit или CRM Data Cleaner.
+
+        **Не прикладывайте CSV, персональные данные, API-ключи, пароли, токены, номера телефонов или email клиентов в публичный issue.** После первичной оценки согласуем безопасный письменный канал передачи обезличенной выборки.
+
+  - type: input
+    id: organization
+    attributes:
+      label: Организация или проект
+      description: Можно указать сокращённое или публичное название.
+      placeholder: Например, интернет-магазин или CRM-интегратор
+    validations:
+      required: true
+
+  - type: dropdown
+    id: goal
+    attributes:
+      label: Что нужно проверить
+      options:
+        - CRM-аудит воронки
+        - Очистка и дедупликация базы
+        - Оба варианта
+    validations:
+      required: true
+
+  - type: input
+    id: crm
+    attributes:
+      label: Источник данных
+      description: CRM, сервис рассылок или тип таблицы.
+      placeholder: amoCRM, Битрикс24, RetailCRM, Excel/CSV, другое
+    validations:
+      required: true
+
+  - type: input
+    id: rows
+    attributes:
+      label: Примерное число строк в полной базе
+      placeholder: 8 000
+    validations:
+      required: true
+
+  - type: textarea
+    id: columns
+    attributes:
+      label: Названия колонок
+      description: Перечислите только заголовки полей без значений и персональных данных.
+      placeholder: id, status, responsible, amount, updated_at, email, phone
+    validations:
+      required: true
+
+  - type: textarea
+    id: result
+    attributes:
+      label: Какой результат важнее всего
+      placeholder: Найти дубли, оценить зависшие сделки, проверить качество контактов...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Безопасность данных
+      options:
+        - label: Я не публикую в этом issue персональные данные, секреты или закрытые файлы.
+          required: true
+        - label: Я согласен продолжить обсуждение только в письменном формате.
+          required: true
