@@ -24,10 +24,13 @@ jobs:
             'https://docs.retailcrm.ru/Developers/modules/PublishingModuleMarketplace/ModulesActivation' \
             -o out/modules-activation.html
           curl -L --fail --silent --show-error \
+            'https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5' \
+            -o out/api-v5.html
+          curl -L --fail --silent --show-error \
             'https://infra-data.retailcrm.tech/crm-domains.json' \
             -o out/crm-domains.json
-          grep -n -B10 -A30 -E 'configUrl|registerUrl|register\[token\]|integrationModule\[actions\]\[activity\]' \
-            out/modules-activation.html > out/relevant.txt || true
+          grep -n -B15 -A90 -E 'callback_get--configUrl|callback_post--registerUrl|callback_post--.*activity|register\[token\]|integrationModule\[actions\]\[activity\]' \
+            out/api-v5.html out/modules-activation.html > out/relevant.txt || true
           cat out/crm-domains.json
       - uses: actions/upload-artifact@v4
         with:
