@@ -1,6 +1,6 @@
 # RetailCRM SLA Guard
 
-RetailCRM SLA Guard detects orders that remain in one status longer than the configured SLA and sends a Telegram alert. The repository supports two modes:
+RetailCRM SLA Guard records order-status SLA breaches, highlights recurring bottlenecks and uses Telegram as an escalation channel. The repository supports two modes:
 
 - a single-account pilot for a specific client;
 - a multi-tenant backend implementing the RetailCRM Marketplace simple-connection flow.
@@ -11,7 +11,11 @@ A public demonstration with fictional orders, configurable SLA thresholds and a 
 
 **https://terratectra.github.io/autotools-hub/site/**
 
-The demo does not connect to RetailCRM and does not collect credentials or customer data.
+A separate public journal and analytics demonstration is available at:
+
+**https://terratectra.github.io/autotools-hub/site/incidents.html**
+
+The demonstrations do not connect to RetailCRM and do not collect credentials or customer data.
 
 ## Business value
 
@@ -26,6 +30,7 @@ The demo does not connect to RetailCRM and does not collect credentials or custo
 ## Marketplace package
 
 - [Bilingual Marketplace card and pricing proposal](MARKETPLACE_SUBMISSION.md)
+- [Competitive positioning and sales boundaries](COMPETITIVE_POSITIONING.md)
 - [Moderation checklist and reviewer scenario](MODERATION.md)
 - [Written support policy](SUPPORT.md)
 - [Privacy and security policy](PRIVACY.md)
@@ -35,8 +40,9 @@ The demo does not connect to RetailCRM and does not collect credentials or custo
 
 1. Reads orders through `GET /api/v5/orders`.
 2. Compares `statusUpdatedAt` with the threshold configured for `extendedStatus` (or `status`).
-3. Sends a Telegram message for newly detected breaches.
-4. Stores sent alert keys so the same status breach is not reported twice.
+3. Records a privacy-safe SLA incident and updates managerial analytics.
+4. Sends a Telegram escalation for the newly detected breach.
+5. Stores sent alert keys so the same status breach is not reported twice.
 
 Marketplace alerts contain only order number, status and SLA duration by default. Customer name and order total require explicit opt-in by the account owner.
 
@@ -114,7 +120,7 @@ The JSON tenant store is sufficient for a controlled pilot on one instance. A pr
 npm run check
 ```
 
-The check runs syntax validation and unit tests for SLA detection, privacy-safe alerts, HMAC verification, AES-256-GCM credential encryption, domain validation, registration parameters and atomic tenant persistence. It also starts the Marketplace HTTP server in a process-level smoke test.
+The check runs syntax validation and unit tests for SLA detection, privacy-safe alerts, incident history, managerial analytics, spreadsheet-safe CSV export, HMAC verification, AES-256-GCM credential encryption, domain validation, registration parameters and atomic tenant persistence. It also starts the Marketplace HTTP server in a process-level smoke test.
 
 ## Docker
 
@@ -138,7 +144,8 @@ A first client pilot can include:
 
 - mapping of real RetailCRM statuses;
 - rules for different teams and shops;
-- Telegram group routing;
+- Telegram escalation routing;
+- privacy-safe incident history and status analytics;
 - links back to the order card;
 - quiet hours and escalation levels;
 - persistent storage and deployment;
