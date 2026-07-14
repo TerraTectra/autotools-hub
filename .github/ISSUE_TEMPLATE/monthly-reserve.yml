@@ -1,0 +1,81 @@
+name: Ежемесячный технический резерв
+
+description: Запросить внешний технический резерв для студии или интегратора
+
+title: "[Техрезерв] "
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Форма предназначена для веб-студий, CRM-интеграторов и агентств с регулярными небольшими задачами.
+
+        **Не публикуйте клиентские файлы, персональные данные, пароли, API-ключи или токены.** Здесь нужна только общая структура очереди. Закрытые детали согласуются отдельно в письменной переписке.
+
+  - type: input
+    id: organization
+    attributes:
+      label: Студия или проект
+      placeholder: Публичное название компании
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: work_types
+    attributes:
+      label: Какие задачи возникают регулярно
+      options:
+        - label: Доработки UMI.CMS или другой CMS
+        - label: API и webhook-интеграции
+        - label: CRM и автоматизация продаж
+        - label: Диагностика сломавшихся подключений
+        - label: CSV/Excel, импорт и экспорт
+        - label: Telegram-уведомления или служебные боты
+        - label: Исправления существующего PHP/Node.js/Python-кода
+        - label: Тесты и техническая документация
+    validations:
+      required: true
+
+  - type: dropdown
+    id: volume
+    attributes:
+      label: Ориентировочный месячный объём
+      options:
+        - До 8 часов
+        - До 18 часов
+        - До 32 часов
+        - Нужна оценка по примерам задач
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: 2–5 примеров типичных задач
+      description: Опишите задачи без закрытых данных и доступов.
+      placeholder: Добавить обработчик события, исправить импорт, подключить webhook...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: client_communication
+    attributes:
+      label: Кто общается с конечным клиентом
+      options:
+        - Агентство оставляет коммуникацию у себя
+        - Нужна только письменная техническая переписка с клиентом
+        - Конечных клиентов нет, это внутренние задачи
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: conditions
+    attributes:
+      label: Условия
+      options:
+        - label: Все задачи и критерии приёмки будут фиксироваться письменно.
+          required: true
+        - label: Я не публикую здесь секреты, доступы и персональные данные.
+          required: true
+        - label: Я ознакомился с условиями MONTHLY_SUPPORT.md.
+          required: true
