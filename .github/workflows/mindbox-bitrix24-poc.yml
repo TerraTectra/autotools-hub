@@ -1,0 +1,27 @@
+name: Mindbox Bitrix24 PoC
+
+on:
+  pull_request:
+    paths:
+      - "prototypes/mindbox-bitrix24-poc/**"
+      - ".github/workflows/mindbox-bitrix24-poc.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prototypes/mindbox-bitrix24-poc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: prototypes/mindbox-bitrix24-poc/package.json
+      - run: npm install --ignore-scripts
+      - run: npm run check
