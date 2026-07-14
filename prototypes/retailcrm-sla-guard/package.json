@@ -9,6 +9,6 @@
     "start": "node src/index.js",
     "start:marketplace": "node src/marketplace-server.js",
     "test": "node --test",
-    "check": "node --check src/index.js && node --check src/core.js && node --check src/marketplace-core.js && node --check src/tenant-store.js && node --check src/marketplace-server.js && node --test"
+    "check": "node --check src/index.js && node --check src/core.js && node --check src/marketplace-core.js && node --check src/incident-core.js && node --check src/tenant-store.js && node --check src/marketplace-server.js && node --test"
   }
 }

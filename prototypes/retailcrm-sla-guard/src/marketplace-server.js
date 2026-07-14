@@ -8,6 +8,7 @@ import {
   collectNewAlerts,
   parseRules,
 } from "./core.js";
+import { appendIncidents, incidentsToCsv } from "./incident-core.js";
 import {
   buildIntegrationModuleForm,
   buildMarketplaceConfig,
@@ -92,6 +93,16 @@ function sendHtml(response, statusCode, html) {
     "x-content-type-options": "nosniff",
   });
   response.end(html);
+}
+
+function sendCsv(response, filename, csv) {
+  response.writeHead(200, {
+    "content-type": "text/csv; charset=utf-8",
+    "content-disposition": `attachment; filename="${filename}"`,
+    "cache-control": "no-store",
+    "x-content-type-options": "nosniff",
+  });
+  response.end(`\uFEFF${csv}`);
 }
 
 async function readPayload(request) {
@@ -240,6 +251,7 @@ async function registerModule(payload) {
         telegramBotTokenEncrypted: null,
         telegramChatId: null,
         sentKeys: [],
+        incidents: [],
         createdAt: new Date().toISOString(),
         registrationState: "pending",
         registrationAttemptAt: new Date().toISOString(),
@@ -360,7 +372,39 @@ body{font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0
 <label for="telegramChatId">Telegram chat ID</label><input id="telegramChatId" name="telegramChatId" required value="${escapeHtml(tenant.telegramChatId || "")}">
 <label for="telegramBotToken">Telegram bot token</label><input id="telegramBotToken" name="telegramBotToken" type="password" autocomplete="new-password" placeholder="Оставьте пустым, чтобы сохранить текущий">
 <label class="check"><input type="checkbox" name="includeCustomerData" value="1"${customerDataChecked}><span>Добавлять в Telegram имя клиента и сумму заказа. По умолчанию выключено для минимизации персональных данных.</span></label>
-<button type="submit">Сохранить настройки</button></form></body></html>`;
+<button type="submit">Сохранить настройки</button></form>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+<form method="post" action="/marketplace/incidents"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Журнал нарушений</button></form>
+<form method="post" action="/marketplace/incidents.csv"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Скачать CSV</button></form>
+</div></body></html>`;
+}
+
+function incidentPage(tenant) {
+  const incidents = Array.isArray(tenant.incidents) ? tenant.incidents : [];
+  const rows = incidents.length
+    ? incidents
+        .map(
+          (incident) => `<tr><td>${escapeHtml(incident.detectedAt)}</td><td>${escapeHtml(incident.orderNumber)}</td><td>${escapeHtml(incident.status)}</td><td>${escapeHtml(incident.staleMinutes ?? "?")} мин.</td><td>${escapeHtml(incident.statusUpdatedAt || "—")}</td></tr>`,
+        )
+        .join("")
+    : '<tr><td colspan="5">Нарушения пока не зафиксированы.</td></tr>';
+
+  return `<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Журнал SLA — RetailCRM SLA Guard</title><style>
+body{font-family:system-ui,sans-serif;max-width:1040px;margin:40px auto;padding:0 18px;color:#171717}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}th{background:#f4f4f4}button{padding:10px 16px;border:0;border-radius:7px;background:#171717;color:white;font-weight:700}form{display:inline-block;margin-right:10px}.note{padding:12px;background:#f3f3f3;border-radius:7px}</style></head><body>
+<h1>Журнал нарушений SLA</h1><div class="note">Хранятся только номер заказа, статус, длительность задержки и техническое время фиксации. Имя клиента, контакты и сумма заказа в журнал не попадают.</div>
+<table><thead><tr><th>Зафиксировано</th><th>Заказ</th><th>Статус</th><th>Задержка</th><th>Статус изменён</th></tr></thead><tbody>${rows}</tbody></table>
+<form method="post" action="/marketplace/account"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Вернуться к настройкам</button></form>
+<form method="post" action="/marketplace/incidents.csv"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Скачать CSV</button></form>
+</body></html>`;
+}
+
+async function tenantFromPayload(payload) {
+  const clientId = getPayloadField(payload, "clientId", ["clientId"]);
+  const tenant = clientId ? await store.get(clientId) : null;
+  if (!tenant) throw new Error("Unknown clientId");
+  return tenant;
 }
 
 async function saveAccount(payload) {
@@ -454,10 +498,11 @@ async function pollTenant(rawTenant) {
   try {
     const orders = await fetchOrders(tenant);
     const alerts = collectNewAlerts(orders, parseRules(tenant.slaRules), sentKeys);
+    const detectedAt = new Date();
     for (const order of alerts) {
       await sendTelegram(
         tenant,
-        buildAlert(order, new Date(), {
+        buildAlert(order, detectedAt, {
           includeCustomerData: tenant.includeCustomerData === true,
         }),
       );
@@ -465,6 +510,7 @@ async function pollTenant(rawTenant) {
     }
     await store.upsert(tenant.clientId, {
       sentKeys: [...sentKeys].slice(-5000),
+      incidents: appendIncidents(tenant.incidents, alerts, detectedAt),
       lastPollAt: new Date().toISOString(),
       lastPollOrders: orders.length,
       lastPollAlerts: alerts.length,
@@ -520,6 +566,18 @@ async function handleRequest(request, response) {
       const tenant = await saveAccount(await readPayload(request));
       await audit("tenant_configured", { clientId: tenant.clientId.slice(0, 12) });
       return sendHtml(response, 200, accountPage(tenant, "Настройки сохранены"));
+    }
+    if (request.method === "POST" && url.pathname === "/marketplace/incidents") {
+      const tenant = await tenantFromPayload(await readPayload(request));
+      return sendHtml(response, 200, incidentPage(tenant));
+    }
+    if (request.method === "POST" && url.pathname === "/marketplace/incidents.csv") {
+      const tenant = await tenantFromPayload(await readPayload(request));
+      return sendCsv(
+        response,
+        "retailcrm-sla-incidents.csv",
+        incidentsToCsv(tenant.incidents),
+      );
     }
     return sendJson(response, 404, { success: false, errorMsg: "Not found" });
   } catch (error) {

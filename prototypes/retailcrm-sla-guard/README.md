@@ -19,7 +19,8 @@ The demo does not connect to RetailCRM and does not collect credentials or custo
 - gives supervisors immediate visibility into SLA breaches;
 - works without changing the CRM workflow;
 - supports different limits for each RetailCRM status;
-- suppresses duplicate notifications until the order status changes again.
+- suppresses duplicate notifications until the order status changes again;
+- keeps a privacy-safe incident journal with CSV export for operational reviews.
 
 ## Marketplace package
 
@@ -63,6 +64,8 @@ The Marketplace backend provides:
 - `POST /marketplace/activity` — processes activation, deactivation, freeze, unfreeze and account URL changes;
 - `POST /marketplace/account` — opens the tenant settings page using `clientId` supplied by RetailCRM in the request body;
 - `POST /marketplace/account/save` — saves SLA, Telegram and privacy settings;
+- `POST /marketplace/incidents` — opens the privacy-safe SLA incident journal;
+- `POST /marketplace/incidents.csv` — exports the journal for operational analysis;
 - `GET /health` — health check.
 
 Set the partner-cabinet configuration URL to:
