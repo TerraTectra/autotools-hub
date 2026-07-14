@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { appendIncidents, buildIncident, incidentsToCsv } from "../src/incident-core.js";
+import {
+  appendIncidents,
+  buildIncident,
+  incidentsToCsv,
+  summarizeIncidents,
+} from "../src/incident-core.js";
 
 const now = new Date("2026-07-14T12:00:00Z");
 const order = {
@@ -31,6 +36,43 @@ test("deduplicates and bounds incident history", () => {
   const bounded = appendIncidents(first, [secondOrder, thirdOrder], now, 2);
   assert.equal(bounded.length, 2);
   assert.equal(bounded[0].orderNumber, "=A-44");
+});
+
+test("summarizes SLA incidents for an operational review", () => {
+  const incidents = [
+    {
+      key: "1",
+      status: "assembling",
+      staleMinutes: 120,
+      detectedAt: "2026-07-14T11:00:00Z",
+    },
+    {
+      key: "2",
+      status: "assembling",
+      staleMinutes: 180,
+      detectedAt: "2026-07-13T13:00:00Z",
+    },
+    {
+      key: "3",
+      status: "new",
+      staleMinutes: 60,
+      detectedAt: "2026-07-06T12:00:00Z",
+    },
+  ];
+
+  const summary = summarizeIncidents(incidents, now);
+  assert.equal(summary.total, 3);
+  assert.equal(summary.last24Hours, 2);
+  assert.equal(summary.last7Days, 2);
+  assert.equal(summary.averageDelayMinutes, 120);
+  assert.equal(summary.maxDelayMinutes, 180);
+  assert.equal(summary.topStatus, "assembling");
+  assert.deepEqual(summary.byStatus[0], {
+    status: "assembling",
+    count: 2,
+    maxDelayMinutes: 180,
+    averageDelayMinutes: 150,
+  });
 });
 
 test("exports incidents as spreadsheet-safe CSV", () => {
