@@ -52,3 +52,13 @@ test("formats a useful Telegram alert", () => {
   assert.match(text, /Иван Петров/);
   assert.match(text, /12\s?500 RUB/);
 });
+
+test("can redact customer data from Telegram alerts", () => {
+  const text = buildAlert(order, now, { includeCustomerData: false });
+  assert.match(text, /A-42/);
+  assert.match(text, /120 мин/);
+  assert.doesNotMatch(text, /Иван Петров/);
+  assert.doesNotMatch(text, /12\s?500 RUB/);
+  assert.doesNotMatch(text, /Клиент:/);
+  assert.doesNotMatch(text, /Сумма:/);
+});
