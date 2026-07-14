@@ -1,0 +1,29 @@
+name: UMI CDEK Adapter
+
+on:
+  push:
+    paths:
+      - "prototypes/umi-cdek-adapter/**"
+      - ".github/workflows/umi-cdek-adapter.yml"
+  pull_request:
+    paths:
+      - "prototypes/umi-cdek-adapter/**"
+      - ".github/workflows/umi-cdek-adapter.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+      - run: php tests/run.php
+        working-directory: prototypes/umi-cdek-adapter
+      - run: |
+          php -l src/PayloadMapper.php
+          php -l src/IdempotencyStore.php
+          php -l src/CdekSdkTransport.php
+        working-directory: prototypes/umi-cdek-adapter
