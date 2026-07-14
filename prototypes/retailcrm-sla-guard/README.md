@@ -20,7 +20,8 @@ The demo does not connect to RetailCRM and does not collect credentials or custo
 - works without changing the CRM workflow;
 - supports different limits for each RetailCRM status;
 - suppresses duplicate notifications until the order status changes again;
-- keeps a privacy-safe incident journal with CSV export for operational reviews.
+- keeps a privacy-safe incident journal with CSV export for operational reviews;
+- highlights the most frequent problem statuses, daily/weekly incident counts and average delay.
 
 ## Marketplace package
 
