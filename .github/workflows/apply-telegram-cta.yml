@@ -1,0 +1,65 @@
+name: Apply Telegram CTA
+
+on:
+  push:
+    branches:
+      - agent/retailcrm-telegram-cta-v3
+    paths:
+      - .github/workflows/apply-telegram-cta.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/retailcrm-telegram-cta-v3
+          fetch-depth: 0
+      - name: Add written Telegram contact
+        shell: python
+        run: |
+          from pathlib import Path
+
+          telegram = '<a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a>'
+
+          index = Path('site/index.html')
+          text = index.read_text(encoding='utf-8')
+          old = '<a class="button" href="mailto:nikidom123@gmail.com?subject=RetailCRM%20SLA%20Guard">Обсудить письменно</a>'
+          new = telegram + '\n        ' + old.replace('Обсудить письменно', 'Email')
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected one main email CTA, got {text.count(old)}')
+          index.write_text(text.replace(old, new), encoding='utf-8')
+
+          incidents = Path('site/incidents.html')
+          text = incidents.read_text(encoding='utf-8')
+          marker = '<a class="button" href="calculator.html">Рассчитать стоимость задержек</a>'
+          if text.count(marker) != 1:
+              raise SystemExit(f'Expected one incident CTA marker, got {text.count(marker)}')
+          incidents.write_text(text.replace(marker, marker + '\n          ' + telegram), encoding='utf-8')
+
+          calculator = Path('site/calculator.html')
+          text = calculator.read_text(encoding='utf-8')
+          marker = '<a class="button" href="incidents.html">Посмотреть журнал SLA</a>'
+          if text.count(marker) != 1:
+              raise SystemExit(f'Expected one calculator CTA marker, got {text.count(marker)}')
+          calculator.write_text(text.replace(marker, marker + '\n          ' + telegram), encoding='utf-8')
+
+          for path in (index, incidents, calculator):
+              content = path.read_text(encoding='utf-8')
+              if content.count('https://t.me/tahioff') != 1:
+                  raise SystemExit(f'{path} must contain exactly one Telegram CTA')
+              if '<script src=' in content.lower():
+                  raise SystemExit(f'{path} unexpectedly contains an external script')
+      - name: Commit clean patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'TerraTectra Automation'
+          git config user.email 'actions@users.noreply.github.com'
+          git rm .github/workflows/apply-telegram-cta.yml
+          git add site/index.html site/incidents.html site/calculator.html
+          git commit -m 'feat: add Telegram contact CTA to SLA Journal pages'
+          git push origin HEAD:agent/retailcrm-telegram-cta-v3
