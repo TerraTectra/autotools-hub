@@ -13,12 +13,22 @@ RetailCRM SLA Guard detects orders that remain in one status longer than the con
 - supports different limits for each RetailCRM status;
 - suppresses duplicate notifications until the order status changes again.
 
+## Marketplace package
+
+- [Bilingual Marketplace card and pricing proposal](MARKETPLACE_SUBMISSION.md)
+- [Moderation checklist and reviewer scenario](MODERATION.md)
+- [Written support policy](SUPPORT.md)
+- [Privacy and security policy](PRIVACY.md)
+- [30-day audit log rotation example](deploy/retailcrm-sla-guard.logrotate)
+
 ## How it works
 
 1. Reads orders through `GET /api/v5/orders`.
 2. Compares `statusUpdatedAt` with the threshold configured for `extendedStatus` (or `status`).
 3. Sends a Telegram message for newly detected breaches.
 4. Stores sent alert keys so the same status breach is not reported twice.
+
+Marketplace alerts contain only order number, status and SLA duration by default. Customer name and order total require explicit opt-in by the account owner.
 
 ## Single-account pilot
 
@@ -44,7 +54,7 @@ The Marketplace backend provides:
 - `POST /marketplace/register` — validates `register[token]` using HMAC-SHA256, checks the CRM domain against the current RetailCRM domain list, registers the integration module through API v5 and creates or safely reconnects a tenant;
 - `POST /marketplace/activity` — processes activation, deactivation, freeze, unfreeze and account URL changes;
 - `POST /marketplace/account` — opens the tenant settings page using `clientId` supplied by RetailCRM in the request body;
-- `POST /marketplace/account/save` — saves SLA and Telegram settings;
+- `POST /marketplace/account/save` — saves SLA, Telegram and privacy settings;
 - `GET /health` — health check.
 
 Set the partner-cabinet configuration URL to:
@@ -82,7 +92,9 @@ The JSON tenant store is sufficient for a controlled pilot on one instance. A pr
 - outgoing RetailCRM and Telegram requests use timeouts and retries for network errors, rate limits and server errors;
 - API keys and bot tokens are excluded from application logs and encrypted in tenant storage;
 - account settings are opened only through a POST carrying the unpredictable `clientId`, avoiding credentials in query strings;
-- module polling stops while a tenant is deactivated, frozen or not fully configured.
+- module polling stops while a tenant is deactivated, frozen or not fully configured;
+- customer data is excluded from Marketplace alerts by default;
+- the provided deployment example rotates audit logs daily and retains 30 archives.
 
 ## Validation
 
@@ -90,7 +102,7 @@ The JSON tenant store is sufficient for a controlled pilot on one instance. A pr
 npm run check
 ```
 
-The check runs syntax validation and unit tests for SLA detection, HMAC verification, AES-256-GCM credential encryption, domain validation, registration parameters and atomic tenant persistence.
+The check runs syntax validation and unit tests for SLA detection, privacy-safe alerts, HMAC verification, AES-256-GCM credential encryption, domain validation, registration parameters and atomic tenant persistence. It also starts the Marketplace HTTP server in a process-level smoke test.
 
 ## Docker
 
@@ -120,4 +132,4 @@ A first client pilot can include:
 - persistent storage and deployment;
 - installation guide and support.
 
-The repository contains no real credentials or customer data. A client pilot requires a test RetailCRM account/API key and a Telegram bot created by the client. Marketplace moderation additionally requires a partner account, the module code and secret from the partner cabinet, a stable public HTTPS deployment and the legal onboarding requested by RetailCRM.
+The repository contains no real credentials or customer data. A client pilot requires a test RetailCRM account/API key and a Telegram bot created by the client. Marketplace moderation additionally requires a partner account, the module code and secret from the partner cabinet, a stable public HTTPS deployment, an SVG logo and the legal onboarding requested by RetailCRM.

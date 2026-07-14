@@ -46,22 +46,29 @@ export function alertKey(order) {
   return `${order.id}:${orderStatus(order)}:${order.statusUpdatedAt || "unknown"}`;
 }
 
-export function buildAlert(order, now = new Date()) {
+export function buildAlert(
+  order,
+  now = new Date(),
+  { includeCustomerData = true } = {},
+) {
   const elapsed = staleMinutes(order, now);
   const number = order.number || order.externalId || order.id;
-  const customer = [order.firstName, order.lastName].filter(Boolean).join(" ") || "не указан";
-  const total = Number.isFinite(Number(order.totalSumm))
-    ? `${Number(order.totalSumm).toLocaleString("ru-RU")} ${order.currency || "RUB"}`
-    : "не указана";
-
-  return [
+  const lines = [
     "⚠️ RetailCRM: заказ превысил SLA",
     `Заказ: ${number}`,
     `Статус: ${orderStatus(order)}`,
     `Без изменения: ${elapsed ?? "?"} мин.`,
-    `Клиент: ${customer}`,
-    `Сумма: ${total}`,
-  ].join("\n");
+  ];
+
+  if (includeCustomerData) {
+    const customer = [order.firstName, order.lastName].filter(Boolean).join(" ") || "не указан";
+    const total = Number.isFinite(Number(order.totalSumm))
+      ? `${Number(order.totalSumm).toLocaleString("ru-RU")} ${order.currency || "RUB"}`
+      : "не указана";
+    lines.push(`Клиент: ${customer}`, `Сумма: ${total}`);
+  }
+
+  return lines.join("\n");
 }
 
 export function buildOrdersUrl(baseUrl, apiKey, page = 1, limit = 100) {

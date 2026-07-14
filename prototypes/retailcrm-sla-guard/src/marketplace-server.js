@@ -235,6 +235,7 @@ async function registerModule(payload) {
         active: false,
         frozen: false,
         configured: false,
+        includeCustomerData: false,
         slaRules: "new:30,assembling:120,delivery:1440",
         telegramBotTokenEncrypted: null,
         telegramChatId: null,
@@ -346,10 +347,11 @@ async function handleActivity(payload) {
 
 function accountPage(tenant, message = "") {
   const tokenState = tenant.telegramBotTokenEncrypted ? "настроен" : "не настроен";
+  const customerDataChecked = tenant.includeCustomerData === true ? " checked" : "";
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RetailCRM SLA Guard</title><style>
-body{font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0 18px;color:#171717}label{display:block;margin:18px 0 6px;font-weight:600}input{box-sizing:border-box;width:100%;padding:11px;border:1px solid #aaa;border-radius:7px}button{margin-top:22px;padding:11px 18px;border:0;border-radius:7px;background:#171717;color:white;font-weight:700}.status{padding:12px;background:#f3f3f3;border-radius:7px}.message{padding:12px;background:#e8f6e8;border-radius:7px;margin-bottom:16px}small{color:#666}</style></head><body>
+body{font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0 18px;color:#171717}label{display:block;margin:18px 0 6px;font-weight:600}input{box-sizing:border-box;width:100%;padding:11px;border:1px solid #aaa;border-radius:7px}.check{display:flex;gap:10px;align-items:flex-start;font-weight:400}.check input{width:auto;margin-top:4px}button{margin-top:22px;padding:11px 18px;border:0;border-radius:7px;background:#171717;color:white;font-weight:700}.status{padding:12px;background:#f3f3f3;border-radius:7px}.message{padding:12px;background:#e8f6e8;border-radius:7px;margin-bottom:16px}small{color:#666}</style></head><body>
 <h1>RetailCRM SLA Guard</h1>${message ? `<div class="message">${escapeHtml(message)}</div>` : ""}
 <div class="status">Аккаунт: <b>${escapeHtml(tenant.crmUrl)}</b><br>Модуль: ${tenant.active ? "активен" : "выключен"}; ${tenant.frozen ? "заморожен" : "не заморожен"}<br>Telegram-токен: ${tokenState}</div>
 <form method="post" action="/marketplace/account/save">
@@ -357,6 +359,7 @@ body{font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0
 <label for="slaRules">SLA по статусам</label><input id="slaRules" name="slaRules" required value="${escapeHtml(tenant.slaRules)}"><small>Формат: status:minutes,status:minutes</small>
 <label for="telegramChatId">Telegram chat ID</label><input id="telegramChatId" name="telegramChatId" required value="${escapeHtml(tenant.telegramChatId || "")}">
 <label for="telegramBotToken">Telegram bot token</label><input id="telegramBotToken" name="telegramBotToken" type="password" autocomplete="new-password" placeholder="Оставьте пустым, чтобы сохранить текущий">
+<label class="check"><input type="checkbox" name="includeCustomerData" value="1"${customerDataChecked}><span>Добавлять в Telegram имя клиента и сумму заказа. По умолчанию выключено для минимизации персональных данных.</span></label>
 <button type="submit">Сохранить настройки</button></form></body></html>`;
 }
 
@@ -371,6 +374,9 @@ async function saveAccount(payload) {
   const suppliedToken = String(
     getPayloadField(payload, "telegramBotToken", ["telegramBotToken"]) || "",
   ).trim();
+  const includeCustomerData = parseBoolean(
+    getPayloadField(payload, "includeCustomerData", ["includeCustomerData"]),
+  );
   parseRules(slaRules);
   if (!telegramChatId) throw new Error("Telegram chat ID is required");
   const telegramBotTokenEncrypted = suppliedToken
@@ -382,6 +388,7 @@ async function saveAccount(payload) {
     slaRules,
     telegramChatId,
     telegramBotTokenEncrypted,
+    includeCustomerData,
     configured: true,
     lastConfigurationAt: new Date().toISOString(),
   });
@@ -448,7 +455,12 @@ async function pollTenant(rawTenant) {
     const orders = await fetchOrders(tenant);
     const alerts = collectNewAlerts(orders, parseRules(tenant.slaRules), sentKeys);
     for (const order of alerts) {
-      await sendTelegram(tenant, buildAlert(order));
+      await sendTelegram(
+        tenant,
+        buildAlert(order, new Date(), {
+          includeCustomerData: tenant.includeCustomerData === true,
+        }),
+      );
       sentKeys.add(alertKey(order));
     }
     await store.upsert(tenant.clientId, {
