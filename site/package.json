@@ -1,0 +1,7 @@
+{
+  "name": "crm-quick-check",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test", "check": "node --check core.js && node --check app.js && node --test" },
+  "engines": { "node": ">=20" }
+}
