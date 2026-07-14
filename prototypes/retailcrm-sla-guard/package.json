@@ -1,13 +1,14 @@
 {
   "name": "retailcrm-sla-guard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Detect orders stuck in RetailCRM statuses and notify Telegram.",
   "engines": { "node": ">=20" },
   "scripts": {
     "start": "node src/index.js",
+    "start:marketplace": "node src/marketplace-server.js",
     "test": "node --test",
-    "check": "node --check src/index.js && node --check src/core.js && node --test"
+    "check": "node --check src/index.js && node --check src/core.js && node --check src/marketplace-core.js && node --check src/tenant-store.js && node --check src/marketplace-server.js && node --test"
   }
 }
