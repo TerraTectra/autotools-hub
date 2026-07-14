@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Бесплатная локальная проверка CSV-выгрузки CRM: дубли, невалидные контакты, зависшие сделки и сумма под риском.">
+  <title>CRM Quick Check — локальная проверка CSV</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">TerraTectra Automation</p>
+      <h1>Проверьте CRM-выгрузку<br>без загрузки данных на сервер</h1>
+      <p class="lead">CSV обрабатывается только в вашем браузере. Быстрая диагностика находит дубли, невалидные контакты, сделки без задач и потенциальную сумму под риском.</p>
+      <div class="trust"><span>Локальная обработка</span><span>Без регистрации</span><span>Без API-доступа</span></div>
+    </section>
+    <section class="panel">
+      <label id="drop" class="drop">
+        <input id="file" type="file" accept=".csv,text/csv,text/plain">
+        <span class="drop-icon">CSV</span>
+        <strong>Выберите CSV или перетащите его сюда</strong>
+        <small>До 20 МБ. Поддерживаются запятая, точка с запятой и табуляция.</small>
+      </label>
+      <div class="settings">
+        <label>Сделка считается зависшей после <input id="stale-days" type="number" value="7" min="1" max="365"> дней</label>
+        <button id="sample" type="button">Показать на демо-данных</button>
+      </div>
+      <p id="status" class="status">Файл не выбран. Никакие данные не отправляются в сеть.</p>
+    </section>
+    <section id="results" class="results" hidden></section>
+    <section class="how">
+      <h2>Что проверяется</h2>
+      <div class="how-grid">
+        <article><strong>Контакты</strong><p>Дубли email и телефонов, неправильный формат и строки без способа связи.</p></article>
+        <article><strong>Воронка</strong><p>Зависшие сделки, отсутствие следующей задачи и просроченные действия.</p></article>
+        <article><strong>Деньги</strong><p>Ориентировочная сумма активных сделок, которым требуется внимание.</p></article>
+      </div>
+      <p class="privacy"><strong>Важно:</strong> бесплатная диагностика работает полностью локально. Для платной работы передавайте только обезличенную выгрузку через согласованный закрытый канал.</p>
+    </section>
+  </main>
+  <footer>TerraTectra Automation · Работа только по переписке · <a href="mailto:nikidom123@gmail.com">nikidom123@gmail.com</a> · <a href="https://t.me/tahioff">@tahioff</a></footer>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
