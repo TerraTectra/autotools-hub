@@ -1,0 +1,25 @@
+{
+  "name": "terratectra/umi-cdek-adapter",
+  "description": "Safe UMI.CMS to CDEK API v2 adapter scaffold",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.1"
+  },
+  "suggest": {
+    "cdek-it/cdek-sdk2.0": "Official CDEK PHP SDK required for live API transport"
+  },
+  "autoload": {
+    "psr-4": {
+      "TerraTectra\\UmiCdek\\": "src/"
+    }
+  },
+  "scripts": {
+    "check": [
+      "@php -l src/PayloadMapper.php",
+      "@php -l src/IdempotencyStore.php",
+      "@php -l src/CdekSdkTransport.php",
+      "@php tests/run.php"
+    ]
+  }
+}
