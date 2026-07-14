@@ -22,33 +22,37 @@ jobs:
         shell: python
         run: |
           from pathlib import Path
-          import re
 
           telegram = '<a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a>'
 
-          def add_before_email(path, prefer_primary=False):
+          replacements = {
+              'site/index.html': (
+                  '        <a class="button" href="mailto:',
+                  f'        {telegram}\n        <a class="button" href="mailto:',
+              ),
+              'site/incidents.html': (
+                  '          <a class="button primary" href="mailto:',
+                  f'          {telegram}\n          <a class="button primary" href="mailto:',
+              ),
+              'site/calculator.html': (
+                  '          <a class="button primary" id="contact" href="mailto:',
+                  f'          {telegram}\n          <a class="button primary" id="contact" href="mailto:',
+              ),
+          }
+
+          for path, (marker, replacement) in replacements.items():
               file = Path(path)
               text = file.read_text(encoding='utf-8')
-              if 'https://t.me/tahioff' in text:
+              if text.count('https://t.me/tahioff'):
                   raise SystemExit(f'{path} already contains Telegram CTA')
-              css_class = 'button primary' if prefer_primary else 'button'
-              pattern = rf'<a\s+class="{re.escape(css_class)}"[^>]*href="mailto:[^"]+"[^>]*>[^<]+</a>'
-              match = re.search(pattern, text)
-              if not match:
-                  raise SystemExit(f'Email CTA not found in {path}')
-              replacement = telegram + '\n          ' + match.group(0)
-              file.write_text(text[:match.start()] + replacement + text[match.end():], encoding='utf-8')
-
-          add_before_email('site/index.html', prefer_primary=False)
-          add_before_email('site/incidents.html', prefer_primary=True)
-          add_before_email('site/calculator.html', prefer_primary=True)
-
-          for path in map(Path, ('site/index.html', 'site/incidents.html', 'site/calculator.html')):
-              content = path.read_text(encoding='utf-8')
-              if content.count('https://t.me/tahioff') != 1:
-                  raise SystemExit(f'{path} must contain exactly one Telegram CTA')
-              if '<script src=' in content.lower():
-                  raise SystemExit(f'{path} unexpectedly contains an external script')
+              if text.count(marker) != 1:
+                  raise SystemExit(f'{path}: expected one marker, got {text.count(marker)}')
+              text = text.replace(marker, replacement, 1)
+              if text.count('https://t.me/tahioff') != 1:
+                  raise SystemExit(f'{path}: Telegram CTA insertion failed')
+              if '<script src=' in text.lower():
+                  raise SystemExit(f'{path}: unexpected external script')
+              file.write_text(text, encoding='utf-8')
       - name: Commit clean patch
         shell: bash
         run: |
