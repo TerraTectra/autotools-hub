@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RetailCRM SLA Guard — контроль заказов, которые слишком долго остаются в статусе, с уведомлениями в Telegram.">
+  <title>RetailCRM SLA Guard — интерактивная демонстрация</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --panel: #141820;
+      --panel-2: #1b202a;
+      --line: #2b3340;
+      --text: #f5f7fa;
+      --muted: #a8b0bd;
+      --accent: #8fd4ff;
+      --accent-2: #b7ffcf;
+      --danger: #ff9d9d;
+      --warning: #ffd38f;
+      --ok: #9cf0b4;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .36);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(63, 139, 255, .16), transparent 34rem),
+        radial-gradient(circle at 86% 14%, rgba(61, 255, 167, .10), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button, input { font: inherit; }
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(11, 13, 18, .82);
+      backdrop-filter: blur(18px);
+    }
+    .nav { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; text-decoration: none; letter-spacing: -.02em; }
+    .mark {
+      width: 34px; height: 34px; border-radius: 11px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #071018; font-weight: 900;
+      box-shadow: 0 10px 30px rgba(111, 200, 255, .18);
+    }
+    .navlinks { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 14px; }
+    .navlinks a { text-decoration: none; }
+    .navlinks a:hover { color: var(--text); }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 44px; padding: 0 17px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--panel-2); color: var(--text);
+      text-decoration: none; cursor: pointer; font-weight: 750;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .button:hover { transform: translateY(-1px); border-color: #526072; }
+    .button.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #071018; border: 0; }
+    .hero { padding: 90px 0 54px; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 52px; }
+    .eyebrow { color: var(--accent); font-size: 13px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 14px 0 18px; font-size: clamp(42px, 6.1vw, 78px); line-height: .98; letter-spacing: -.055em; }
+    .lead { max-width: 730px; color: var(--muted); font-size: clamp(18px, 2vw, 22px); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .micro { margin-top: 20px; color: #818b99; font-size: 13px; }
+    .hero-card {
+      position: relative; padding: 22px; border: 1px solid var(--line); border-radius: 24px;
+      background: linear-gradient(150deg, rgba(31, 38, 50, .96), rgba(18, 22, 29, .96));
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .hero-card::after {
+      content: ""; position: absolute; width: 200px; height: 200px; border-radius: 50%;
+      right: -80px; top: -95px; background: rgba(143, 212, 255, .11); filter: blur(2px);
+    }
+    .window-head { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 13px; }
+    .dots { display: flex; gap: 6px; }
+    .dots span { width: 8px; height: 8px; border-radius: 50%; background: #536071; }
+    .alert-card { position: relative; margin-top: 22px; padding: 18px; border: 1px solid #604849; border-radius: 16px; background: rgba(86, 39, 41, .23); }
+    .alert-title { font-weight: 850; color: #ffd3d3; }
+    .alert-lines { margin-top: 12px; display: grid; gap: 7px; color: #d9dee6; font-size: 14px; }
+    .pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--muted); font-size: 12px; }
+    section { padding: 54px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 24px; }
+    h2 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.06; letter-spacing: -.035em; }
+    .section-head p { margin: 0; max-width: 560px; color: var(--muted); }
+    .demo-shell { border: 1px solid var(--line); background: rgba(20,24,32,.93); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); }
+    .demo-toolbar { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 14px; padding: 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.018); }
+    .field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .field input {
+      width: 100%; height: 42px; padding: 0 12px;
+      border: 1px solid var(--line); border-radius: 10px;
+      color: var(--text); background: #0e1218; outline: none;
+    }
+    .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(143,212,255,.1); }
+    .check-button { align-self: end; height: 42px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 780px; }
+    th, td { padding: 15px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.055); }
+    th { color: #8f9aaa; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    td { font-size: 14px; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .status { display: inline-flex; padding: 6px 9px; border-radius: 8px; background: rgba(255,255,255,.055); color: #d8dee8; font-size: 12px; font-weight: 760; }
+    .risk { font-weight: 800; }
+    .risk.bad { color: var(--danger); }
+    .risk.warn { color: var(--warning); }
+    .risk.ok { color: var(--ok); }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 18px; background: #0f131a; border-top: 1px solid var(--line); }
+    .result-card { min-height: 170px; padding: 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
+    .result-card h3 { margin: 0 0 12px; font-size: 16px; }
+    .result-card p { margin: 0; color: var(--muted); }
+    pre { margin: 0; white-space: pre-wrap; color: #e9edf3; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feature { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: rgba(20,24,32,.72); }
+    .feature-number { color: var(--accent); font-size: 13px; font-weight: 850; }
+    .feature h3 { margin: 10px 0 7px; font-size: 18px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 14px; }
+    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .price-card { padding: 28px; border-radius: 22px; border: 1px solid var(--line); background: rgba(20,24,32,.88); }
+    .price-card.featured { border-color: rgba(143,212,255,.45); background: linear-gradient(145deg, rgba(31,49,65,.96), rgba(18,24,31,.96)); }
+    .price { margin: 10px 0 4px; font-size: 40px; font-weight: 900; letter-spacing: -.04em; }
+    .price-card ul { padding-left: 20px; color: var(--muted); }
+    .cta { margin: 54px 0 80px; padding: 36px; border: 1px solid var(--line); border-radius: 26px; background: linear-gradient(135deg, rgba(35,50,69,.92), rgba(21,37,31,.92)); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .cta h2 { font-size: clamp(28px, 4vw, 48px); }
+    footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .footer-inner { padding: 24px 0 40px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 64px; }
+      .demo-toolbar { grid-template-columns: 1fr 1fr; }
+      .check-button { grid-column: 1 / -1; }
+      .features { grid-template-columns: 1fr 1fr; }
+      .result-grid, .price-grid { grid-template-columns: 1fr; }
+      .cta { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 620px) {
+      .navlinks a:not(.button) { display: none; }
+      .hero { gap: 34px; }
+      .demo-toolbar, .features { grid-template-columns: 1fr; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .cta { padding: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#top"><span class="mark">S</span> SLA Guard</a>
+      <nav class="navlinks" aria-label="Основная навигация">
+        <a href="#demo">Демонстрация</a>
+        <a href="#features">Возможности</a>
+        <a href="#pricing">Форматы</a>
+        <a class="button" href="mailto:nikidom123@gmail.com?subject=RetailCRM%20SLA%20Guard">Обсудить письменно</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">RetailCRM API v5 · Telegram · Marketplace-ready</div>
+        <h1>Заказы больше не зависают молча.</h1>
+        <p class="lead">SLA Guard находит заказы, которые слишком долго остаются в статусе, и сообщает ответственным до того, как задержка превращается в потерянную продажу.</p>
+        <div class="actions">
+          <a class="button primary" href="#demo">Запустить демонстрацию</a>
+          <a class="button" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes/retailcrm-sla-guard">Открыть исходный код</a>
+        </div>
+        <div class="micro">Демо работает только с вымышленными данными. Доступ к RetailCRM не требуется.</div>
+      </div>
+      <aside class="hero-card" aria-label="Пример уведомления">
+        <div class="window-head"><span>Telegram · Отдел заказов</span><span class="dots"><span></span><span></span><span></span></span></div>
+        <div class="alert-card">
+          <div class="alert-title">⚠️ RetailCRM: заказ превысил SLA</div>
+          <div class="alert-lines">
+            <span>Заказ: A-1048</span>
+            <span>Статус: assembling</span>
+            <span>Без изменения: 176 мин.</span>
+          </div>
+        </div>
+        <p class="micro">Имя клиента и сумма заказа исключены по умолчанию. Их можно включить отдельно.</p>
+      </aside>
+    </div>
+
+    <section id="demo">
+      <div class="wrap">
+        <div class="section-head">
+          <div><div class="eyebrow">Интерактивная модель</div><h2>Настройте SLA и проверьте заказы</h2></div>
+          <p>Измените допустимое время для статусов. Демо пересчитает риск и покажет текст уведомления, которое получит команда.</p>
+        </div>
+
+        <div class="demo-shell">
+          <div class="demo-toolbar">
+            <div class="field"><label for="sla-new">new, минут</label><input id="sla-new" type="number" min="1" value="30"></div>
+            <div class="field"><label for="sla-assembling">assembling, минут</label><input id="sla-assembling" type="number" min="1" value="120"></div>
+            <div class="field"><label for="sla-delivery">delivery, минут</label><input id="sla-delivery" type="number" min="1" value="1440"></div>
+            <button class="button primary check-button" id="check" type="button">Проверить сейчас</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Заказ</th><th>Статус</th><th>Без изменения</th><th>SLA</th><th>Результат</th></tr></thead>
+              <tbody id="orders"></tbody>
+            </table>
+          </div>
+          <div class="result-grid">
+            <div class="result-card"><h3>Итог проверки</h3><p id="summary">Нажмите «Проверить сейчас».</p></div>
+            <div class="result-card"><h3>Предпросмотр Telegram</h3><pre id="telegram">Уведомление появится здесь.</pre></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">Готовый продукт</div><h2>Не просто демонстрация</h2></div><p>Backend уже реализует подключение RetailCRM Marketplace, безопасное хранение секретов и работу с несколькими клиентами.</p></div>
+        <div class="features">
+          <article class="feature"><div class="feature-number">01</div><h3>Индивидуальный SLA</h3><p>Отдельный срок для каждого статуса, магазина или процесса обработки.</p></article>
+          <article class="feature"><div class="feature-number">02</div><h3>Без дублей</h3><p>Повторное уведомление не отправляется, пока состояние заказа не изменилось.</p></article>
+          <article class="feature"><div class="feature-number">03</div><h3>Приватность по умолчанию</h3><p>В Telegram передаются только номер, статус и длительность задержки.</p></article>
+          <article class="feature"><div class="feature-number">04</div><h3>Marketplace lifecycle</h3><p>Активация, деактивация, заморозка и смена URL аккаунта обрабатываются автоматически.</p></article>
+          <article class="feature"><div class="feature-number">05</div><h3>Шифрование секретов</h3><p>API-ключи и Telegram-токены шифруются AES-256-GCM при хранении.</p></article>
+          <article class="feature"><div class="feature-number">06</div><h3>Проверяемая сборка</h3><p>Unit-тесты, процессный smoke-тест, Docker и GitHub Actions.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">Коммерческие форматы</div><h2>Пилот или white-label</h2></div><p>Для интеграторов конечная цена и отношения с клиентом остаются на стороне партнёра.</p></div>
+        <div class="price-grid">
+          <article class="price-card featured">
+            <div class="pill">Быстрый запуск</div><div class="price">15 000 ₽</div><div class="micro">адаптация под одного клиента</div>
+            <ul><li>карта реальных статусов;</li><li>правила SLA и Telegram-маршрутизация;</li><li>развёртывание и инструкция;</li><li>ориентир 3–5 рабочих дней.</li></ul>
+          </article>
+          <article class="price-card">
+            <div class="pill">Продуктовая модель</div><div class="price">1 990 ₽</div><div class="micro">рекомендованная цена в месяц</div>
+            <ul><li>стартовая цена 1 490 ₽;</li><li>14 дней пробного периода;</li><li>русская и английская карточка;</li><li>готовый пакет для модерации.</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap cta">
+      <div><div class="eyebrow">Только письменное общение</div><h2>Покажите типовой процесс — получите точную схему пилота.</h2></div>
+      <div class="actions">
+        <a class="button primary" href="mailto:nikidom123@gmail.com?subject=RetailCRM%20SLA%20Guard%20%E2%80%94%20%D0%BF%D0%B8%D0%BB%D0%BE%D1%82">Email</a>
+        <a class="button" href="https://t.me/tahioff">Telegram @tahioff</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© 2026 TerraTectra · RetailCRM SLA Guard</span>
+      <span class="footer-links"><a href="https://github.com/TerraTectra/autotools-hub/blob/main/prototypes/retailcrm-sla-guard/PRIVACY.md">Конфиденциальность</a><a href="https://github.com/TerraTectra/autotools-hub/blob/main/prototypes/retailcrm-sla-guard/SUPPORT.md">Поддержка</a><a href="https://github.com/TerraTectra/autotools-hub">GitHub</a></span>
+    </div>
+  </footer>
+
+  <script>
+    const sampleOrders = [
+      { number: "A-1048", status: "assembling", minutes: 176 },
+      { number: "A-1051", status: "new", minutes: 44 },
+      { number: "A-1054", status: "delivery", minutes: 870 },
+      { number: "A-1059", status: "assembling", minutes: 92 },
+      { number: "A-1062", status: "new", minutes: 9 }
+    ];
+
+    const ordersBody = document.querySelector("#orders");
+    const summary = document.querySelector("#summary");
+    const telegram = document.querySelector("#telegram");
+
+    function currentRules() {
+      return {
+        new: Math.max(1, Number(document.querySelector("#sla-new").value) || 1),
+        assembling: Math.max(1, Number(document.querySelector("#sla-assembling").value) || 1),
+        delivery: Math.max(1, Number(document.querySelector("#sla-delivery").value) || 1)
+      };
+    }
+
+    function riskLabel(order, limit) {
+      const ratio = order.minutes / limit;
+      if (ratio >= 1) return { text: `Превышен на ${order.minutes - limit} мин.`, cls: "bad" };
+      if (ratio >= .75) return { text: "Близко к лимиту", cls: "warn" };
+      return { text: "В норме", cls: "ok" };
+    }
+
+    function render() {
+      const rules = currentRules();
+      const breached = [];
+      ordersBody.innerHTML = sampleOrders.map(order => {
+        const limit = rules[order.status];
+        const risk = riskLabel(order, limit);
+        if (order.minutes >= limit) breached.push(order);
+        return `<tr><td><strong>${order.number}</strong></td><td><span class="status">${order.status}</span></td><td>${order.minutes} мин.</td><td>${limit} мин.</td><td><span class="risk ${risk.cls}">${risk.text}</span></td></tr>`;
+      }).join("");
+
+      summary.textContent = breached.length
+        ? `Проверено ${sampleOrders.length} заказов. Нарушений SLA: ${breached.length}. Для каждого нового нарушения будет отправлено одно уведомление.`
+        : `Проверено ${sampleOrders.length} заказов. Нарушений SLA нет.`;
+
+      const first = breached[0];
+      telegram.textContent = first
+        ? `⚠️ RetailCRM: заказ превысил SLA\nЗаказ: ${first.number}\nСтатус: ${first.status}\nБез изменения: ${first.minutes} мин.`
+        : "Новых уведомлений нет.";
+    }
+
+    document.querySelector("#check").addEventListener("click", render);
+    document.querySelectorAll(".demo-toolbar input").forEach(input => input.addEventListener("change", render));
+    render();
+  </script>
+</body>
+</html>
