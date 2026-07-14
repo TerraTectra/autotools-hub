@@ -31,7 +31,8 @@ jobs:
               text = file.read_text(encoding='utf-8')
               if 'https://t.me/tahioff' in text:
                   raise SystemExit(f'{path} already contains Telegram CTA')
-              pattern = r'<a class="button primary" href="mailto:[^"]+">[^<]+</a>' if prefer_primary else r'<a class="button" href="mailto:[^"]+">[^<]+</a>'
+              css_class = 'button primary' if prefer_primary else 'button'
+              pattern = rf'<a\s+class="{re.escape(css_class)}"[^>]*href="mailto:[^"]+"[^>]*>[^<]+</a>'
               match = re.search(pattern, text)
               if not match:
                   raise SystemExit(f'Email CTA not found in {path}')
