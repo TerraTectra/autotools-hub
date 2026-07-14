@@ -1,0 +1,31 @@
+name: CRM Quick Check
+
+on:
+  push:
+    paths:
+      - "site/quick-check/**"
+      - ".github/workflows/crm-quick-check.yml"
+  pull_request:
+    paths:
+      - "site/quick-check/**"
+      - ".github/workflows/crm-quick-check.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test local CSV analyzer
+        run: npm run check
+        working-directory: site/quick-check
+      - name: Upload static preview package
+        uses: actions/upload-artifact@v4
+        with:
+          name: crm-quick-check-site
+          path: site
+          if-no-files-found: error
+          retention-days: 14
