@@ -1,4 +1,4 @@
-name: Apply Telegram CTA
+name: Diagnose Telegram CTA
 
 on:
   pull_request:
@@ -7,60 +7,38 @@ on:
     types: [opened, synchronize, reopened]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  patch:
+  diagnose:
     if: github.head_ref == 'agent/retailcrm-telegram-cta-v3'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/retailcrm-telegram-cta-v3
-          fetch-depth: 0
-      - name: Add written Telegram contact
+      - name: Inspect contact anchors
         shell: python
         run: |
           from pathlib import Path
+          import re
 
-          telegram = '<a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a>'
-
-          replacements = {
-              'site/index.html': (
-                  '        <a class="button" href="mailto:',
-                  f'        {telegram}\n        <a class="button" href="mailto:',
-              ),
-              'site/incidents.html': (
-                  '          <a class="button primary" href="mailto:',
-                  f'          {telegram}\n          <a class="button primary" href="mailto:',
-              ),
-              'site/calculator.html': (
-                  '          <a class="button primary" id="contact" href="mailto:',
-                  f'          {telegram}\n          <a class="button primary" id="contact" href="mailto:',
-              ),
-          }
-
-          for path, (marker, replacement) in replacements.items():
-              file = Path(path)
-              text = file.read_text(encoding='utf-8')
-              if 'https://t.me/tahioff' in text:
-                  raise SystemExit(f'{path} already contains Telegram CTA')
-              if marker not in text:
-                  raise SystemExit(f'{path}: insertion marker not found')
-              text = text.replace(marker, replacement, 1)
-              if text.count('https://t.me/tahioff') != 1:
-                  raise SystemExit(f'{path}: Telegram CTA insertion failed')
-              if '<script src=' in text.lower():
-                  raise SystemExit(f'{path}: unexpected external script')
-              file.write_text(text, encoding='utf-8')
-      - name: Commit clean patch
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'TerraTectra Automation'
-          git config user.email 'actions@users.noreply.github.com'
-          git rm .github/workflows/apply-telegram-cta.yml
-          git rm -f tmp/noop.txt || true
-          git add site/index.html site/incidents.html site/calculator.html
-          git commit -m 'feat: add Telegram contact CTA to SLA Journal pages'
-          git push origin HEAD:agent/retailcrm-telegram-cta-v3
+          output = []
+          for path in map(Path, ('site/index.html', 'site/incidents.html', 'site/calculator.html')):
+              text = path.read_text(encoding='utf-8')
+              output.append(f'## {path}')
+              output.append(f'telegram_count={text.count("https://t.me/tahioff")}')
+              output.append(f'external_script_count={text.lower().count("<script src=")}')
+              output.append(f'index_marker={text.count("        <a class=\"button\" href=\"mailto:")}')
+              output.append(f'incident_marker={text.count("          <a class=\"button primary\" href=\"mailto:")}')
+              output.append(f'calculator_marker={text.count("          <a class=\"button primary\" id=\"contact\" href=\"mailto:")}')
+              for anchor in re.findall(r'<a[^>]+href="mailto:[^"]+"[^>]*>[^<]*</a>', text):
+                  output.append(anchor)
+              output.append('')
+          Path('telegram-debug.txt').write_text('\n'.join(output), encoding='utf-8')
+          print('\n'.join(output))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: telegram-cta-diagnostics
+          path: telegram-debug.txt
+          retention-days: 1
