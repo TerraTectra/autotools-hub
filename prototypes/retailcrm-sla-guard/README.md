@@ -41,9 +41,9 @@ npm run start:marketplace
 The Marketplace backend provides:
 
 - `GET /marketplace/config` — returns the required `order_read` and `integration_write` scopes and the registration URL;
-- `POST /marketplace/register` — validates `register[token]` using HMAC-SHA256, checks the CRM domain against the current RetailCRM domain list, registers the integration module through API v5 and creates a tenant;
+- `POST /marketplace/register` — validates `register[token]` using HMAC-SHA256, checks the CRM domain against the current RetailCRM domain list, registers the integration module through API v5 and creates or safely reconnects a tenant;
 - `POST /marketplace/activity` — processes activation, deactivation, freeze, unfreeze and account URL changes;
-- `POST /marketplace/account` — opens the tenant settings page using `clientId` supplied by RetailCRM;
+- `POST /marketplace/account` — opens the tenant settings page using `clientId` supplied by RetailCRM in the request body;
 - `POST /marketplace/account/save` — saves SLA and Telegram settings;
 - `GET /health` — health check.
 
@@ -58,12 +58,31 @@ Marketplace environment variables:
 - `PUBLIC_BASE_URL` — public HTTPS origin of the module backend;
 - `MARKETPLACE_SECRET` — secret generated in the RetailCRM partner cabinet;
 - `MARKETPLACE_MODULE_CODE` — code matching the module code in the partner cabinet;
+- `TENANT_ENCRYPTION_KEY` — exactly 32 random bytes encoded as 64 hexadecimal characters or base64;
 - `TENANTS_FILE` — atomic JSON tenant storage path;
 - `AUDIT_LOG_FILE` — JSONL integration audit log;
 - `RETAILCRM_DOMAINS_URL` — official live list of accepted CRM domains;
 - `PORT` and `POLL_INTERVAL_SECONDS`.
 
-The backend never writes API keys or Telegram tokens to logs. Tenant storage contains credentials required for operation and therefore must be placed on an encrypted, access-controlled persistent volume. For production Marketplace publication, replace the JSON store with a managed encrypted database or secrets service.
+Generate an encryption key locally and store it only in the deployment secret manager:
+
+```bash
+openssl rand -hex 32
+```
+
+API keys and Telegram bot tokens are encrypted at rest with AES-256-GCM. The audit log contains endpoint paths, status codes and shortened tenant identifiers, but not credentials or message contents. The encryption key must never be committed to Git and must be backed up separately: losing it makes stored credentials unrecoverable.
+
+The JSON tenant store is sufficient for a controlled pilot on one instance. A production Marketplace deployment should use an encrypted managed database or secrets service, a single active scheduler or distributed lock, monitored backups and HTTPS termination by a trusted reverse proxy.
+
+## Reliability and security
+
+- registration requests are authenticated with the RetailCRM HMAC token;
+- CRM URLs are accepted only over HTTPS and only under domains from the current official RetailCRM domain list;
+- repeated installation of the same CRM account reuses the tenant and restores the previous working state if registration fails;
+- outgoing RetailCRM and Telegram requests use timeouts and retries for network errors, rate limits and server errors;
+- API keys and bot tokens are excluded from application logs and encrypted in tenant storage;
+- account settings are opened only through a POST carrying the unpredictable `clientId`, avoiding credentials in query strings;
+- module polling stops while a tenant is deactivated, frozen or not fully configured.
 
 ## Validation
 
@@ -71,7 +90,7 @@ The backend never writes API keys or Telegram tokens to logs. Tenant storage con
 npm run check
 ```
 
-The check runs syntax validation and unit tests for SLA detection, HMAC verification, domain validation, registration parameters and atomic tenant persistence.
+The check runs syntax validation and unit tests for SLA detection, HMAC verification, AES-256-GCM credential encryption, domain validation, registration parameters and atomic tenant persistence.
 
 ## Docker
 
@@ -101,4 +120,4 @@ A first client pilot can include:
 - persistent storage and deployment;
 - installation guide and support.
 
-The repository contains no real credentials or customer data. A client pilot requires a test RetailCRM account/API key and a Telegram bot created by the client. Marketplace moderation additionally requires a partner account, the module code and secret from the partner cabinet, and a public HTTPS deployment.
+The repository contains no real credentials or customer data. A client pilot requires a test RetailCRM account/API key and a Telegram bot created by the client. Marketplace moderation additionally requires a partner account, the module code and secret from the partner cabinet, a stable public HTTPS deployment and the legal onboarding requested by RetailCRM.
