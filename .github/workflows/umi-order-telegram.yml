@@ -12,13 +12,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-and-package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate PHP syntax
-        run: find module -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Run preflight checks and create review archive
+        run: sh scripts/preflight.sh
         working-directory: prototypes/umi-order-telegram
-      - name: Run module tests
-        run: php tests/run.php
-        working-directory: prototypes/umi-order-telegram
+      - name: Upload review archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: terratectra-order-telegram-review
+          path: |
+            prototypes/umi-order-telegram/dist/terratectra_order_telegram-review.tar.gz
+            prototypes/umi-order-telegram/dist/terratectra_order_telegram-review.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
