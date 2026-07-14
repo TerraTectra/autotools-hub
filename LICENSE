@@ -1,0 +1,38 @@
+TerraTectra Evaluation License 1.0
+
+Copyright (c) 2026 TerraTectra. All rights reserved.
+
+The source code and other materials in this repository are publicly available for evaluation. They are not offered under an open-source license.
+
+1. Evaluation permission
+
+You may view the source code, create a GitHub fork where permitted by GitHub's terms, and run the software locally on synthetic or anonymized data solely to evaluate its functionality.
+
+2. Restrictions
+
+Unless you have separate written permission from the copyright holder, you may not:
+
+- use the software in production or for a commercial purpose;
+- use it to provide paid or unpaid services to clients;
+- copy, redistribute, publish, mirror, sell, rent, sublicense, or white-label the software;
+- distribute modified versions or derivative works;
+- offer the software or a modified version as a hosted service;
+- remove or alter copyright and licensing notices.
+
+3. Commercial licensing
+
+Production use, internal business use, client work, redistribution, white-label use, and other commercial rights require a separate written license. Commercial options are described in COMMERCIAL.md. Contact details are available in the repository owner's GitHub profile.
+
+4. GitHub platform rights
+
+Nothing in this license limits the minimum rights required for GitHub to host and display the repository or the platform functionality granted by GitHub's terms of service.
+
+5. Termination
+
+The evaluation permission ends automatically if you violate these terms. After termination, you must stop using the software and delete copies under your control, except copies retained by GitHub as part of its normal platform operation.
+
+6. No warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COPYRIGHT HOLDER IS NOT LIABLE FOR ANY CLAIM, LOSS, OR DAMAGE ARISING FROM THE SOFTWARE OR ITS USE.
+
+For a production or commercial license, obtain written permission before use.
