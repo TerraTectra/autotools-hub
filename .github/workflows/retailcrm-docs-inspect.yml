@@ -1,0 +1,33 @@
+name: RetailCRM docs inspect
+
+on:
+  push:
+    branches:
+      - agent/retailcrm-marketplace
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch official docs and domain list
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          curl -L --fail --silent --show-error \
+            'https://docs.retailcrm.ru/Developers/modules/PublishingModuleMarketplace/ModulesActivation' \
+            -o out/modules-activation.html
+          curl -L --fail --silent --show-error \
+            'https://infra-data.retailcrm.tech/crm-domains.json' \
+            -o out/crm-domains.json
+          grep -n -B10 -A30 -E 'configUrl|registerUrl|register\[token\]|integrationModule\[actions\]\[activity\]' \
+            out/modules-activation.html > out/relevant.txt || true
+          cat out/crm-domains.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retailcrm-docs
+          path: out
+          retention-days: 1
