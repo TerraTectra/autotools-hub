@@ -1,0 +1,76 @@
+name: Static Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/static-site.yml"
+  pull_request:
+    paths:
+      - "site/**"
+      - ".github/workflows/static-site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate HTML assets and inline JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+
+          required = {
+              "site/index.html": ["incidents.html"],
+              "site/incidents.html": ["calculator.html", "15 000 ₽"],
+              "site/calculator.html": ["Сценарная модель", "15 000 ₽"],
+          }
+
+          class Parser(HTMLParser):
+              def error(self, message):
+                  raise RuntimeError(message)
+
+          for filename, markers in required.items():
+              path = Path(filename)
+              if not path.exists():
+                  raise SystemExit(f"Missing required page: {filename}")
+              text = path.read_text(encoding="utf-8")
+              Parser().feed(text)
+
+              for marker in markers:
+                  if marker.lower() not in text.lower():
+                      raise SystemExit(f"{filename}: missing required marker {marker!r}")
+
+              if re.search(r'<script\b[^>]*\bsrc\s*=\s*["\']https?://', text, re.I):
+                  raise SystemExit(f"{filename}: external scripts are not allowed")
+
+              scripts = re.findall(r'<script\b[^>]*>(.*?)</script>', text, re.I | re.S)
+              for index, script in enumerate(scripts, start=1):
+                  with tempfile.NamedTemporaryFile(
+                      mode="w", encoding="utf-8", suffix=".mjs", delete=False
+                  ) as temporary:
+                      temporary.write(script)
+                      temporary_path = temporary.name
+                  subprocess.run(
+                      ["node", "--check", temporary_path],
+                      check=True,
+                      text=True,
+                  )
+                  print(f"Validated {filename} inline script #{index}")
+
+          print("Static site validation passed")
+          PY
