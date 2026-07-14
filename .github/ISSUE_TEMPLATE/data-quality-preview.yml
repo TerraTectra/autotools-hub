@@ -1,0 +1,102 @@
+name: Превью качества CRM-базы
+description: Первичная оценка очистки данных или аудита воронки по структуре CSV
+title: "[Data Quality]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Публично указывайте только структуру и вымышленные примеры. Не прикладывайте клиентскую выгрузку или закрытые данные.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Задача
+      options:
+        - Очистка и объединение контактов
+        - Аудит CRM-воронки
+        - Очистка и аудит
+        - Оценка применимости
+    validations:
+      required: true
+
+  - type: dropdown
+    id: requester
+    attributes:
+      label: Тип заказчика
+      options:
+        - Агентство или интегратор
+        - Компания для внутреннего использования
+        - Независимый специалист
+        - Другое
+    validations:
+      required: true
+
+  - type: dropdown
+    id: delivery
+    attributes:
+      label: Формат результата
+      options:
+        - White-label
+        - Внутренний отчёт
+        - Ещё не определено
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Источник выгрузки
+      placeholder: CRM, сервис рассылок, Excel или собственная система
+    validations:
+      required: true
+
+  - type: input
+    id: volume
+    attributes:
+      label: Примерное количество строк
+      placeholder: Например, 25000
+    validations:
+      required: true
+
+  - type: textarea
+    id: columns
+    attributes:
+      label: Заголовки колонок
+      description: Перечислите только названия полей
+      placeholder: name, email, phone, status, amount, owner, updated_at
+    validations:
+      required: true
+
+  - type: textarea
+    id: symptoms
+    attributes:
+      label: Проблема и желаемый результат
+      placeholder: Опишите дубли, разные форматы контактов, зависшие сделки или другие признаки
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Вымышленный пример
+      description: Необязательно. Используйте только придуманные значения
+
+  - type: dropdown
+    id: communication
+    attributes:
+      label: Письменное взаимодействие
+      options:
+        - Подходит
+        - Требуется обязательный звонок
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Подтверждение
+      options:
+        - label: В публичной заявке нет реальных клиентских строк или закрытых данных
+          required: true
+        - label: Бесплатное превью ограничено схемой и небольшой обезличенной или вымышленной выборкой
+          required: true
