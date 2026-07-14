@@ -1,0 +1,24 @@
+name: UMI.CMS Telegram Order Status
+
+on:
+  push:
+    paths:
+      - "prototypes/umi-order-telegram/**"
+      - ".github/workflows/umi-order-telegram.yml"
+  pull_request:
+    paths:
+      - "prototypes/umi-order-telegram/**"
+      - ".github/workflows/umi-order-telegram.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PHP syntax
+        run: find module -name '*.php' -print0 | xargs -0 -n1 php -l
+        working-directory: prototypes/umi-order-telegram
+      - name: Run module tests
+        run: php tests/run.php
+        working-directory: prototypes/umi-order-telegram
