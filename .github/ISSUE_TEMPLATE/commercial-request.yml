@@ -1,0 +1,84 @@
+name: Коммерческая задача
+
+description: Обсудить аудит, очистку данных, white-label или интеграционный пилот
+
+title: "[Задача] "
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Опишите задачу без публикации персональных данных, паролей, API-ключей, токенов и закрытых документов. После первичной оценки детали и файлы будут запрошены в частной письменной переписке.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Направление
+      options:
+        - CRM Pipeline Audit
+        - CRM Data Cleaner
+        - White-label для агентства
+        - amoCRM Lead SLA Guard
+        - RetailCRM SLA Guard
+        - UIS Missed Call Recovery
+        - Bitrix24 → Mindbox
+        - Другая API/webhook автоматизация
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Текущая проблема
+      placeholder: Что сейчас происходит и почему это мешает бизнесу?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемый результат
+      placeholder: Какой конкретный результат нужно передать и по каким критериям его принять?
+    validations:
+      required: true
+
+  - type: input
+    id: stack
+    attributes:
+      label: Системы и формат данных
+      placeholder: amoCRM, Битрикс24, RetailCRM, Mindbox, CSV, webhook...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: budget
+    attributes:
+      label: Ориентир бюджета
+      options:
+        - До 5 000 ₽
+        - 5 000–15 000 ₽
+        - 15 000–30 000 ₽
+        - Более 30 000 ₽
+        - Нужна оценка
+    validations:
+      required: true
+
+  - type: input
+    id: deadline
+    attributes:
+      label: Желаемый срок
+      placeholder: Например, 5 рабочих дней
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: conditions
+    attributes:
+      label: Условия
+      options:
+        - label: Я не публикую в issue персональные данные, секреты или закрытые файлы.
+          required: true
+        - label: Коммуникация и согласование будут проходить письменно.
+          required: true
+        - label: Я понимаю, что production и коммерческое использование кода требуют письменного согласования прав.
+          required: true
