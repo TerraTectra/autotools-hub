@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Демонстрация обезличенного журнала нарушений RetailCRM SLA Guard и безопасного CSV-экспорта.">
-  <title>Журнал нарушений — RetailCRM SLA Guard</title>
+  <meta name="description" content="Управленческая демонстрация RetailCRM SLA Guard: обезличенный журнал, аналитика задержек и безопасный CSV-экспорт.">
+  <title>SLA-журнал и аналитика — RetailCRM SLA Guard</title>
   <style>
-    :root{color-scheme:dark;--bg:#0b0d12;--panel:#151a22;--line:#2c3543;--text:#f3f6fa;--muted:#a9b2bf;--accent:#91d6ff;--green:#b8ffd0;--red:#ffabab}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 10% 0,rgba(70,151,255,.16),transparent 34rem),var(--bg);color:var(--text);line-height:1.5}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}.top{padding:22px 0;border-bottom:1px solid var(--line)}a{color:inherit}.brand{text-decoration:none;font-weight:850}.hero{padding:70px 0 30px}.eyebrow{color:var(--accent);font-size:13px;font-weight:850;letter-spacing:.11em;text-transform:uppercase}h1{font-size:clamp(38px,6vw,70px);line-height:1;margin:14px 0 20px;letter-spacing:-.045em}.lead{max-width:760px;color:var(--muted);font-size:19px}.panel{margin:28px 0 70px;border:1px solid var(--line);border-radius:22px;background:rgba(21,26,34,.95);overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.35)}.toolbar{padding:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.note{color:var(--muted);font-size:13px;max-width:700px}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#1c232e;color:var(--text);font-weight:750;text-decoration:none;cursor:pointer}.button.primary{border:0;background:linear-gradient(135deg,var(--accent),var(--green));color:#071018}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:790px}th,td{padding:15px 18px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#939dab}td{font-size:14px}.status{display:inline-flex;padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.06)}.late{color:var(--red);font-weight:800}.footer{padding:24px 0 38px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.privacy{padding:17px 18px;background:#10151c;color:var(--muted);font-size:13px}.privacy strong{color:var(--text)}@media(max-width:650px){.hero{padding-top:48px}.toolbar{align-items:flex-start;flex-direction:column}}
+    :root{color-scheme:dark;--bg:#0b0d12;--panel:#151a22;--panel2:#1b222d;--line:#2c3543;--text:#f3f6fa;--muted:#a9b2bf;--accent:#91d6ff;--green:#b8ffd0;--red:#ffabab}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 10% 0,rgba(70,151,255,.16),transparent 34rem),var(--bg);color:var(--text);line-height:1.5}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}.top{padding:22px 0;border-bottom:1px solid var(--line)}a{color:inherit}.brand{text-decoration:none;font-weight:850}.hero{padding:70px 0 30px}.eyebrow{color:var(--accent);font-size:13px;font-weight:850;letter-spacing:.11em;text-transform:uppercase}h1{font-size:clamp(38px,6vw,70px);line-height:1;margin:14px 0 20px;letter-spacing:-.045em}.lead{max-width:820px;color:var(--muted);font-size:19px}.panel{margin:28px 0 70px;border:1px solid var(--line);border-radius:22px;background:rgba(21,26,34,.95);overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.35)}.toolbar{padding:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.note{color:var(--muted);font-size:13px;max-width:680px}.actions{display:flex;gap:10px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#1c232e;color:var(--text);font-weight:750;text-decoration:none;cursor:pointer}.button.primary{border:0;background:linear-gradient(135deg,var(--accent),var(--green));color:#071018}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:18px;background:#10151c}.card{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:var(--muted);font-size:12px}.card strong{display:block;margin-top:6px;color:var(--text);font-size:24px;line-height:1.1}.section-title{padding:20px 18px 6px;margin:0;font-size:20px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:14px 18px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#939dab}td{font-size:14px}.status{display:inline-flex;padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.06)}.late{color:var(--red);font-weight:800}.footer{padding:24px 0 38px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.privacy{padding:17px 18px;background:#10151c;color:var(--muted);font-size:13px}.privacy strong{color:var(--text)}@media(max-width:900px){.cards{grid-template-columns:1fr 1fr}}@media(max-width:650px){.hero{padding-top:48px}.toolbar{align-items:flex-start;flex-direction:column}.cards{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -14,23 +14,32 @@
   <main class="wrap">
     <section class="hero">
       <div class="eyebrow">Управленческий контур · без персональных данных</div>
-      <h1>История нарушений, а не одноразовый сигнал.</h1>
-      <p class="lead">Штатный триггер сообщает о проблеме. SLA Guard дополнительно сохраняет обезличенный журнал, чтобы руководитель видел повторяющиеся задержки, сравнивал статусы и разбирал пики нагрузки.</p>
+      <h1>Не просто сигнал. Картина повторяющихся задержек.</h1>
+      <p class="lead">Обычный триггер сообщает об одном событии. SLA Guard сохраняет обезличенную историю, показывает частоту нарушений, среднюю задержку и статусы, в которых процесс ломается чаще всего.</p>
     </section>
     <section class="panel">
       <div class="toolbar">
-        <div class="note">Демо использует вымышленные заказы. В журнал попадают только номер, статус, длительность задержки и техническое время фиксации.</div>
+        <div class="note">Демо использует вымышленные заказы. Хранятся только номер, статус, длительность задержки и техническое время фиксации.</div>
         <div class="actions">
           <button class="button" id="add" type="button">Добавить инцидент</button>
           <button class="button" id="download" type="button">Скачать CSV</button>
           <a class="button primary" href="mailto:nikidom123@gmail.com?subject=RetailCRM%20SLA%20Guard%20%E2%80%94%20%D0%BF%D0%B8%D0%BB%D0%BE%D1%82&body=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C.%0A%0A%D0%A5%D0%BE%D1%82%D0%B8%D0%BC%20%D0%BE%D0%B1%D1%81%D1%83%D0%B4%D0%B8%D1%82%D1%8C%20%D0%BF%D0%B8%D0%BB%D0%BE%D1%82%20RetailCRM%20SLA%20Guard.%0A%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%B8%D1%80%D1%83%D0%B5%D0%BC%D1%8B%D0%B5%20%D1%81%D1%82%D0%B0%D1%82%D1%83%D1%81%D1%8B%3A%20%0A%D0%94%D0%BE%D0%BF%D1%83%D1%81%D1%82%D0%B8%D0%BC%D0%BE%D0%B5%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%3A%20">Запустить пилот — 15 000 ₽</a>
         </div>
       </div>
+      <div class="cards">
+        <div class="card">Всего инцидентов<strong id="total">0</strong></div>
+        <div class="card">За 24 часа<strong id="day">0</strong></div>
+        <div class="card">За 7 дней<strong id="week">0</strong></div>
+        <div class="card">Средняя задержка<strong id="average">—</strong></div>
+        <div class="card">Главный статус<strong id="top-status">—</strong></div>
+      </div>
+      <h2 class="section-title">Повторяющиеся узкие места</h2>
       <div class="table-wrap">
-        <table>
-          <thead><tr><th>Зафиксировано</th><th>Заказ</th><th>Статус</th><th>Задержка</th><th>Статус изменён</th></tr></thead>
-          <tbody id="rows"></tbody>
-        </table>
+        <table><thead><tr><th>Статус</th><th>Инциденты</th><th>Средняя задержка</th><th>Максимум</th></tr></thead><tbody id="status-rows"></tbody></table>
+      </div>
+      <h2 class="section-title">Последние инциденты</h2>
+      <div class="table-wrap">
+        <table><thead><tr><th>Зафиксировано</th><th>Заказ</th><th>Статус</th><th>Задержка</th><th>Статус изменён</th></tr></thead><tbody id="rows"></tbody></table>
       </div>
       <div class="privacy"><strong>Приватность:</strong> имена, телефоны, email, адреса и суммы заказа не сохраняются. CSV защищает значения, начинающиеся с <code>=</code>, <code>+</code>, <code>-</code> и <code>@</code>, от выполнения как формул.</div>
     </section>
@@ -38,19 +47,16 @@
   <footer class="footer"><div class="wrap">© 2026 TerraTectra · Публичная демонстрация на синтетических данных</div></footer>
   <script>
     const incidents = [
-      {detectedAt:"2026-07-14 17:42",orderNumber:"A-1048",status:"assembling",staleMinutes:176,statusUpdatedAt:"2026-07-14 14:46"},
-      {detectedAt:"2026-07-14 16:15",orderNumber:"A-1031",status:"new",staleMinutes:61,statusUpdatedAt:"2026-07-14 15:14"},
-      {detectedAt:"2026-07-14 13:05",orderNumber:"A-0997",status:"delivery",staleMinutes:1620,statusUpdatedAt:"2026-07-13 10:05"}
+      {detectedAt:"2026-07-14T17:42:00Z",orderNumber:"A-1048",status:"assembling",staleMinutes:176,statusUpdatedAt:"2026-07-14 14:46"},
+      {detectedAt:"2026-07-14T16:15:00Z",orderNumber:"A-1031",status:"new",staleMinutes:61,statusUpdatedAt:"2026-07-14 15:14"},
+      {detectedAt:"2026-07-14T13:05:00Z",orderNumber:"A-0997",status:"delivery",staleMinutes:1620,statusUpdatedAt:"2026-07-13 10:05"},
+      {detectedAt:"2026-07-12T09:30:00Z",orderNumber:"A-0962",status:"assembling",staleMinutes:138,statusUpdatedAt:"2026-07-12 07:12"}
     ];
-    const samples=[
-      {orderNumber:"A-1064",status:"assembling",staleMinutes:143},
-      {orderNumber:"A-1068",status:"new",staleMinutes:48},
-      {orderNumber:"=A-1072",status:"delivery",staleMinutes:1512}
-    ];
-    const tbody=document.querySelector("#rows");
-    function render(){tbody.innerHTML=incidents.map(i=>`<tr><td>${i.detectedAt}</td><td><strong>${i.orderNumber}</strong></td><td><span class="status">${i.status}</span></td><td class="late">${i.staleMinutes} мин.</td><td>${i.statusUpdatedAt}</td></tr>`).join("")}
-    function now(){return new Date().toLocaleString("ru-RU",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}).replace(",","")}
-    document.querySelector("#add").addEventListener("click",()=>{const sample=samples[incidents.length%samples.length];incidents.unshift({...sample,detectedAt:now(),statusUpdatedAt:"2026-07-14 15:00"});render()});
+    const samples=[{orderNumber:"A-1064",status:"assembling",staleMinutes:143},{orderNumber:"A-1068",status:"new",staleMinutes:48},{orderNumber:"=A-1072",status:"delivery",staleMinutes:1512}];
+    const tbody=document.querySelector("#rows"),statusBody=document.querySelector("#status-rows");
+    function summary(){const reference=Math.max(Date.now(),...incidents.map(i=>new Date(i.detectedAt).getTime()));const byStatus={};let totalDelay=0;incidents.forEach(i=>{totalDelay+=i.staleMinutes;const row=byStatus[i.status]??={count:0,total:0,max:0};row.count++;row.total+=i.staleMinutes;row.max=Math.max(row.max,i.staleMinutes)});const ranked=Object.entries(byStatus).map(([status,row])=>({status,...row,average:Math.round(row.total/row.count)})).sort((a,b)=>b.count-a.count||a.status.localeCompare(b.status));return{reference,ranked,average:incidents.length?Math.round(totalDelay/incidents.length):null}}
+    function render(){const s=summary();tbody.innerHTML=incidents.map(i=>`<tr><td>${new Date(i.detectedAt).toLocaleString("ru-RU")}</td><td><strong>${i.orderNumber}</strong></td><td><span class="status">${i.status}</span></td><td class="late">${i.staleMinutes} мин.</td><td>${i.statusUpdatedAt}</td></tr>`).join("");statusBody.innerHTML=s.ranked.map(i=>`<tr><td><span class="status">${i.status}</span></td><td>${i.count}</td><td>${i.average} мин.</td><td>${i.max} мин.</td></tr>`).join("");document.querySelector("#total").textContent=incidents.length;document.querySelector("#day").textContent=incidents.filter(i=>s.reference-new Date(i.detectedAt).getTime()<=86400000).length;document.querySelector("#week").textContent=incidents.filter(i=>s.reference-new Date(i.detectedAt).getTime()<=604800000).length;document.querySelector("#average").textContent=s.average===null?"—":`${s.average} мин.`;document.querySelector("#top-status").textContent=s.ranked[0]?.status??"—"}
+    document.querySelector("#add").addEventListener("click",()=>{const sample=samples[incidents.length%samples.length];incidents.unshift({...sample,detectedAt:new Date().toISOString(),statusUpdatedAt:new Date(Date.now()-sample.staleMinutes*60000).toLocaleString("ru-RU")});render()});
     function csvCell(value){const text=String(value??"");const safe=/^[=+\-@]/.test(text)?`'${text}`:text;return `"${safe.replaceAll('"','""')}"`}
     document.querySelector("#download").addEventListener("click",()=>{const header=["detectedAt","orderNumber","status","staleMinutes","statusUpdatedAt"];const csv=[header,...incidents.map(i=>header.map(k=>i[k]))].map(r=>r.map(csvCell).join(",")).join("\n")+"\n";const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="retailcrm-sla-incidents-demo.csv";a.click();URL.revokeObjectURL(url)});
     render();
