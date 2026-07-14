@@ -1,0 +1,328 @@
+name: Build RetailCRM incident journal
+
+on:
+  push:
+    branches:
+      - agent/retailcrm-incident-journal
+    paths:
+      - .github/workflows/build-retailcrm-incident-journal.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/retailcrm-incident-journal
+          fetch-depth: 0
+
+      - name: Add privacy-safe incident journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          root = Path('prototypes/retailcrm-sla-guard')
+          server_path = root / 'src/marketplace-server.js'
+          package_path = root / 'package.json'
+          readme_path = root / 'README.md'
+          server = server_path.read_text()
+
+          def replace_once(old, new, label):
+              global server
+              count = server.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected one match, found {count}')
+              server = server.replace(old, new, 1)
+
+          replace_once(
+              '} from "./core.js";\nimport {',
+              '} from "./core.js";\nimport { appendIncidents, incidentsToCsv } from "./incident-core.js";\nimport {',
+              'incident import',
+          )
+
+          replace_once(
+              '''function sendHtml(response, statusCode, html) {
+            response.writeHead(statusCode, {
+              "content-type": "text/html; charset=utf-8",
+              "cache-control": "no-store",
+              "content-security-policy":
+                "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+              "referrer-policy": "no-referrer",
+              "x-content-type-options": "nosniff",
+            });
+            response.end(html);
+          }
+          ''',
+              '''function sendHtml(response, statusCode, html) {
+            response.writeHead(statusCode, {
+              "content-type": "text/html; charset=utf-8",
+              "cache-control": "no-store",
+              "content-security-policy":
+                "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+              "referrer-policy": "no-referrer",
+              "x-content-type-options": "nosniff",
+            });
+            response.end(html);
+          }
+
+          function sendCsv(response, filename, csv) {
+            response.writeHead(200, {
+              "content-type": "text/csv; charset=utf-8",
+              "content-disposition": `attachment; filename="${filename}"`,
+              "cache-control": "no-store",
+              "x-content-type-options": "nosniff",
+            });
+            response.end(`\\uFEFF${csv}`);
+          }
+          ''',
+              'CSV response',
+          )
+
+          replace_once(
+              '''        telegramChatId: null,
+                  sentKeys: [],
+                  createdAt: new Date().toISOString(),''',
+              '''        telegramChatId: null,
+                  sentKeys: [],
+                  incidents: [],
+                  createdAt: new Date().toISOString(),''',
+              'tenant incidents default',
+          )
+
+          replace_once(
+              '''<label class="check"><input type="checkbox" name="includeCustomerData" value="1"${customerDataChecked}><span>Добавлять в Telegram имя клиента и сумму заказа. По умолчанию выключено для минимизации персональных данных.</span></label>
+          <button type="submit">Сохранить настройки</button></form></body></html>`;''',
+              '''<label class="check"><input type="checkbox" name="includeCustomerData" value="1"${customerDataChecked}><span>Добавлять в Telegram имя клиента и сумму заказа. По умолчанию выключено для минимизации персональных данных.</span></label>
+          <button type="submit">Сохранить настройки</button></form>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+          <form method="post" action="/marketplace/incidents"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Журнал нарушений</button></form>
+          <form method="post" action="/marketplace/incidents.csv"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Скачать CSV</button></form>
+          </div></body></html>`;''',
+              'account journal links',
+          )
+
+          marker = 'async function saveAccount(payload) {'
+          if server.count(marker) != 1:
+              raise SystemExit('incident page insertion marker missing')
+          incident_page = '''function incidentPage(tenant) {
+            const incidents = Array.isArray(tenant.incidents) ? tenant.incidents : [];
+            const rows = incidents.length
+              ? incidents
+                  .map(
+                    (incident) => `<tr><td>${escapeHtml(incident.detectedAt)}</td><td>${escapeHtml(incident.orderNumber)}</td><td>${escapeHtml(incident.status)}</td><td>${escapeHtml(incident.staleMinutes ?? "?")} мин.</td><td>${escapeHtml(incident.statusUpdatedAt || "—")}</td></tr>`,
+                  )
+                  .join("")
+              : '<tr><td colspan="5">Нарушения пока не зафиксированы.</td></tr>';
+
+            return `<!doctype html>
+          <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>Журнал SLA — RetailCRM SLA Guard</title><style>
+          body{font-family:system-ui,sans-serif;max-width:1040px;margin:40px auto;padding:0 18px;color:#171717}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}th{background:#f4f4f4}button{padding:10px 16px;border:0;border-radius:7px;background:#171717;color:white;font-weight:700}form{display:inline-block;margin-right:10px}.note{padding:12px;background:#f3f3f3;border-radius:7px}</style></head><body>
+          <h1>Журнал нарушений SLA</h1><div class="note">Хранятся только номер заказа, статус, длительность задержки и техническое время фиксации. Имя клиента, контакты и сумма заказа в журнал не попадают.</div>
+          <table><thead><tr><th>Зафиксировано</th><th>Заказ</th><th>Статус</th><th>Задержка</th><th>Статус изменён</th></tr></thead><tbody>${rows}</tbody></table>
+          <form method="post" action="/marketplace/account"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Вернуться к настройкам</button></form>
+          <form method="post" action="/marketplace/incidents.csv"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Скачать CSV</button></form>
+          </body></html>`;
+          }
+
+          async function tenantFromPayload(payload) {
+            const clientId = getPayloadField(payload, "clientId", ["clientId"]);
+            const tenant = clientId ? await store.get(clientId) : null;
+            if (!tenant) throw new Error("Unknown clientId");
+            return tenant;
+          }
+
+          '''
+          server = server.replace(marker, incident_page + marker, 1)
+
+          replace_once(
+              '''    const orders = await fetchOrders(tenant);
+              const alerts = collectNewAlerts(orders, parseRules(tenant.slaRules), sentKeys);
+              for (const order of alerts) {
+                await sendTelegram(
+                  tenant,
+                  buildAlert(order, new Date(), {
+                    includeCustomerData: tenant.includeCustomerData === true,
+                  }),
+                );
+                sentKeys.add(alertKey(order));
+              }
+              await store.upsert(tenant.clientId, {
+                sentKeys: [...sentKeys].slice(-5000),''',
+              '''    const orders = await fetchOrders(tenant);
+              const alerts = collectNewAlerts(orders, parseRules(tenant.slaRules), sentKeys);
+              const detectedAt = new Date();
+              for (const order of alerts) {
+                await sendTelegram(
+                  tenant,
+                  buildAlert(order, detectedAt, {
+                    includeCustomerData: tenant.includeCustomerData === true,
+                  }),
+                );
+                sentKeys.add(alertKey(order));
+              }
+              await store.upsert(tenant.clientId, {
+                sentKeys: [...sentKeys].slice(-5000),
+                incidents: appendIncidents(tenant.incidents, alerts, detectedAt),''',
+              'poll incident persistence',
+          )
+
+          replace_once(
+              '''    if (request.method === "POST" && url.pathname === "/marketplace/account/save") {
+                const tenant = await saveAccount(await readPayload(request));
+                await audit("tenant_configured", { clientId: tenant.clientId.slice(0, 12) });
+                return sendHtml(response, 200, accountPage(tenant, "Настройки сохранены"));
+              }
+              return sendJson(response, 404, { success: false, errorMsg: "Not found" });''',
+              '''    if (request.method === "POST" && url.pathname === "/marketplace/account/save") {
+                const tenant = await saveAccount(await readPayload(request));
+                await audit("tenant_configured", { clientId: tenant.clientId.slice(0, 12) });
+                return sendHtml(response, 200, accountPage(tenant, "Настройки сохранены"));
+              }
+              if (request.method === "POST" && url.pathname === "/marketplace/incidents") {
+                const tenant = await tenantFromPayload(await readPayload(request));
+                return sendHtml(response, 200, incidentPage(tenant));
+              }
+              if (request.method === "POST" && url.pathname === "/marketplace/incidents.csv") {
+                const tenant = await tenantFromPayload(await readPayload(request));
+                return sendCsv(
+                  response,
+                  "retailcrm-sla-incidents.csv",
+                  incidentsToCsv(tenant.incidents),
+                );
+              }
+              return sendJson(response, 404, { success: false, errorMsg: "Not found" });''',
+              'incident routes',
+          )
+
+          server_path.write_text(server)
+
+          (root / 'src/incident-core.js').write_text('''import { alertKey, orderStatus, staleMinutes } from "./core.js";
+
+          export const MAX_INCIDENTS = 1000;
+
+          export function buildIncident(order, detectedAt = new Date()) {
+            return {
+              key: alertKey(order),
+              orderId: String(order.id ?? ""),
+              orderNumber: String(order.number || order.externalId || order.id || "unknown"),
+              status: orderStatus(order),
+              statusUpdatedAt: order.statusUpdatedAt || null,
+              staleMinutes: staleMinutes(order, detectedAt),
+              detectedAt: detectedAt.toISOString(),
+            };
+          }
+
+          export function appendIncidents(existing, orders, detectedAt = new Date(), limit = MAX_INCIDENTS) {
+            const current = Array.isArray(existing) ? existing : [];
+            const knownKeys = new Set(current.map((incident) => incident.key));
+            const created = [];
+            for (const order of orders || []) {
+              const incident = buildIncident(order, detectedAt);
+              if (knownKeys.has(incident.key)) continue;
+              knownKeys.add(incident.key);
+              created.push(incident);
+            }
+            return [...created.reverse(), ...current].slice(0, Math.max(1, limit));
+          }
+
+          function csvCell(value) {
+            const text = String(value ?? "");
+            const safe = /^[=+\\-@]/.test(text) ? `'${text}` : text;
+            return `"${safe.replaceAll('"', '""')}"`;
+          }
+
+          export function incidentsToCsv(incidents) {
+            const rows = [
+              ["detectedAt", "orderNumber", "status", "staleMinutes", "statusUpdatedAt"],
+              ...(Array.isArray(incidents) ? incidents : []).map((incident) => [
+                incident.detectedAt,
+                incident.orderNumber,
+                incident.status,
+                incident.staleMinutes,
+                incident.statusUpdatedAt,
+              ]),
+            ];
+            return `${rows.map((row) => row.map(csvCell).join(",")).join("\\n")}\\n`;
+          }
+          ''')
+
+          (root / 'test/incident-core.test.js').write_text('''import assert from "node:assert/strict";
+          import test from "node:test";
+          import { appendIncidents, buildIncident, incidentsToCsv } from "../src/incident-core.js";
+
+          const now = new Date("2026-07-14T12:00:00Z");
+          const order = {
+            id: 42,
+            number: "A-42",
+            extendedStatus: "assembling",
+            statusUpdatedAt: "2026-07-14T10:00:00Z",
+            firstName: "Иван",
+            lastName: "Петров",
+            totalSumm: 12500,
+          };
+
+          test("builds a privacy-safe SLA incident", () => {
+            const incident = buildIncident(order, now);
+            assert.equal(incident.orderNumber, "A-42");
+            assert.equal(incident.status, "assembling");
+            assert.equal(incident.staleMinutes, 120);
+            assert.equal(Object.hasOwn(incident, "firstName"), false);
+            assert.equal(Object.hasOwn(incident, "totalSumm"), false);
+          });
+
+          test("deduplicates and bounds incident history", () => {
+            const first = appendIncidents([], [order], now, 2);
+            assert.equal(first.length, 1);
+            assert.equal(appendIncidents(first, [order], now, 2).length, 1);
+            const secondOrder = { ...order, id: 43, number: "A-43" };
+            const thirdOrder = { ...order, id: 44, number: "=A-44" };
+            const bounded = appendIncidents(first, [secondOrder, thirdOrder], now, 2);
+            assert.equal(bounded.length, 2);
+            assert.equal(bounded[0].orderNumber, "=A-44");
+          });
+
+          test("exports incidents as spreadsheet-safe CSV", () => {
+            const incidents = appendIncidents([], [{ ...order, number: "=2+2" }], now);
+            const csv = incidentsToCsv(incidents);
+            assert.match(csv, /orderNumber/);
+            assert.match(csv, /'=2\\+2/);
+            assert.doesNotMatch(csv, /Иван|12500/);
+          });
+          ''')
+
+          package = package_path.read_text()
+          old = 'node --check src/marketplace-core.js && node --check src/tenant-store.js && node --check src/marketplace-server.js'
+          new = 'node --check src/marketplace-core.js && node --check src/incident-core.js && node --check src/tenant-store.js && node --check src/marketplace-server.js'
+          if package.count(old) != 1:
+              raise SystemExit('package check marker missing')
+          package_path.write_text(package.replace(old, new, 1))
+
+          readme = readme_path.read_text()
+          readme = readme.replace(
+              '- suppresses duplicate notifications until the order status changes again.',
+              '- suppresses duplicate notifications until the order status changes again;\n- keeps a privacy-safe incident journal with CSV export for operational reviews.',
+              1,
+          )
+          readme = readme.replace(
+              '- `POST /marketplace/account/save` — saves SLA, Telegram and privacy settings;',
+              '- `POST /marketplace/account/save` — saves SLA, Telegram and privacy settings;\n- `POST /marketplace/incidents` — opens the privacy-safe SLA incident journal;\n- `POST /marketplace/incidents.csv` — exports the journal for operational analysis;',
+              1,
+          )
+          readme_path.write_text(readme)
+          PY
+
+          cd prototypes/retailcrm-sla-guard
+          npm run check
+          cd ../..
+          rm .github/workflows/build-retailcrm-incident-journal.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: add privacy-safe SLA incident journal'
+          git push origin HEAD:agent/retailcrm-incident-journal
