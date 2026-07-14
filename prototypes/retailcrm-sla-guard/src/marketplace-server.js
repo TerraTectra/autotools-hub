@@ -8,7 +8,7 @@ import {
   collectNewAlerts,
   parseRules,
 } from "./core.js";
-import { appendIncidents, incidentsToCsv } from "./incident-core.js";
+import { appendIncidents, incidentsToCsv, summarizeIncidents } from "./incident-core.js";
 import {
   buildIntegrationModuleForm,
   buildMarketplaceConfig,
@@ -381,6 +381,7 @@ body{font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0
 
 function incidentPage(tenant) {
   const incidents = Array.isArray(tenant.incidents) ? tenant.incidents : [];
+  const summary = summarizeIncidents(incidents);
   const rows = incidents.length
     ? incidents
         .map(
@@ -388,12 +389,29 @@ function incidentPage(tenant) {
         )
         .join("")
     : '<tr><td colspan="5">Нарушения пока не зафиксированы.</td></tr>';
+  const statusRows = summary.byStatus.length
+    ? summary.byStatus
+        .map(
+          (status) => `<tr><td>${escapeHtml(status.status)}</td><td>${status.count}</td><td>${status.averageDelayMinutes ?? "—"} мин.</td><td>${status.maxDelayMinutes ?? "—"} мин.</td></tr>`,
+        )
+        .join("")
+    : '<tr><td colspan="4">Недостаточно данных для аналитики.</td></tr>';
 
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Журнал SLA — RetailCRM SLA Guard</title><style>
-body{font-family:system-ui,sans-serif;max-width:1040px;margin:40px auto;padding:0 18px;color:#171717}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}th{background:#f4f4f4}button{padding:10px 16px;border:0;border-radius:7px;background:#171717;color:white;font-weight:700}form{display:inline-block;margin-right:10px}.note{padding:12px;background:#f3f3f3;border-radius:7px}</style></head><body>
+body{font-family:system-ui,sans-serif;max-width:1040px;margin:40px auto;padding:0 18px;color:#171717}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}.card{padding:14px;background:#f3f3f3;border-radius:9px}.card b{display:block;font-size:24px;margin-top:4px}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}th{background:#f4f4f4}button{padding:10px 16px;border:0;border-radius:7px;background:#171717;color:white;font-weight:700}form{display:inline-block;margin-right:10px}.note{padding:12px;background:#f3f3f3;border-radius:7px}h2{margin-top:34px}@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}}@media(max-width:480px){.cards{grid-template-columns:1fr}}</style></head><body>
 <h1>Журнал нарушений SLA</h1><div class="note">Хранятся только номер заказа, статус, длительность задержки и техническое время фиксации. Имя клиента, контакты и сумма заказа в журнал не попадают.</div>
+<div class="cards">
+<div class="card">Всего инцидентов<b>${summary.total}</b></div>
+<div class="card">За 24 часа<b>${summary.last24Hours}</b></div>
+<div class="card">За 7 дней<b>${summary.last7Days}</b></div>
+<div class="card">Средняя задержка<b>${summary.averageDelayMinutes ?? "—"} мин.</b></div>
+<div class="card">Главный статус<b>${escapeHtml(summary.topStatus || "—")}</b></div>
+</div>
+<h2>Повторяющиеся узкие места</h2>
+<table><thead><tr><th>Статус</th><th>Инциденты</th><th>Средняя задержка</th><th>Максимальная задержка</th></tr></thead><tbody>${statusRows}</tbody></table>
+<h2>Последние инциденты</h2>
 <table><thead><tr><th>Зафиксировано</th><th>Заказ</th><th>Статус</th><th>Задержка</th><th>Статус изменён</th></tr></thead><tbody>${rows}</tbody></table>
 <form method="post" action="/marketplace/account"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Вернуться к настройкам</button></form>
 <form method="post" action="/marketplace/incidents.csv"><input type="hidden" name="clientId" value="${escapeHtml(tenant.clientId)}"><button type="submit">Скачать CSV</button></form>
