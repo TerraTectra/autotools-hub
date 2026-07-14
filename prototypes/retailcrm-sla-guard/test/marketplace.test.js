@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { createHmac } from "node:crypto";
+import { createHmac, randomBytes } from "node:crypto";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -7,8 +7,11 @@ import test from "node:test";
 import {
   buildIntegrationModuleForm,
   buildMarketplaceConfig,
+  decryptSecret,
+  encryptSecret,
   parseAllowedDomains,
   parseBoolean,
+  parseEncryptionKey,
   validateRetailCrmSystemUrl,
   verifyRegisterToken,
 } from "../src/marketplace-core.js";
@@ -26,9 +29,20 @@ test("verifies RetailCRM registration HMAC in constant-size hex form", () => {
   const apiKey = "crm-api-key";
   const secret = "partner-secret";
   const token = createHmac("sha256", secret).update(apiKey).digest("hex");
+  const invalidToken = `${token[0] === "0" ? "1" : "0"}${token.slice(1)}`;
   assert.equal(verifyRegisterToken(apiKey, secret, token), true);
-  assert.equal(verifyRegisterToken(apiKey, secret, `${token.slice(0, -1)}0`), false);
+  assert.equal(verifyRegisterToken(apiKey, secret, invalidToken), false);
   assert.equal(verifyRegisterToken(apiKey, secret, "not-a-token"), false);
+});
+
+test("encrypts tenant secrets using AES-256-GCM", () => {
+  const key = parseEncryptionKey(randomBytes(32).toString("hex"));
+  const otherKey = parseEncryptionKey(randomBytes(32).toString("base64"));
+  const encrypted = encryptSecret("very-secret-value", key);
+  assert.match(encrypted, /^v1\./);
+  assert.equal(decryptSecret(encrypted, key), "very-secret-value");
+  assert.throws(() => decryptSecret(encrypted, otherKey), /could not be decrypted/);
+  assert.throws(() => parseEncryptionKey("too-short"), /exactly 32 bytes/);
 });
 
 test("validates CRM URL against the live-domain payload shape", () => {
