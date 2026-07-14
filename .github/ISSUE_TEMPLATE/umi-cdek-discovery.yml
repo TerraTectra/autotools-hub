@@ -1,0 +1,149 @@
+name: UMI.CMS → СДЭК: discovery
+
+description: Запросить техническое обследование и фиксированную оценку модуля доставки
+
+title: "[UMI.CMS → СДЭК] "
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Эта форма предназначена для первичной оценки и оплачиваемого discovery.
+
+        **Не публикуйте здесь логины, пароли, ключи СДЭК, резервные копии, персональные данные покупателей или закрытые файлы.** Доступы запрашиваются отдельно только после письменного согласования условий.
+
+  - type: dropdown
+    id: product_type
+    attributes:
+      label: Формат продукта
+      options:
+        - Модуль для одного интернет-магазина
+        - Повторно устанавливаемый модуль для нескольких клиентов
+        - Подготовка к UMI.Market
+        - Пока не определено
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Требуемые функции
+      options:
+        - label: Расчёт стоимости и срока доставки
+        - label: Курьерская доставка
+        - label: Получение и выбор ПВЗ
+        - label: Сохранение тарифа и ПВЗ в заказе UMI.CMS
+        - label: Создание отправления в СДЭК
+        - label: Обновление и отмена отправления
+        - label: Получение статусов
+        - label: Синхронизация статусов с заказом UMI.CMS
+        - label: Печатные формы и штрихкоды
+        - label: White-label для интегратора
+
+  - type: input
+    id: umi_version
+    attributes:
+      label: Версия и редакция UMI.CMS
+      placeholder: Например, Shop, версия 24.x
+    validations:
+      required: true
+
+  - type: input
+    id: php_version
+    attributes:
+      label: Версия PHP
+      placeholder: Например, PHP 8.1
+    validations:
+      required: true
+
+  - type: textarea
+    id: checkout
+    attributes:
+      label: Оформление заказа
+      description: Опишите используемый шаблон, одностраничное/пошаговое оформление и текущие способы доставки.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: product_dimensions
+    attributes:
+      label: Вес и габариты товаров
+      options:
+        - Заполнены для всех товаров
+        - Заполнены частично
+        - Не заполнены
+        - Нужно рассчитывать по правилам упаковки
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cdek_access
+    attributes:
+      label: Контур СДЭК
+      description: Не размещайте сами ключи в issue.
+      options:
+        - Есть договор и тестовые доступы API
+        - Есть договор, тестовые доступы нужно получить
+        - Договора со СДЭК пока нет
+        - Неизвестно
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_site
+    attributes:
+      label: Тестовый сайт UMI.CMS
+      options:
+        - Есть отдельная тестовая копия
+        - Можно создать тестовую копию
+        - Есть только production-сайт
+        - Пока неизвестно
+    validations:
+      required: true
+
+  - type: textarea
+    id: payment_tax
+    attributes:
+      label: Оплата, наложенный платёж и НДС
+      description: Опишите способы оплаты, нужен ли наложенный платёж и какие ставки НДС используются.
+    validations:
+      required: true
+
+  - type: input
+    id: target_date
+    attributes:
+      label: Желаемый срок запуска
+      placeholder: Например, до конца августа 2026
+
+  - type: dropdown
+    id: budget
+    attributes:
+      label: Ориентир бюджета
+      options:
+        - Только discovery за 5 000 ₽
+        - 45 000–75 000 ₽
+        - 75 000–110 000 ₽
+        - 110 000–140 000 ₽
+        - Нужна оценка после discovery
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Главный критерий приёмки
+      placeholder: Например, покупатель выбирает ПВЗ, стоимость сохраняется в заказе, тестовое отправление создаётся без дублей.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Условия
+      options:
+        - label: Я не публикую в issue доступы, персональные данные или закрытые клиентские материалы.
+          required: true
+        - label: Я согласен фиксировать требования, цену и приёмку письменно.
+          required: true
+        - label: Я понимаю, что scaffold не является готовым универсальным production-модулем.
+          required: true
