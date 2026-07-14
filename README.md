@@ -28,7 +28,9 @@
 
 [Открыть исходники страницы](site/quick-check)
 
-Статическая страница подготовлена к публикации в GitHub Pages. После однократного включения источника GitHub Actions используется workflow `Deploy public site to GitHub Pages`.
+[Открыть демонстрацию очистки CRM-базы и аудита воронки](site/data-quality/)
+
+Статические страницы подготовлены к публикации в GitHub Pages. После однократного включения источника GitHub Actions используется workflow `Deploy public site to GitHub Pages`.
 
 ## Bitrix24 to Mindbox
 
