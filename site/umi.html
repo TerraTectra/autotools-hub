@@ -3,37 +3,357 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="TerraTectra Automation — модули UMI.CMS, интеграции СДЭК и Telegram, технический white-label субподряд для веб-студий.">
+  <meta name="description" content="Модули UMI.CMS, интеграция СДЭК, Telegram-уведомления и white-label разработка для веб-студий. Фиксированные пакеты 20 000, 35 000 и 55 000 рублей.">
   <title>TerraTectra Automation — разработка для UMI.CMS</title>
   <style>
-    :root{color-scheme:dark;--bg:#0b0d12;--panel:#151a22;--panel2:#1b222d;--line:#2c3543;--text:#f3f6fa;--muted:#a9b2bf;--accent:#91d6ff;--green:#b8ffd0;--warning:#ffd28c}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 12% 0,rgba(70,151,255,.17),transparent 34rem),radial-gradient(circle at 88% 10%,rgba(83,255,169,.09),transparent 30rem),var(--bg);color:var(--text);line-height:1.55}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}a{color:inherit}.top{border-bottom:1px solid var(--line);background:rgba(11,13,18,.82);backdrop-filter:blur(16px);position:sticky;top:0;z-index:10}.nav{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{text-decoration:none;font-weight:850;letter-spacing:-.02em}.links{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.links a{text-decoration:none;color:var(--muted)}.button{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);font-weight:760;text-decoration:none;color:var(--text)}.button.primary{border:0;background:linear-gradient(135deg,var(--accent),var(--green));color:#071018}.hero{padding:82px 0 44px}.eyebrow{color:var(--accent);font-size:13px;font-weight:850;letter-spacing:.11em;text-transform:uppercase}h1{font-size:clamp(42px,6vw,74px);line-height:.98;letter-spacing:-.05em;margin:14px 0 20px;max-width:900px}.lead{max-width:820px;color:var(--muted);font-size:20px}.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:26px}.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:40px 0}.fact{padding:17px;border:1px solid var(--line);border-radius:15px;background:rgba(21,26,34,.9);color:var(--muted);font-size:13px}.fact strong{display:block;margin-top:5px;color:var(--text);font-size:20px}.section{padding:46px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}.section-head h2{margin:0;font-size:clamp(30px,4vw,48px);letter-spacing:-.035em}.section-head p{margin:0;max-width:580px;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{padding:25px;border:1px solid var(--line);border-radius:21px;background:rgba(21,26,34,.93)}.card h3{margin:0 0 10px;font-size:24px}.badge{display:inline-flex;padding:6px 9px;border-radius:999px;background:rgba(145,214,255,.1);color:var(--accent);font-size:12px;font-weight:800}.card p,.card li{color:var(--muted)}.card ul{padding-left:20px}.price{font-size:27px;font-weight:900;margin:18px 0 4px}.note{color:var(--warning);font-size:13px}.process{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.step{padding:20px;border:1px solid var(--line);border-radius:17px;background:rgba(21,26,34,.75)}.step strong{display:block;color:var(--accent);margin-bottom:7px}.step span{color:var(--muted);font-size:14px}.cta{margin:45px 0 70px;padding:32px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,rgba(35,50,69,.92),rgba(21,37,31,.92));display:flex;align-items:center;justify-content:space-between;gap:24px}.cta h2{margin:0 0 8px;font-size:clamp(28px,4vw,44px)}.cta p{margin:0;color:var(--muted)}footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}.footer{padding:24px 0 38px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}@media(max-width:850px){.facts,.process{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.section-head,.cta{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.links a:not(.button){display:none}.facts,.process{grid-template-columns:1fr}.hero{padding-top:55px}}
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --panel: #151a22;
+      --panel-2: #1b222d;
+      --line: #2c3543;
+      --text: #f3f6fa;
+      --muted: #a9b2bf;
+      --accent: #91d6ff;
+      --green: #b8ffd0;
+      --warning: #ffd28c;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0, rgba(70, 151, 255, .17), transparent 34rem),
+        radial-gradient(circle at 88% 10%, rgba(83, 255, 169, .09), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: auto; }
+    a { color: inherit; }
+    .top {
+      border-bottom: 1px solid var(--line);
+      background: rgba(11, 13, 18, .82);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { text-decoration: none; font-weight: 850; letter-spacing: -.02em; }
+    .links { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .links a { text-decoration: none; color: var(--muted); }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 43px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--panel-2);
+      font-weight: 760;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .button.primary { border: 0; background: linear-gradient(135deg, var(--accent), var(--green)); color: #071018; }
+    .hero { padding: 82px 0 44px; }
+    .eyebrow { color: var(--accent); font-size: 13px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    h1 { font-size: clamp(42px, 6vw, 74px); line-height: .98; letter-spacing: -.05em; margin: 14px 0 20px; max-width: 900px; }
+    .lead { max-width: 820px; color: var(--muted); font-size: 20px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 26px; }
+    .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 40px 0; }
+    .fact { padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: rgba(21, 26, 34, .9); color: var(--muted); font-size: 13px; }
+    .fact strong { display: block; margin-top: 5px; color: var(--text); font-size: 20px; }
+    .section { padding: 46px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+    .section-head h2 { margin: 0; font-size: clamp(30px, 4vw, 48px); letter-spacing: -.035em; }
+    .section-head p { margin: 0; max-width: 580px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+    .card, .package {
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 21px;
+      background: rgba(21, 26, 34, .93);
+    }
+    .package { display: flex; flex-direction: column; }
+    .package.featured { border-color: rgba(145, 214, 255, .75); box-shadow: 0 0 0 1px rgba(145, 214, 255, .15), 0 22px 70px rgba(36, 105, 156, .18); }
+    .card h3, .package h3 { margin: 0 0 10px; font-size: 24px; }
+    .badge { display: inline-flex; width: fit-content; padding: 6px 9px; border-radius: 999px; background: rgba(145, 214, 255, .1); color: var(--accent); font-size: 12px; font-weight: 800; }
+    .card p, .card li, .package p, .package li { color: var(--muted); }
+    .card ul, .package ul { padding-left: 20px; }
+    .price { font-size: 29px; font-weight: 900; margin: 18px 0 4px; }
+    .term { color: var(--green); font-weight: 750; }
+    .note { color: var(--warning); font-size: 13px; }
+    .package .actions { margin-top: auto; padding-top: 16px; }
+    .comparison { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; background: rgba(21, 26, 34, .78); }
+    th, td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; background: rgba(27, 34, 45, .9); }
+    tr:last-child td { border-bottom: 0; }
+    .yes { color: var(--green); font-weight: 800; }
+    .dash { color: #667180; }
+    .process { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
+    .step { padding: 20px; border: 1px solid var(--line); border-radius: 17px; background: rgba(21, 26, 34, .75); }
+    .step strong { display: block; color: var(--accent); margin-bottom: 7px; }
+    .step span { color: var(--muted); font-size: 14px; }
+    .faq { display: grid; gap: 12px; }
+    details { padding: 18px 20px; border: 1px solid var(--line); border-radius: 15px; background: rgba(21, 26, 34, .75); }
+    summary { cursor: pointer; font-weight: 800; }
+    details p { margin: 10px 0 0; color: var(--muted); }
+    .cta { margin: 45px 0 70px; padding: 32px; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(135deg, rgba(35, 50, 69, .92), rgba(21, 37, 31, .92)); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .cta h2 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); }
+    .cta p { margin: 0; color: var(--muted); }
+    footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .footer { padding: 24px 0 38px; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+
+    @media (max-width: 900px) {
+      .pricing { grid-template-columns: 1fr; }
+      .facts, .process { grid-template-columns: 1fr 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .section-head, .cta { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      .links a:not(.button) { display: none; }
+      .facts, .process { grid-template-columns: 1fr; }
+      .hero { padding-top: 55px; }
+    }
   </style>
 </head>
 <body>
-  <header class="top"><div class="wrap nav"><a class="brand" href="#top">TerraTectra Automation · UMI.CMS</a><nav class="links" aria-label="Навигация"><a href="#products">Разработки</a><a href="#formats">Форматы</a><a href="https://t.me/tahioff" rel="noopener">Telegram</a><a class="button" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%80%94%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0">Email</a></nav></div></header>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="#top">TerraTectra Automation · UMI.CMS</a>
+      <nav class="links" aria-label="Навигация">
+        <a href="#products">Разработки</a>
+        <a href="#cdek-packages">Пакеты СДЭК</a>
+        <a href="#formats">Субподряд</a>
+        <a href="https://t.me/tahioff" rel="noopener">Telegram</a>
+        <a class="button" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%80%94%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0">Email</a>
+      </nav>
+    </div>
+  </header>
+
   <main id="top">
     <section class="wrap hero">
       <div class="eyebrow">PHP · API · Telegram · интернет-магазины</div>
       <h1>Прикладные модули и интеграции для UMI.CMS.</h1>
       <p class="lead">Независимая разработка небольших модулей, обработчиков заказов, интеграций доставки и технический white-label субподряд для веб-студий. Работа ведётся письменно через GitHub: код, тесты, критерии приёмки и документация.</p>
-      <div class="actions"><a class="button primary" href="#products">Посмотреть разработки</a><a class="button" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes" rel="noopener">Исходный код</a><a class="button" href="https://t.me/tahioff" rel="noopener">Написать @tahioff</a></div>
-      <div class="facts"><div class="fact">Формат<strong>Самозанятый НПД</strong></div><div class="fact">Коммуникация<strong>Только письменно</strong></div><div class="fact">Передача<strong>GitHub + тесты</strong></div><div class="fact">Секреты клиента<strong>Не публикуются</strong></div></div>
-    </section>
-
-    <section class="wrap section" id="products">
-      <div class="section-head"><h2>Готовая техническая база</h2><p>Публичные репозитории содержат только синтетические данные. Production-адаптация выполняется на тестовом контуре клиента.</p></div>
-      <div class="grid">
-        <article class="card"><span class="badge">Рабочий PoC · PHP-тесты</span><h3>Telegram Order Status</h3><p>Уведомления при штатном событии изменения статуса заказа UMI.CMS.</p><ul><li>фильтр отслеживаемых статусов;</li><li>номер, сумма, старый и новый статус;</li><li>ссылка в административную карточку заказа;</li><li>персональные данные отключены по умолчанию;</li><li>повтор при 429/5xx и безопасная обработка ошибок;</li><li>установщик, unit-тесты и preflight-проверка.</li></ul><div class="price">от 5 000 ₽</div><p class="note">Установка на одном тестовом сайте; white-label — от 12 000 ₽.</p><div class="actions"><a class="button" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes/umi-order-telegram" rel="noopener">Код и инструкция</a></div></article>
-        <article class="card"><span class="badge">Интеграционный каркас · 7 тестов</span><h3>UMI.CMS → СДЭК</h3><p>Проверяемая основа доставки через официальный SDK СДЭК 2.0.</p><ul><li>payload расчёта тарифа и списка тарифов;</li><li>фильтры пунктов выдачи;</li><li>формирование отправления, упаковок и товаров;</li><li>валидация получателя и адресов;</li><li>нормализация телефона и email;</li><li>защита от повторной отправки заказа.</li></ul><div class="price">20 000–55 000 ₽</div><p class="note">От адаптации одного магазина до повторно устанавливаемой white-label версии. Админ-настройки входят во все рабочие варианты.</p><div class="actions"><a class="button" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes/umi-cdek-adapter" rel="noopener">Каркас и тесты</a></div></article>
+      <div class="actions">
+        <a class="button primary" href="#cdek-packages">Пакеты СДЭК</a>
+        <a class="button" href="#products">Другие разработки</a>
+        <a class="button" href="https://t.me/tahioff" rel="noopener">Написать @tahioff</a>
+      </div>
+      <div class="facts">
+        <div class="fact">Формат<strong>Самозанятый НПД</strong></div>
+        <div class="fact">Коммуникация<strong>Только письменно</strong></div>
+        <div class="fact">Передача<strong>GitHub + тесты</strong></div>
+        <div class="fact">Секреты клиента<strong>Не публикуются</strong></div>
       </div>
     </section>
 
-    <section class="wrap section" id="formats"><div class="section-head"><h2>Форматы сотрудничества</h2><p>Цена и срок фиксируются письменно до начала. Для стандартных небольших задач отдельный платный discovery не требуется.</p></div><div class="grid"><article class="card"><h3>Для владельца магазина</h3><ul><li>установка и настройка готового модуля;</li><li>адаптация под текущие статусы и шаблон;</li><li>интеграции API и webhooks;</li><li>импорт, очистка и дедупликация данных;</li><li>инструкция и период исправления дефектов.</li></ul></article><article class="card"><h3>Для веб-студии</h3><ul><li>работа под брендом интегратора;</li><li>общение с конечным клиентом остаётся у студии;</li><li>отдельная GitHub-ветка и прозрачный review;</li><li>white-label лицензия и документация;</li><li>оплата самозанятому с чеком НПД.</li></ul></article></div></section>
+    <section class="wrap section" id="products">
+      <div class="section-head">
+        <h2>Готовая техническая база</h2>
+        <p>Публичные репозитории содержат только синтетические данные. Production-адаптация выполняется на тестовом контуре клиента.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <span class="badge">Рабочий PoC · PHP-тесты</span>
+          <h3>Telegram Order Status</h3>
+          <p>Уведомления при штатном событии изменения статуса заказа UMI.CMS.</p>
+          <ul>
+            <li>фильтр отслеживаемых статусов;</li>
+            <li>номер, сумма, старый и новый статус;</li>
+            <li>ссылка в административную карточку заказа;</li>
+            <li>персональные данные отключены по умолчанию;</li>
+            <li>повтор при 429/5xx и безопасная обработка ошибок;</li>
+            <li>установщик, unit-тесты и preflight-проверка.</li>
+          </ul>
+          <div class="price">от 5 000 ₽</div>
+          <p class="note">Установка на одном тестовом сайте; white-label — от 12 000 ₽.</p>
+          <div class="actions"><a class="button" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes/umi-order-telegram" rel="noopener">Код и инструкция</a></div>
+        </article>
 
-    <section class="wrap section"><div class="section-head"><h2>Процесс</h2><p>Без обязательных созвонов и встреч. Все решения остаются зафиксированы в переписке.</p></div><div class="process"><div class="step"><strong>01 · Объём</strong><span>Версия UMI.CMS, сценарий и критерии результата.</span></div><div class="step"><strong>02 · Цена</strong><span>Фиксированная стоимость, срок и порядок оплаты.</span></div><div class="step"><strong>03 · Разработка</strong><span>Отдельная ветка, тесты и промежуточные результаты.</span></div><div class="step"><strong>04 · Приёмка</strong><span>Демонстрация, исправления и передача инструкции.</span></div></div></section>
+        <article class="card">
+          <span class="badge">Интеграционный каркас · 7 тестов</span>
+          <h3>UMI.CMS → СДЭК</h3>
+          <p>Проверяемая основа доставки через официальный SDK СДЭК 2.0.</p>
+          <ul>
+            <li>payload расчёта тарифа и списка тарифов;</li>
+            <li>фильтры пунктов выдачи;</li>
+            <li>формирование отправления, упаковок и товаров;</li>
+            <li>валидация получателя и адресов;</li>
+            <li>нормализация телефона и email;</li>
+            <li>защита от повторной отправки заказа.</li>
+          </ul>
+          <div class="price">20 000–55 000 ₽</div>
+          <p class="note">Три фиксированных формата ниже. Административные настройки входят во все production-варианты.</p>
+          <div class="actions"><a class="button" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes/umi-cdek-adapter" rel="noopener">Каркас и тесты</a></div>
+        </article>
+      </div>
+    </section>
 
-    <section class="wrap cta"><div><h2>Задачу можно описать одним письмом.</h2><p>Достаточно указать версию UMI.CMS, желаемый результат и наличие тестовой копии. Доступы до согласования объёма не нужны.</p></div><div class="actions"><a class="button primary" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%80%94%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0&body=%D0%92%D0%B5%D1%80%D1%81%D0%B8%D1%8F%20UMI.CMS%3A%20%0A%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%3A%20%0A%D0%A2%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%3A%20">Отправить описание</a><a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a></div></section>
+    <section class="wrap section" id="cdek-packages">
+      <div class="section-head">
+        <h2>Три пакета интеграции СДЭК</h2>
+        <p>Для стандартного магазина UMI.CMS без полностью переписанного оформления заказа. Предварительная проверка структуры checkout выполняется бесплатно и письменно.</p>
+      </div>
+
+      <div class="pricing">
+        <article class="package">
+          <span class="badge">Один сайт · расчёт доставки</span>
+          <h3>СДЭК Start</h3>
+          <div class="price">20 000 ₽</div>
+          <div class="term">5–7 рабочих дней</div>
+          <ul>
+            <li>настройки API, города отправления и тарифов в админке;</li>
+            <li>расчёт стоимости и срока;</li>
+            <li>доставка до двери и ПВЗ списком;</li>
+            <li>сохранение способа, тарифа и стоимости в заказе;</li>
+            <li>журнал ошибок, тесты и инструкция.</li>
+          </ul>
+          <p class="note">Без карты ПВЗ, создания отправления и синхронизации статусов.</p>
+          <div class="actions"><a class="button" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%86%92%20%D0%A1%D0%94%D0%AD%D0%9A%20Start">Обсудить Start</a></div>
+        </article>
+
+        <article class="package featured">
+          <span class="badge">Один сайт · рабочий обмен</span>
+          <h3>СДЭК Flow</h3>
+          <div class="price">35 000 ₽</div>
+          <div class="term">8–12 рабочих дней</div>
+          <ul>
+            <li>всё из пакета Start;</li>
+            <li>карта выбора ПВЗ;</li>
+            <li>создание отправления в СДЭК;</li>
+            <li>получение текущего статуса;</li>
+            <li>отмена отправления;</li>
+            <li>защита от дублей и безопасный повтор операции.</li>
+          </ul>
+          <p class="note">Оптимальный вариант для конкретного клиентского магазина.</p>
+          <div class="actions"><a class="button primary" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%86%92%20%D0%A1%D0%94%D0%AD%D0%9A%20Flow">Обсудить Flow</a></div>
+        </article>
+
+        <article class="package">
+          <span class="badge">Для веб-студии · white-label</span>
+          <h3>СДЭК Agency</h3>
+          <div class="price">55 000 ₽</div>
+          <div class="term">12–18 рабочих дней</div>
+          <ul>
+            <li>повторно устанавливаемая версия;</li>
+            <li>установщик и административные настройки;</li>
+            <li>white-label без контакта с конечным клиентом;</li>
+            <li>документация для специалистов студии;</li>
+            <li>согласованная матрица UMI.CMS/PHP;</li>
+            <li>право использовать в оговорённых клиентских проектах.</li>
+          </ul>
+          <p class="note">Точная матрица поддерживаемых конфигураций фиксируется до начала.</p>
+          <div class="actions"><a class="button" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%86%92%20%D0%A1%D0%94%D0%AD%D0%9A%20Agency">Обсудить Agency</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head">
+        <h2>Сравнение пакетов</h2>
+        <p>Границы указаны заранее, чтобы оценка не менялась после начала стандартной задачи.</p>
+      </div>
+      <div class="comparison">
+        <table>
+          <thead>
+            <tr><th>Функция</th><th>Start</th><th>Flow</th><th>Agency</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Настройки СДЭК в админке</td><td class="yes">Да</td><td class="yes">Да</td><td class="yes">Да</td></tr>
+            <tr><td>Расчёт стоимости и срока</td><td class="yes">Да</td><td class="yes">Да</td><td class="yes">Да</td></tr>
+            <tr><td>Курьер и ПВЗ списком</td><td class="yes">Да</td><td class="yes">Да</td><td class="yes">Да</td></tr>
+            <tr><td>Карта ПВЗ</td><td class="dash">—</td><td class="yes">Да</td><td class="yes">Да</td></tr>
+            <tr><td>Создание и отмена отправления</td><td class="dash">—</td><td class="yes">Да</td><td class="yes">Да</td></tr>
+            <tr><td>Получение статуса</td><td class="dash">—</td><td class="yes">Да</td><td class="yes">Да</td></tr>
+            <tr><td>Повторная установка на других проектах</td><td class="dash">—</td><td class="dash">—</td><td class="yes">По лицензии</td></tr>
+            <tr><td>White-label документация</td><td class="dash">—</td><td class="dash">—</td><td class="yes">Да</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="wrap section" id="formats">
+      <div class="section-head">
+        <h2>Форматы сотрудничества</h2>
+        <p>Цена и срок фиксируются письменно до начала. Для стандартных небольших задач отдельный платный discovery не требуется.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>Для владельца магазина</h3>
+          <ul>
+            <li>установка и настройка готового модуля;</li>
+            <li>адаптация под текущие статусы и шаблон;</li>
+            <li>интеграции API и webhooks;</li>
+            <li>импорт, очистка и дедупликация данных;</li>
+            <li>инструкция и период исправления дефектов.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Для веб-студии</h3>
+          <ul>
+            <li>работа под брендом интегратора;</li>
+            <li>общение с конечным клиентом остаётся у студии;</li>
+            <li>отдельная GitHub-ветка и прозрачный review;</li>
+            <li>white-label лицензия и документация;</li>
+            <li>оплата самозанятому с чеком НПД.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head">
+        <h2>Процесс</h2>
+        <p>Без обязательных созвонов и встреч. Все решения остаются зафиксированы в переписке.</p>
+      </div>
+      <div class="process">
+        <div class="step"><strong>01 · Бесплатная проверка</strong><span>Версия UMI.CMS/PHP, структура checkout, веса и габариты.</span></div>
+        <div class="step"><strong>02 · Фиксация</strong><span>Пакет, критерии приёмки, срок и оплата 50/50.</span></div>
+        <div class="step"><strong>03 · Разработка</strong><span>Отдельная ветка, тесты и демонстрация на тестовом контуре.</span></div>
+        <div class="step"><strong>04 · Передача</strong><span>Исправления по критериям, инструкция, код и чек НПД.</span></div>
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head">
+        <h2>Частые вопросы</h2>
+        <p>Ответы на вопросы, которые влияют на решение до передачи доступов.</p>
+      </div>
+      <div class="faq">
+        <details><summary>Настройки в административной панели входят только в дорогой пакет?</summary><p>Нет. Настройки доступа СДЭК, города отправления и рабочих тарифов входят уже в пакет Start за 20 000 ₽. Пакет Agency дороже из-за повторной установки, лицензии для проектов студии и документации.</p></details>
+        <details><summary>Нужно отдельно платить за проектирование?</summary><p>Для стандартного магазина — нет. До сделки бесплатно проверяется версия UMI.CMS/PHP и структура оформления. Отдельная оценка потребуется только при существенно переписанном checkout или нестандартной архитектуре.</p></details>
+        <details><summary>Нужен созвон с разработчиком или конечным клиентом?</summary><p>Нет. Объём, вопросы, демонстрация и приёмка ведутся письменно. В white-label формате коммуникация с конечным клиентом полностью остаётся у студии.</p></details>
+        <details><summary>Где хранятся ключи и клиентские данные?</summary><p>Ключи не публикуются в GitHub и не выводятся в журналы. В публичном репозитории используются только синтетические данные; production-проверка выполняется на закрытом тестовом контуре заказчика.</p></details>
+        <details><summary>Что произойдёт, если сайт уже сильно доработан?</summary><p>До подтверждения цены можно бесплатно письменно показать структуру checkout или relevant-фрагменты без секретов. Если доработки влияют на объём, это фиксируется до начала, а не после предоплаты.</p></details>
+      </div>
+    </section>
+
+    <section class="wrap cta">
+      <div>
+        <h2>Для оценки достаточно одного письма.</h2>
+        <p>Укажите версию UMI.CMS/PHP, используемый checkout, наличие весов и габаритов и нужный пакет. Production-доступы до согласования не требуются.</p>
+      </div>
+      <div class="actions">
+        <a class="button primary" href="mailto:nikidom123@gmail.com?subject=UMI.CMS%20%E2%86%92%20%D0%A1%D0%94%D0%AD%D0%9A&body=%D0%92%D0%B5%D1%80%D1%81%D0%B8%D1%8F%20UMI.CMS%2FPHP%3A%20%0A%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%3A%20Start%20%2F%20Flow%20%2F%20Agency%0A%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%20checkout%3A%20%0A%D0%92%D0%B5%D1%81%D0%B0%20%D0%B8%20%D0%B3%D0%B0%D0%B1%D0%B0%D1%80%D0%B8%D1%82%D1%8B%3A%20%0A%D0%A2%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BA%D0%BE%D0%BF%D0%B8%D1%8F%3A%20">Отправить описание</a>
+        <a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a>
+      </div>
+    </section>
   </main>
-  <footer><div class="wrap footer"><span>© 2026 TerraTectra Automation</span><span>Самозанятый НПД · только письменная коммуникация</span></div></footer>
+
+  <footer>
+    <div class="wrap footer">
+      <span>© 2026 TerraTectra Automation</span>
+      <span>Самозанятый НПД · только письменная коммуникация</span>
+    </div>
+  </footer>
 </body>
 </html>
