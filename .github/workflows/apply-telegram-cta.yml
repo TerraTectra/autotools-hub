@@ -22,32 +22,27 @@ jobs:
         shell: python
         run: |
           from pathlib import Path
+          import re
 
           telegram = '<a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a>'
 
-          index = Path('site/index.html')
-          text = index.read_text(encoding='utf-8')
-          old = '<a class="button" href="mailto:nikidom123@gmail.com?subject=RetailCRM%20SLA%20Guard">Обсудить письменно</a>'
-          new = telegram + '\n        ' + old.replace('Обсудить письменно', 'Email')
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected one main email CTA, got {text.count(old)}')
-          index.write_text(text.replace(old, new), encoding='utf-8')
+          def add_before_email(path, prefer_primary=False):
+              file = Path(path)
+              text = file.read_text(encoding='utf-8')
+              if 'https://t.me/tahioff' in text:
+                  raise SystemExit(f'{path} already contains Telegram CTA')
+              pattern = r'<a class="button primary" href="mailto:[^"]+">[^<]+</a>' if prefer_primary else r'<a class="button" href="mailto:[^"]+">[^<]+</a>'
+              match = re.search(pattern, text)
+              if not match:
+                  raise SystemExit(f'Email CTA not found in {path}')
+              replacement = telegram + '\n          ' + match.group(0)
+              file.write_text(text[:match.start()] + replacement + text[match.end():], encoding='utf-8')
 
-          incidents = Path('site/incidents.html')
-          text = incidents.read_text(encoding='utf-8')
-          marker = '<a class="button" href="calculator.html">Рассчитать стоимость задержек</a>'
-          if text.count(marker) != 1:
-              raise SystemExit(f'Expected one incident CTA marker, got {text.count(marker)}')
-          incidents.write_text(text.replace(marker, marker + '\n          ' + telegram), encoding='utf-8')
+          add_before_email('site/index.html', prefer_primary=False)
+          add_before_email('site/incidents.html', prefer_primary=True)
+          add_before_email('site/calculator.html', prefer_primary=True)
 
-          calculator = Path('site/calculator.html')
-          text = calculator.read_text(encoding='utf-8')
-          marker = '<a class="button" href="incidents.html">Посмотреть журнал SLA</a>'
-          if text.count(marker) != 1:
-              raise SystemExit(f'Expected one calculator CTA marker, got {text.count(marker)}')
-          calculator.write_text(text.replace(marker, marker + '\n          ' + telegram), encoding='utf-8')
-
-          for path in (index, incidents, calculator):
+          for path in map(Path, ('site/index.html', 'site/incidents.html', 'site/calculator.html')):
               content = path.read_text(encoding='utf-8')
               if content.count('https://t.me/tahioff') != 1:
                   raise SystemExit(f'{path} must contain exactly one Telegram CTA')
@@ -60,6 +55,7 @@ jobs:
           git config user.name 'TerraTectra Automation'
           git config user.email 'actions@users.noreply.github.com'
           git rm .github/workflows/apply-telegram-cta.yml
+          git rm -f tmp/noop.txt || true
           git add site/index.html site/incidents.html site/calculator.html
           git commit -m 'feat: add Telegram contact CTA to SLA Journal pages'
           git push origin HEAD:agent/retailcrm-telegram-cta-v3
