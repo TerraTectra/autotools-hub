@@ -58,12 +58,13 @@
       const recoveredOrders=lostOrders*recoverable;
       const recoveredRevenue=risk*recoverable;
       const recoveredGross=recoveredRevenue*margin;
-      const ordersToPayback=check>0?Math.ceil(pilotPrice/check):0;
+      const grossPerOrder=check*margin;
+      const ordersToPayback=grossPerOrder>0?Math.ceil(pilotPrice/grossPerOrder):null;
       const months=recoveredGross>0?pilotPrice/recoveredGross:null;
       document.getElementById("risk").textContent=money.format(risk);
       document.getElementById("revenue").textContent=money.format(recoveredRevenue);
       document.getElementById("gross").textContent=money.format(recoveredGross);
-      document.getElementById("orders-to-payback").textContent=`${ordersToPayback} шт.`;
+      document.getElementById("orders-to-payback").textContent=ordersToPayback===null?"—":`${ordersToPayback} шт.`;
       document.getElementById("payback").textContent=months===null?"—":months<1?`${Math.max(1,Math.round(months*30))} дн.`:`${number.format(months)} мес.`;
       document.getElementById("explanation").textContent=`При заданных предположениях задержки затрагивают около ${number.format(lostOrders)} заказа в месяц. Если удаётся предотвратить ${number.format(recoveredOrders)} из них, расчётная возвращаемая валовая прибыль составляет ${money.format(recoveredGross)} в месяц.`;
       const body=`Добрый день.\n\nХотим обсудить пилот RetailCRM SLA Journal.\n\nНаши ориентировочные показатели:\n— заказов в месяц: ${orders};\n— средний чек: ${check} ₽;\n— предполагаемая доля потерь из-за задержек: ${number.format(lossRate*100)}%;\n— потенциально предотвратимая доля: ${number.format(recoverable*100)}%.\n\nПросим оценить схему пилота письменно.`;
