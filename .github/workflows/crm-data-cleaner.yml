@@ -1,0 +1,25 @@
+name: CRM Data Cleaner
+
+on:
+  push:
+    paths:
+      - "prototypes/crm-data-cleaner/**"
+      - ".github/workflows/crm-data-cleaner.yml"
+  pull_request:
+    paths:
+      - "prototypes/crm-data-cleaner/**"
+      - ".github/workflows/crm-data-cleaner.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+        working-directory: prototypes/crm-data-cleaner
+      - run: node src/index.js --input sample/leads-a.csv --input sample/leads-b.csv --output output/cleaned.csv --report output/report.json
+        working-directory: prototypes/crm-data-cleaner
