@@ -5,6 +5,14 @@ RetailCRM SLA Guard detects orders that remain in one status longer than the con
 - a single-account pilot for a specific client;
 - a multi-tenant backend implementing the RetailCRM Marketplace simple-connection flow.
 
+## Interactive demo
+
+A public demonstration with fictional orders, configurable SLA thresholds and a privacy-safe Telegram alert preview is available at:
+
+**https://terratectra.github.io/autotools-hub/site/**
+
+The demo does not connect to RetailCRM and does not collect credentials or customer data.
+
 ## Business value
 
 - reduces forgotten and abandoned orders;
