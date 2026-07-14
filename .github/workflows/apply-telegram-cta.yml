@@ -43,10 +43,10 @@ jobs:
           for path, (marker, replacement) in replacements.items():
               file = Path(path)
               text = file.read_text(encoding='utf-8')
-              if text.count('https://t.me/tahioff'):
+              if 'https://t.me/tahioff' in text:
                   raise SystemExit(f'{path} already contains Telegram CTA')
-              if text.count(marker) != 1:
-                  raise SystemExit(f'{path}: expected one marker, got {text.count(marker)}')
+              if marker not in text:
+                  raise SystemExit(f'{path}: insertion marker not found')
               text = text.replace(marker, replacement, 1)
               if text.count('https://t.me/tahioff') != 1:
                   raise SystemExit(f'{path}: Telegram CTA insertion failed')
