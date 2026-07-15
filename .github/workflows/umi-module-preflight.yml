@@ -1,0 +1,37 @@
+name: UMI.CMS Module Preflight
+
+on:
+  pull_request:
+    paths:
+      - "prototypes/umi-module-preflight/**"
+      - "prototypes/umi-order-telegram/**"
+      - ".github/workflows/umi-module-preflight.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "prototypes/umi-module-preflight/**"
+      - "prototypes/umi-order-telegram/**"
+      - ".github/workflows/umi-module-preflight.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests
+        working-directory: prototypes/umi-module-preflight
+        run: python -m unittest discover -s tests -v
+      - name: Inspect Telegram module package
+        working-directory: prototypes/umi-module-preflight
+        run: python preflight.py ../umi-order-telegram/module --json report.json
+      - name: Upload preflight report
+        uses: actions/upload-artifact@v4
+        with:
+          name: umi-module-preflight-report
+          path: prototypes/umi-module-preflight/report.json
