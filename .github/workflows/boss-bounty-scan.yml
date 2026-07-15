@@ -21,7 +21,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Fetch current bounties
+      - name: Fetch and validate current bounties
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/boss_bounty_scan.py artifacts/boss-bounty-scan
       - name: Show summary
         run: cat artifacts/boss-bounty-scan/boss-bounties.md
