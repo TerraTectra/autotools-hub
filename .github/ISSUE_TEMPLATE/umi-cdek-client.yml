@@ -1,0 +1,97 @@
+name: UMI.CMS → СДЭК — первичная проверка
+about: Определить подходящий пакет для магазина или веб-студии
+title: "[UMI CDEK] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Укажите только общую техническую информацию о проекте.
+
+  - type: input
+    id: project
+    attributes:
+      label: Сайт или описание проекта
+      placeholder: https://example.ru или «закрытый проект»
+    validations:
+      required: true
+
+  - type: input
+    id: umi_version
+    attributes:
+      label: Версия UMI.CMS
+      placeholder: Например, 24.x
+    validations:
+      required: true
+
+  - type: input
+    id: php_version
+    attributes:
+      label: Версия PHP
+      placeholder: Например, 8.1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Предварительный пакет
+      options:
+        - Start — 20 000 ₽
+        - Flow — 35 000 ₽
+        - Agency — 55 000 ₽
+        - Нужна рекомендация
+    validations:
+      required: true
+
+  - type: dropdown
+    id: checkout
+    attributes:
+      label: Оформление заказа
+      options:
+        - Стандартное или с небольшими изменениями
+        - Существенно изменённое
+        - Полностью собственное
+        - Неизвестно
+    validations:
+      required: true
+
+  - type: dropdown
+    id: dimensions
+    attributes:
+      label: Вес и габариты товаров
+      options:
+        - Заполнены у большинства товаров
+        - Заполнены частично
+        - Не заполнены
+        - Неизвестно
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: functions
+    attributes:
+      label: Нужные функции
+      options:
+        - label: Расчёт стоимости и срока
+        - label: Доставка до двери
+        - label: ПВЗ списком
+        - label: Карта ПВЗ
+        - label: Создание отправления
+        - label: Получение статуса
+        - label: Отмена отправления
+        - label: Повторно устанавливаемая версия
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Дополнительные особенности
+      placeholder: Несколько складов, особые способы доставки, собственные поля заказа...
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Подтверждение
+      options:
+        - label: В заявке указана только общая техническая информация
+          required: true
