@@ -1,0 +1,47 @@
+name: RPA Order Reconciliation
+
+on:
+  pull_request:
+    paths:
+      - "prototypes/rpa-order-reconciliation/**"
+      - ".github/workflows/rpa-order-reconciliation.yml"
+  push:
+    branches: [main]
+    paths:
+      - "prototypes/rpa-order-reconciliation/**"
+      - ".github/workflows/rpa-order-reconciliation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prototypes/rpa-order-reconciliation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Run synthetic reconciliation
+        run: |
+          python reconcile.py \
+            --orders data/orders.csv \
+            --payments data/payments.csv \
+            --output output
+      - name: Validate summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(Path("output/summary.json").read_text(encoding="utf-8"))
+          assert summary["orders_processed"] == 4, summary
+          assert summary["matched"] == 1, summary
+          assert summary["business_exceptions"] == 4, summary
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          PY
