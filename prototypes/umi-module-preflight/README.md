@@ -55,3 +55,7 @@ python preflight.py ../umi-order-telegram/module --json /tmp/umi-preflight.json
 - адаптация проверки под внутренние правила веб-студии — от **10 000 ₽**.
 
 Проверка выполняется локально. Рабочие доступы к сайту для статического аудита не требуются.
+
+## Запрос аудита
+
+`https://github.com/TerraTectra/autotools-hub/issues/new?template=umi-module-preflight.yml`
