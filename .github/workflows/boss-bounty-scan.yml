@@ -6,6 +6,8 @@ on:
       - "scripts/boss_bounty_scan.py"
       - ".github/workflows/boss-bounty-scan.yml"
   workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
 
 permissions:
   contents: read
