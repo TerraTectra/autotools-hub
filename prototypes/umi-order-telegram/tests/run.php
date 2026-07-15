@@ -74,6 +74,20 @@ test('retries temporary Telegram error', function (): void {
     same(2, $calls);
 });
 
+test('installer enables the administration page', function (): void {
+    $install = (string)file_get_contents(__DIR__ . '/../module/classes/components/terratectra_order_telegram/install.php');
+    truthy(str_contains($install, "'config' => '1'"));
+    truthy(str_contains($install, "'default_method_admin' => 'config'"));
+    truthy(str_contains($install, 'terratectra_order_telegram/admin.php'));
+});
+
+test('administration page keeps the stored token out of the form', function (): void {
+    $admin = (string)file_get_contents(__DIR__ . '/../module/classes/components/terratectra_order_telegram/admin.php');
+    truthy(str_contains($admin, "['string:bot_token'] = '';"));
+    truthy(str_contains($admin, '$newToken !=='));
+    truthy(str_contains($admin, ': $currentToken'));
+});
+
 $failed = 0;
 foreach ($tests as [$name, $callback]) {
     try { $callback(); echo "PASS {$name}\n"; }
