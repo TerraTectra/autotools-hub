@@ -1,0 +1,37 @@
+name: Boss bounty scan
+
+on:
+  pull_request:
+    paths:
+      - "scripts/boss_bounty_scan.py"
+      - ".github/workflows/boss-bounty-scan.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch and validate current bounties
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/boss_bounty_scan.py artifacts/boss-bounty-scan
+      - name: Show summary
+        run: cat artifacts/boss-bounty-scan/boss-bounties.md
+      - name: Upload bounty list
+        uses: actions/upload-artifact@v4
+        with:
+          name: boss-bounty-scan
+          path: artifacts/boss-bounty-scan
+          retention-days: 7
