@@ -2,9 +2,10 @@
 
 $INFO = [
     'name' => 'terratectra_order_telegram',
-    'config' => '0',
+    'version' => '1.1.0.0',
+    'config' => '1',
     'default_method' => '',
-    'default_method_admin' => '',
+    'default_method_admin' => 'config',
     'telegram/enabled' => 0,
     'telegram/bot_token' => '',
     'telegram/chat_id' => '',
@@ -15,6 +16,7 @@ $INFO = [
 ];
 
 $COMPONENTS = [
+    './classes/components/terratectra_order_telegram/admin.php',
     './classes/components/terratectra_order_telegram/class.php',
     './classes/components/terratectra_order_telegram/events.php',
     './classes/components/terratectra_order_telegram/install.php',
