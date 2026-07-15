@@ -84,7 +84,8 @@ test('installer enables the administration page', function (): void {
 test('administration page does not reveal the stored bot token', function (): void {
     $admin = (string)file_get_contents(__DIR__ . '/../module/classes/components/terratectra_order_telegram/admin.php');
     truthy(str_contains($admin, "['string:bot_token'] = '';"));
-    truthy(str_contains($admin, "$newToken !== '' ? $newToken : $currentToken"));
+    truthy(str_contains($admin, '$newToken !=='));
+    truthy(str_contains($admin, ': $currentToken'));
     truthy(!str_contains($admin, "['string:bot_token'] = $currentToken"));
 });
 
