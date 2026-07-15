@@ -11,5 +11,12 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -r prototypes/rental-listing-monitor/requirements.txt
-      - run: pytest -q
+      - name: Run tests
         working-directory: prototypes/rental-listing-monitor
+        run: pytest -q --junitxml=pytest-report.xml
+      - name: Upload pytest report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rental-monitor-pytest-report
+          path: prototypes/rental-listing-monitor/pytest-report.xml
