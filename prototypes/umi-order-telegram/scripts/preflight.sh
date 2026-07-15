@@ -7,6 +7,7 @@ DIST="$ROOT/dist"
 ARCHIVE="$DIST/terratectra_order_telegram-review.tar.gz"
 
 required_files="
+$COMPONENT/admin.php
 $COMPONENT/install.php
 $COMPONENT/class.php
 $COMPONENT/events.php
