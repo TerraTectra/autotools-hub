@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Проверяемый RPA-процесс на Python: сверка заказов и платежей, бизнес-исключения, CSV, JSON, unit-тесты и GitHub Actions.">
+  <title>RPA Order Reconciliation — TerraTectra Automation</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --panel: #151a22;
+      --panel-2: #1b222d;
+      --line: #2c3543;
+      --text: #f3f6fa;
+      --muted: #a9b2bf;
+      --accent: #91d6ff;
+      --green: #b8ffd0;
+      --yellow: #ffd28c;
+      --red: #ffaaaa;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 0, rgba(70, 151, 255, .17), transparent 34rem),
+        radial-gradient(circle at 88% 8%, rgba(83, 255, 169, .09), transparent 30rem),
+        var(--bg);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: auto; }
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11, 13, 18, .84);
+      backdrop-filter: blur(16px);
+    }
+    .nav { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { text-decoration: none; font-weight: 850; letter-spacing: -.02em; }
+    .links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .links a { color: var(--muted); text-decoration: none; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 43px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--panel-2);
+      color: var(--text) !important;
+      font-weight: 760;
+      text-decoration: none;
+    }
+    .button.primary { border: 0; background: linear-gradient(135deg, var(--accent), var(--green)); color: #071018 !important; }
+    .hero { padding: 82px 0 48px; display: grid; grid-template-columns: 1.08fr .92fr; gap: 42px; align-items: center; }
+    .eyebrow { color: var(--accent); font-size: 13px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    h1 { margin: 14px 0 20px; max-width: 800px; font-size: clamp(42px, 6vw, 74px); line-height: .98; letter-spacing: -.05em; }
+    .lead { max-width: 760px; color: var(--muted); font-size: 20px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 26px; }
+    .terminal { padding: 22px; border: 1px solid var(--line); border-radius: 22px; background: rgba(21, 26, 34, .94); box-shadow: 0 24px 70px rgba(0, 0, 0, .35); }
+    .terminal-head { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
+    pre { margin: 20px 0 0; white-space: pre-wrap; color: #e9edf3; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .ok { color: var(--green); }
+    .warn { color: var(--yellow); }
+    .bad { color: var(--red); }
+    .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 36px 0 0; }
+    .fact { padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: rgba(21, 26, 34, .82); color: var(--muted); font-size: 13px; }
+    .fact strong { display: block; margin-top: 5px; color: var(--text); font-size: 20px; }
+    section { padding: 48px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+    h2 { margin: 0; font-size: clamp(30px, 4vw, 48px); letter-spacing: -.035em; line-height: 1.05; }
+    .section-head p { margin: 0; max-width: 590px; color: var(--muted); }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .step, .card { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: rgba(21, 26, 34, .82); }
+    .step strong { display: block; margin-bottom: 8px; color: var(--accent); }
+    .step span, .card p, .card li { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .card h3 { margin: 0 0 10px; font-size: 22px; }
+    .card ul { padding-left: 20px; }
+    .badge { display: inline-flex; width: fit-content; padding: 6px 9px; margin-bottom: 12px; border-radius: 999px; background: rgba(145, 214, 255, .1); color: var(--accent); font-size: 12px; font-weight: 800; }
+    .outcomes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .outcome { padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: rgba(21, 26, 34, .76); }
+    .outcome code { color: var(--yellow); font-size: 12px; }
+    .outcome p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .honesty { padding: 28px; border: 1px solid rgba(184, 255, 208, .34); border-radius: 22px; background: linear-gradient(135deg, rgba(27, 47, 42, .9), rgba(18, 27, 35, .92)); }
+    .honesty h3 { margin: 0 0 8px; font-size: 25px; }
+    .honesty p { margin: 0; color: var(--muted); }
+    .cta { margin: 44px 0 70px; padding: 32px; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(135deg, rgba(35, 50, 69, .92), rgba(21, 37, 31, .92)); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .cta h2 { margin-bottom: 8px; }
+    .cta p { margin: 0; color: var(--muted); }
+    footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .footer { padding: 24px 0 38px; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .facts, .flow, .outcomes { grid-template-columns: 1fr 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .section-head, .cta { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      .links a:not(.button) { display: none; }
+      .facts, .flow, .outcomes { grid-template-columns: 1fr; }
+      .hero { padding-top: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="#top">TerraTectra Automation · RPA</a>
+      <nav class="links" aria-label="Навигация">
+        <a href="#process">Процесс</a>
+        <a href="#checks">Проверки</a>
+        <a href="#scope">Границы</a>
+        <a class="button" href="mailto:nikidom123@gmail.com?subject=RPA%20Order%20Reconciliation">Написать письменно</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <div>
+        <div class="eyebrow">Python · CSV · JSON · unit tests · GitHub Actions</div>
+        <h1>Робот сверки заказов и платежей.</h1>
+        <p class="lead">Проверяемый RPA-процесс отделяет штатные операции от бизнес-исключений, завершает пакет без потери проблемных записей и отдаёт результаты следующему шагу оркестрации.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/TerraTectra/autotools-hub/tree/main/prototypes/rpa-order-reconciliation" rel="noopener">Открыть код и тесты</a>
+          <a class="button" href="https://github.com/TerraTectra/autotools-hub/actions/workflows/rpa-order-reconciliation.yml" rel="noopener">Проверка GitHub Actions</a>
+          <a class="button" href="https://t.me/tahioff" rel="noopener">Telegram @tahioff</a>
+        </div>
+        <div class="facts">
+          <div class="fact">Зависимости<strong>Только stdlib</strong></div>
+          <div class="fact">Деньги<strong>Decimal</strong></div>
+          <div class="fact">Тесты<strong>6 сценариев</strong></div>
+          <div class="fact">Данные<strong>Синтетические</strong></div>
+        </div>
+      </div>
+      <div class="terminal" aria-label="Пример результата робота">
+        <div class="terminal-head"><span>summary.json</span><span class="ok">CI passed</span></div>
+        <pre>{
+  "orders_processed": 4,
+  "matched": <span class="ok">1</span>,
+  "business_exceptions": <span class="warn">4</span>,
+  "outcomes": {
+    "MATCHED": 1,
+    "MISSING_PAYMENT": 1,
+    "AMOUNT_MISMATCH": 1,
+    "DUPLICATE_PAYMENT": 1
+  },
+  "exception_codes": {
+    "ORPHAN_PAYMENT": 1
+  }
+}</pre>
+      </div>
+    </section>
+
+    <section class="wrap" id="process">
+      <div class="section-head">
+        <h2>Процесс от входа до маршрутизации.</h2>
+        <p>Логику можно вызывать из RPA-платформы, cron, контейнера или другого оркестратора. Бизнес-исключения не превращаются в техническое падение всего пакета.</p>
+      </div>
+      <div class="flow">
+        <div class="step"><strong>01 · Вход</strong><span>Два CSV: заказы и платежи с обязательной проверкой колонок и значений.</span></div>
+        <div class="step"><strong>02 · Сверка</strong><span>Успешные статусы платежей группируются по заказу, суммы считаются через Decimal.</span></div>
+        <div class="step"><strong>03 · Исключения</strong><span>Проблемы фиксируются отдельными кодами и не прерывают обработку остальных записей.</span></div>
+        <div class="step"><strong>04 · Выход</strong><span>CSV результата, CSV очереди исключений и JSON-сводка для следующего шага.</span></div>
+      </div>
+    </section>
+
+    <section class="wrap" id="checks">
+      <div class="section-head">
+        <h2>Какие ситуации обнаруживает робот.</h2>
+        <p>Каждая ветка воспроизводится синтетическими данными и покрыта unit-тестами.</p>
+      </div>
+      <div class="outcomes">
+        <div class="outcome"><code>MISSING_PAYMENT</code><p>У заказа нет ни одного успешного платежа.</p></div>
+        <div class="outcome"><code>AMOUNT_MISMATCH</code><p>Фактически оплаченная сумма не совпадает с суммой заказа.</p></div>
+        <div class="outcome"><code>DUPLICATE_PAYMENT</code><p>Для одного заказа найдено несколько успешных платежей.</p></div>
+        <div class="outcome"><code>ORPHAN_PAYMENT</code><p>Платёж ссылается на неизвестный заказ.</p></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head">
+        <h2>Артефакты, которые можно проверить.</h2>
+        <p>Проект не требует доступа к рабочим системам и не содержит персональных данных.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <span class="badge">Выход процесса</span>
+          <h3>Файлы для людей и систем</h3>
+          <ul>
+            <li><code>reconciliation.csv</code> — итог по каждому уникальному заказу;</li>
+            <li><code>exceptions.csv</code> — очередь ручной проверки или следующего робота;</li>
+            <li><code>summary.json</code> — метрики для оркестратора, мониторинга или уведомления.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <span class="badge">Контроль качества</span>
+          <h3>Воспроизводимый CI</h3>
+          <ul>
+            <li>Python 3.12 в чистом GitHub Actions worker;</li>
+            <li>полный набор unit-тестов;</li>
+            <li>запуск робота на синтетических CSV;</li>
+            <li>отдельная проверка значений итоговой JSON-сводки.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap" id="scope">
+      <div class="honesty">
+        <h3>Честная граница демонстрации</h3>
+        <p>Это platform-neutral Python/RPA-пруф, а не заявление о коммерческом опыте в PIX, Primo, Sherpa или другой конкретной студии роботов. Проект показывает проектирование процесса, обработку исключений, тестирование и готовность переносить логику в выбранную платформу.</p>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="cta">
+        <div>
+          <h2>Готов выполнить письменное тестовое задание.</h2>
+          <p>Удалённо. Без обязательного созвона. Python, Node.js, REST API, JSON, webhooks, Docker, GitHub Actions и техническая документация.</p>
+        </div>
+        <div class="actions">
+          <a class="button primary" href="mailto:nikidom123@gmail.com?subject=RPA%20%E2%80%94%20%D1%82%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D0%BE%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5">Email</a>
+          <a class="button" href="https://t.me/tahioff" rel="noopener">Telegram</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer">
+      <span>TerraTectra Automation · самозанятый НПД</span>
+      <span>Коммуникация только письменно</span>
+    </div>
+  </footer>
+</body>
+</html>
