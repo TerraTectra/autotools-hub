@@ -1,0 +1,45 @@
+{
+  "login": {
+    "url": "https://example.com/login",
+    "email": "input[type='email']",
+    "password": "input[type='password']",
+    "submit": "button[type='submit']",
+    "success_marker": "body"
+  },
+  "captcha_markers": [
+    "iframe[src*='captcha']",
+    "text=/verify you are human/i",
+    "text=/security check/i"
+  ],
+  "company_row": "article.company-card",
+  "fields": {
+    "company_name": {
+      "selector": "h2"
+    },
+    "revenue": {
+      "selector": "[data-field='revenue']"
+    },
+    "address": {
+      "selector": "[data-field='address']"
+    },
+    "website": {
+      "selector": "a.company-website",
+      "attribute": "href"
+    },
+    "profile_url": {
+      "selector": "a.company-profile",
+      "attribute": "href"
+    },
+    "founded_year": {
+      "selector": "[data-field='founded']"
+    },
+    "company_type": {
+      "selector": "[data-field='type']"
+    }
+  },
+  "next_page": {
+    "selector": "a[rel='next']",
+    "disabled_attribute": "aria-disabled",
+    "disabled_value": "true"
+  }
+}

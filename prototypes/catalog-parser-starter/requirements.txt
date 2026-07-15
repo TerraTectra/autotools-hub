@@ -1,0 +1,4 @@
+playwright>=1.49,<2
+gspread>=6,<7
+google-auth>=2,<3
+pytest>=8,<9
