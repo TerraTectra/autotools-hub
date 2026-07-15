@@ -32,4 +32,4 @@ jobs:
           pip install -r prototypes/catalog-parser-starter/requirements.txt
 
       - name: Run tests
-        run: pytest -q prototypes/catalog-parser-starter/tests
+        run: pytest -q prototypes/catalog-parser-starter/test_catalog_parser.py
