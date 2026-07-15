@@ -1,0 +1,15 @@
+name: Rental monitor tests
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r prototypes/rental-listing-monitor/requirements.txt
+      - run: pytest -q
+        working-directory: prototypes/rental-listing-monitor
