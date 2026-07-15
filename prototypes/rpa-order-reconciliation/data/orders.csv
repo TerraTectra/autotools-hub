@@ -1,0 +1,5 @@
+order_id,customer,amount,status
+ORD-1001,Synthetic Alpha,1250.00,new
+ORD-1002,Synthetic Beta,850.00,new
+ORD-1003,Synthetic Gamma,499.90,new
+ORD-1004,Synthetic Delta,150.00,new
