@@ -58,7 +58,7 @@ def test_filters_accept_matching_listing() -> None:
 def test_filters_reject_price_and_keywords() -> None:
     assert not matches_filters(sample_listing(price=25000), ListingFilters(max_price=20000))
     assert not matches_filters(
-        sample_listing(description="Объявление агентства"),
+        sample_listing(description="Агентство предлагает квартиру"),
         ListingFilters(exclude_keywords=("агентство",)),
     )
 
