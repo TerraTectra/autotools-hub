@@ -1,0 +1,22 @@
+name: Rental monitor tests
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r prototypes/rental-listing-monitor/requirements.txt
+      - name: Run tests
+        working-directory: prototypes/rental-listing-monitor
+        run: pytest -q --junitxml=pytest-report.xml
+      - name: Upload pytest report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rental-monitor-pytest-report
+          path: prototypes/rental-listing-monitor/pytest-report.xml
