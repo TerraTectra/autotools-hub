@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Варианты подключения доставки СДЭК к интернет-магазину на UMI.CMS: расчёт доставки, пункты выдачи, карта ПВЗ и обмен отправлениями.">
+  <title>Доставка СДЭК для интернет-магазина на UMI.CMS</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --panel: #151a22;
+      --panel-2: #1b222d;
+      --line: #2c3543;
+      --text: #f3f6fa;
+      --muted: #a9b2bf;
+      --accent: #91d6ff;
+      --green: #b8ffd0;
+      --warning: #ffd28c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0, rgba(70, 151, 255, .18), transparent 34rem),
+        radial-gradient(circle at 90% 10%, rgba(83, 255, 169, .1), transparent 30rem),
+        var(--bg);
+      line-height: 1.55;
+    }
+    .wrap { width: min(1040px, calc(100% - 32px)); margin: auto; }
+    header { padding: 26px 0; border-bottom: 1px solid var(--line); }
+    .brand { font-weight: 850; letter-spacing: -.02em; }
+    .hero { padding: 72px 0 42px; }
+    .eyebrow { color: var(--accent); font-size: 13px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    h1 { max-width: 900px; margin: 14px 0 18px; font-size: clamp(40px, 6vw, 72px); line-height: 1; letter-spacing: -.05em; }
+    .lead { max-width: 780px; color: var(--muted); font-size: 20px; }
+    .facts, .packages, .steps { display: grid; gap: 16px; }
+    .facts { grid-template-columns: repeat(3, 1fr); margin: 34px 0; }
+    .packages { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: repeat(4, 1fr); }
+    .fact, .card, .step, .note {
+      border: 1px solid var(--line);
+      background: rgba(21, 26, 34, .92);
+      border-radius: 18px;
+    }
+    .fact { padding: 18px; color: var(--muted); font-size: 13px; }
+    .fact strong { display: block; margin-top: 5px; color: var(--text); font-size: 20px; }
+    section { padding: 38px 0; }
+    h2 { margin: 0 0 18px; font-size: clamp(30px, 4vw, 46px); letter-spacing: -.035em; }
+    .section-intro { max-width: 740px; color: var(--muted); }
+    .card { padding: 26px; }
+    .card.featured { border-color: rgba(145, 214, 255, .7); box-shadow: 0 20px 65px rgba(36, 105, 156, .16); }
+    .badge { display: inline-flex; padding: 6px 10px; border-radius: 999px; background: rgba(145, 214, 255, .1); color: var(--accent); font-size: 12px; font-weight: 800; }
+    .card h3 { margin: 14px 0 8px; font-size: 26px; }
+    .card p, .card li, .step span, .note p { color: var(--muted); }
+    ul { padding-left: 20px; }
+    .term { color: var(--green); font-weight: 800; }
+    .step { padding: 20px; }
+    .step strong { display: block; margin-bottom: 7px; color: var(--accent); }
+    .note { padding: 24px; }
+    .note strong { color: var(--warning); }
+    .checklist { margin: 18px 0 0; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel-2); white-space: pre-wrap; color: var(--muted); }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      margin-top: 16px;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--accent), var(--green));
+      color: #071018;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .button[disabled] { cursor: default; opacity: .75; }
+    footer { margin-top: 40px; padding: 28px 0 38px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    @media (max-width: 820px) {
+      .facts, .packages, .steps { grid-template-columns: 1fr; }
+      .hero { padding-top: 52px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap brand">UMI.CMS × СДЭК</div>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div class="eyebrow">Интеграция доставки для интернет-магазина</div>
+      <h1>СДЭК в оформлении заказа UMI.CMS.</h1>
+      <p class="lead">Покупатель видит стоимость и срок доставки, выбирает доставку до двери или пункт выдачи, а выбранные параметры сохраняются в заказе. Расширенный вариант автоматизирует создание и сопровождение отправления.</p>
+      <div class="facts">
+        <div class="fact">Первичная проверка<strong>Без оплаты</strong></div>
+        <div class="fact">Работа<strong>На тестовой копии</strong></div>
+        <div class="fact">Передача<strong>Код + тесты + инструкция</strong></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <h2>Два рабочих формата</h2>
+      <p class="section-intro">Точный вариант выбирается по процессу магазина. Стоимость согласовывается с вашей веб-студией после бесплатной проверки оформления заказа и данных товаров.</p>
+      <div class="packages">
+        <article class="card">
+          <span class="badge">Расчёт и выбор доставки</span>
+          <h3>Базовая интеграция</h3>
+          <ul>
+            <li>расчёт стоимости и ориентировочного срока;</li>
+            <li>доставка до двери;</li>
+            <li>пункты выдачи списком;</li>
+            <li>настройки СДЭК и города отправления в админке;</li>
+            <li>сохранение тарифа, стоимости и ПВЗ в заказе;</li>
+            <li>журнал ошибок и инструкция.</li>
+          </ul>
+          <p class="term">Ориентировочный срок: 5–7 рабочих дней</p>
+        </article>
+
+        <article class="card featured">
+          <span class="badge">Полный рабочий обмен</span>
+          <h3>Расширенная интеграция</h3>
+          <ul>
+            <li>всё из базовой интеграции;</li>
+            <li>карта выбора пункта выдачи;</li>
+            <li>создание отправления в СДЭК;</li>
+            <li>получение текущего статуса;</li>
+            <li>отмена отправления;</li>
+            <li>защита от повторного создания одной отправки.</li>
+          </ul>
+          <p class="term">Ориентировочный срок: 8–12 рабочих дней</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <h2>Как проходит подключение</h2>
+      <div class="steps">
+        <div class="step"><strong>1. Проверка</strong><span>Веб-студия передаёт версию UMI.CMS/PHP и описание оформления заказа. Доступы на первом этапе не нужны.</span></div>
+        <div class="step"><strong>2. Фиксация</strong><span>Письменно подтверждаются функции, срок, стоимость и критерии приёмки.</span></div>
+        <div class="step"><strong>3. Тестовый контур</strong><span>Интеграция проверяется на копии сайта и тестовых данных СДЭК.</span></div>
+        <div class="step"><strong>4. Передача</strong><span>Передаются код, настройки, тестовые сценарии и инструкция для администратора.</span></div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="note">
+        <h2>Что нужно для предварительной оценки</h2>
+        <p>Достаточно ответить на несколько вопросов. Рабочие пароли, ключи и клиентская база на этом этапе не требуются.</p>
+        <div class="checklist" id="checklist">1. Ссылка на интернет-магазин:
+2. Версия UMI.CMS:
+3. Версия PHP:
+4. Стандартное или переработанное оформление заказа:
+5. Заполнены ли у товаров вес и габариты:
+6. Нужна доставка до двери, ПВЗ списком или карта ПВЗ:
+7. Нужно ли создавать отправления и получать статусы:</div>
+        <button class="button" id="copy" type="button">Скопировать список вопросов</button>
+        <p><strong>Следующий шаг:</strong> отправьте заполненный список своей веб-студии. Она подтвердит подходящий формат, цену и порядок запуска.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Страница не запрашивает доступы, не загружает данные и не использует внешние скрипты.</div>
+  </footer>
+
+  <script>
+    const button = document.getElementById('copy');
+    const checklist = document.getElementById('checklist');
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(checklist.textContent.trim());
+        button.textContent = 'Скопировано';
+        button.disabled = true;
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(checklist);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        button.textContent = 'Текст выделен — скопируйте вручную';
+      }
+    });
+  </script>
+</body>
+</html>
