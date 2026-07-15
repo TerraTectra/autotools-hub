@@ -1,0 +1,6 @@
+payment_id,order_id,amount,status
+PAY-2001,ORD-1001,1250.00,paid
+PAY-2002,ORD-1002,800.00,captured
+PAY-2003,ORD-1004,150.00,paid
+PAY-2004,ORD-1004,150.00,succeeded
+PAY-2005,ORD-9999,75.00,paid
