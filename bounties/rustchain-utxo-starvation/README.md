@@ -84,29 +84,61 @@ scan_limit = min(
 The subsequent loop never fetches another page after skipped rows exhaust that
 window.
 
-## Suggested fix
+## Validated fix
 
-Continue keyset-paginated fee-order scanning until one of these conditions is
-met:
+The included fix continues deterministic keyset-paginated scanning until:
 
 - `max_count` compatible candidates have been selected;
-- the mempool is exhausted;
-- a separately defined total-work/time budget is reached.
+- the mempool is exhausted; or
+- `MAX_POOL_SIZE` rows have been examined.
 
-The cursor should include deterministic tie-breakers such as
-`(fee_nrtc DESC, submitted_at ASC, tx_id ASC)`. A hard work budget can still
-bound CPU/SQL cost without allowing one conflict cluster to monopolize the only
-scan window.
+The ordering cursor is:
 
-Add a regression test that places compatible transactions immediately after a
-full conflict-heavy first page and asserts that the requested candidate count
-is filled.
+```text
+fee_nrtc DESC, submitted_at ASC, tx_id ASC
+```
+
+This preserves the fee-first policy while preventing one conflict cluster from
+monopolising the only scan window.
+
+Apply the generated patch:
+
+```bash
+cd Rustchain
+git apply /path/to/rustchain-utxo-starvation/proposed_fix.patch
+python -m py_compile node/utxo_db.py
+python node/test_utxo_db.py
+python /path/to/rustchain-utxo-starvation/test_proposed_fix.py --repo .
+```
+
+Alternatively, the defensive transformer checks that the vulnerable function
+still has the expected shape before editing:
+
+```bash
+python apply_proposed_fix.py --repo ./Rustchain
+```
+
+Independent validation against current upstream `main` passed all stages:
+
+```json
+{
+  "apply_patch": "success",
+  "module_compile": "success",
+  "upstream_utxo_tests": "success",
+  "starvation_regression": "success",
+  "validated": true
+}
+```
 
 ## Evidence
 
 - `poc_candidate_scan_starvation.py` — standalone local reproducer.
-- `report.json` — sanitised CI result.
-- Private independent CI checked out upstream `main` and reproduced the issue.
+- `report.json` — sanitised vulnerability reproduction result.
+- `proposed_fix.patch` — generated, directly applicable validated patch.
+- `apply_proposed_fix.py` — defensive source transformer.
+- `test_proposed_fix.py` — focused regression test.
+- Independent CI checked out upstream `main`, compiled the patched module,
+  passed the upstream UTXO DB tests, and passed the new regression.
 
 ## Builder
 
