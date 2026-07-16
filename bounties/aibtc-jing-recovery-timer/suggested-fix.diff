@@ -1,0 +1,20 @@
+diff --git a/contracts/rfq/deployed/jing-mm-safe.clar b/contracts/rfq/deployed/jing-mm-safe.clar
+--- a/contracts/rfq/deployed/jing-mm-safe.clar
++++ b/contracts/rfq/deployed/jing-mm-safe.clar
+@@
+-    (update-activity)
++    ;; RFQ operator activity must not postpone owner/passkey lost-key recovery.
++    ;; Preserve the custody timer reset only when an admin directly invoked RFQ.
++    (if (is-some (map-get? admins contract-caller))
++      (update-activity)
++      true
++    )
+     (print { event: "fix-rfq", id: id, committed-out: committed-out })
+@@
+-    (update-activity)
++    ;; Operational hot-key activity is separate from custody activity.
++    (if (is-some (map-get? admins contract-caller))
++      (update-activity)
++      true
++    )
+     (print { event: "fulfill-rfq", id: id, stx-out: stx-out })
