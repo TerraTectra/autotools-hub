@@ -1,0 +1,16 @@
+{
+  "upstream": "Scottcjn/Rustchain@main",
+  "tested_at": "2026-07-17",
+  "max_count": 2,
+  "scan_factor": 4,
+  "scan_window": 8,
+  "high_fee_rows": 8,
+  "valid_low_fee_rows_beyond_window": 2,
+  "candidates_before_removing_conflicts": [
+    "e5436cfdbc17afb2304e7c9d304cb2234ecc75140361da4a04649bc88795b5ff"
+  ],
+  "candidate_count_before": 1,
+  "candidate_count_after_control": 2,
+  "classification": "bounded_candidate_scan_starvation",
+  "reproduced": true
+}
