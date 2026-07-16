@@ -43,7 +43,7 @@ foreach ($Directory in @('skill', 'commands', 'agents', 'scripts')) {
 
     $Destination = Join-Path $ResolvedTarget $Directory
     New-Item -ItemType Directory -Path $Destination -Force | Out-Null
-    Copy-Item -LiteralPath (Join-Path $Source '*') -Destination $Destination -Recurse -Force
+    Get-ChildItem -LiteralPath $Source -Force | Copy-Item -Destination $Destination -Recurse -Force
 }
 
 Copy-Item -LiteralPath (Join-Path $ScriptRoot 'README.md') -Destination (Join-Path $ResolvedTarget 'README.md') -Force
