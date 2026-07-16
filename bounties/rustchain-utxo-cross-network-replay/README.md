@@ -91,22 +91,22 @@ A testnet signature can authorize a real mainnet transfer if:
 
 1. the user reuses the same RustChain key/address on both networks;
 2. the signed nonce is still unused on mainnet;
-3. an attacker obtains the signed testnet request (for example from a malicious
-   testnet service/operator, client logs, browser instrumentation, or another
-   system receiving the signed payload);
+3. an attacker obtains the signed testnet request;
 4. the mainnet address has enough UTXO balance.
 
 The attacker does not need the private key and cannot alter recipient, amount,
-fee, memo, or nonce. They only replay the already valid signed request on the
-other chain. Because nonce tables are chain-local, using the nonce on testnet
-does not consume it on mainnet.
+fee, memo, or nonce. They replay the already valid signed request on the other
+chain. Because nonce tables are chain-local, using the nonce on testnet does not
+consume it on mainnet.
 
 This can cause unauthorized loss of real RTC and fits the bounty's **High**
 category.
 
-## Suggested fix
+## Validated fix
 
-Version the UTXO signature domain and bind the canonical chain identifier:
+The included patch introduces the versioned domain
+`rustchain-utxo-transfer-v2` and adds the configured chain ID to the canonical
+signed payload:
 
 ```python
 {
@@ -116,24 +116,54 @@ Version the UTXO signature domain and bind the canonical chain identifier:
 }
 ```
 
-Recommended migration:
+`register_utxo_blueprint()` accepts an appended optional `chain_id` argument and
+otherwise resolves `RC_CHAIN_ID`, retaining the existing mainnet identifier as
+a deployment compatibility default.
 
-1. Pass the configured `RC_CHAIN_ID` into `register_utxo_blueprint()`.
-2. Require it in the signed canonical payload.
-3. Update wallet clients to fetch/confirm the chain ID before signing.
-4. Use a new signature-domain version rather than silently changing v1 bytes.
-5. Allow v1 only behind an explicit, short migration deadline if compatibility
-   is necessary.
-6. Add a regression test with two isolated apps and assert that a signature for
-   one chain returns `401` on the other.
+Apply and verify:
 
-Including a stable genesis hash in addition to the human-readable chain ID can
-provide stronger accidental-misconfiguration protection.
+```bash
+cd Rustchain
+git apply /path/to/rustchain-utxo-cross-network-replay/proposed_fix.patch
+python -m py_compile node/utxo_endpoints.py
+python /path/to/rustchain-utxo-cross-network-replay/test_proposed_fix.py --repo .
+```
+
+The defensive transformer can be used instead of `git apply` and aborts if the
+expected upstream blocks have changed:
+
+```bash
+python apply_proposed_fix.py --repo ./Rustchain
+```
+
+Independent validation against current upstream `main` passed every stage:
+
+```json
+{
+  "dependencies": "success",
+  "apply_patch": "success",
+  "module_compile": "success",
+  "cross_network_regression": "success",
+  "validated": true
+}
+```
+
+The regression proves:
+
+- a mainnet-v2 signature is accepted on mainnet-v2;
+- the exact same signature returns HTTP `401` on testnet-v2;
+- a separately signed testnet-v2 request is accepted on testnet-v2.
+
+A stable genesis hash could additionally strengthen protection against an
+accidentally duplicated human-readable chain ID.
 
 ## Evidence
 
 - `poc_cross_network_replay.py` — local two-chain Ed25519 reproducer.
-- `report.json` — sanitised independent CI result.
+- `report.json` — sanitised vulnerability reproduction result.
+- `proposed_fix.patch` — generated, directly applicable validated patch.
+- `apply_proposed_fix.py` — defensive source transformer.
+- `test_proposed_fix.py` — two-chain rejection regression.
 - Official testnet docs state that testnet uses the same node code/signing but a
   distinct `chain_id` and genesis.
 
