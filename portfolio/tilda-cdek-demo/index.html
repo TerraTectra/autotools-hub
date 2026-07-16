@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tilda × СДЭК — демонстрационный кейс</title>
+  <style>
+    :root { --bg:#07101c; --panel:#0d1928; --panel2:#122337; --text:#f4f8ff; --muted:#91a6bd; --line:rgba(255,255,255,.10); --accent:#64d6ff; --accent2:#83ffbd; --warn:#ffd166; }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:radial-gradient(circle at 75% 8%,rgba(100,214,255,.14),transparent 28%),radial-gradient(circle at 12% 84%,rgba(131,255,189,.09),transparent 32%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.45}
+    a{color:inherit}.wrap{width:min(1180px,calc(100% - 40px));margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;padding:24px 0}.brand{font-weight:800;letter-spacing:.08em}.brand span{color:var(--accent)}.tag{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.03)}
+    .hero{display:grid;grid-template-columns:1.12fr .88fr;gap:52px;align-items:center;padding:62px 0 74px}.eyebrow{display:inline-flex;gap:9px;align-items:center;color:var(--accent2);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 18px var(--accent2)}h1{font-size:clamp(44px,6vw,78px);line-height:.98;letter-spacing:-.055em;margin:18px 0 24px;max-width:760px}.lead{font-size:19px;color:var(--muted);max-width:690px}.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:700}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061019}.btn.secondary{border:1px solid var(--line);background:rgba(255,255,255,.035)}
+    .mock{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 26px 80px rgba(0,0,0,.38)}.browser{display:flex;gap:7px;padding-bottom:18px}.browser i{width:10px;height:10px;border-radius:50%;background:#496075}.browser i:nth-child(1){background:#ff6b6b}.browser i:nth-child(2){background:#ffd166}.browser i:nth-child(3){background:#56e39f}.box{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}.box h3{margin:0 0 18px;font-size:18px}.field{margin:12px 0}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}.input{height:44px;border-radius:10px;border:1px solid var(--line);background:#081421;padding:0 13px;display:flex;align-items:center;color:#dceaff}.options{display:grid;gap:10px;margin-top:16px}.option{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(255,255,255,.025)}.option.active{border-color:rgba(100,214,255,.7);box-shadow:inset 0 0 0 1px rgba(100,214,255,.18)}.price{font-weight:800}.muted{color:var(--muted)}
+    .section{padding:80px 0;border-top:1px solid var(--line)}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:34px}.section h2{font-size:clamp(32px,4vw,52px);letter-spacing:-.04em;margin:0}.section-head p{max-width:520px;color:var(--muted);margin:0}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border-radius:18px;padding:24px;min-height:190px}.num{font-size:13px;color:var(--accent);font-weight:800;letter-spacing:.14em}.card h3{font-size:20px;margin:42px 0 8px}.card p{color:var(--muted);margin:0}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:stretch}.step{position:relative;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:20px}.step strong{display:block;margin-bottom:7px}.step span{color:var(--muted);font-size:13px}.step:not(:last-child):after{content:'→';position:absolute;right:-11px;top:50%;transform:translateY(-50%);z-index:2;color:var(--accent);font-weight:900}
+    .result{display:grid;grid-template-columns:1fr 1fr;gap:18px}.metric{border:1px solid var(--line);border-radius:18px;padding:26px;background:var(--panel)}.metric b{font-size:36px;letter-spacing:-.04em}.metric p{color:var(--muted);margin:8px 0 0}.notice{margin-top:18px;padding:16px 18px;border:1px solid rgba(255,209,102,.28);background:rgba(255,209,102,.07);border-radius:14px;color:#ffe6a3;font-size:14px}.footer{padding:38px 0 52px;display:flex;justify-content:space-between;gap:20px;align-items:center;color:var(--muted);border-top:1px solid var(--line)}.contact{color:var(--text);font-weight:800;text-decoration:none}
+    @media(max-width:900px){.hero,.result{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.step:not(:last-child):after{content:'↓';right:auto;left:50%;top:auto;bottom:-17px}.section-head{display:block}.section-head p{margin-top:16px}.footer{display:block}.mock{max-width:620px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav"><div class="brand">TERRA<span>·DEV</span></div><div class="tag">Демонстрационный проект</div></nav>
+    <main class="hero">
+      <div>
+        <div class="eyebrow"><span class="dot"></span>Tilda × API СДЭК</div>
+        <h1>Доставка, которая считается прямо на сайте</h1>
+        <p class="lead">Концепт интеграции магазина на Tilda со СДЭК: город, тариф, стоимость, срок и выбранный пункт выдачи передаются вместе с заказом — без ручного пересчёта менеджером.</p>
+        <div class="cta"><a class="btn primary" href="#solution">Посмотреть решение</a><a class="btn secondary" href="https://t.me/tahioff">Обсудить задачу письменно</a></div>
+      </div>
+      <div class="mock" aria-label="Макет калькулятора доставки">
+        <div class="browser"><i></i><i></i><i></i></div>
+        <div class="box">
+          <h3>Рассчитать доставку</h3>
+          <div class="field"><label>Город получателя</label><div class="input">Нижний Новгород</div></div>
+          <div class="field"><label>Вес заказа</label><div class="input">2,4 кг</div></div>
+          <div class="options">
+            <div class="option active"><div><b>До пункта выдачи</b><div class="muted">2–3 рабочих дня</div></div><div class="price">490 ₽</div></div>
+            <div class="option"><div><b>Курьером до двери</b><div class="muted">1–2 рабочих дня</div></div><div class="price">790 ₽</div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <section class="section" id="solution"><div class="wrap">
+    <div class="section-head"><h2>Что получает магазин</h2><p>Не просто визуальный калькулятор, а полный технический сценарий с безопасным backend-слоем, обработкой ошибок и передачей данных дальше по цепочке.</p></div>
+    <div class="grid3">
+      <article class="card"><div class="num">01 · КОНВЕРСИЯ</div><h3>Цена до отправки формы</h3><p>Покупатель заранее видит стоимость и срок, поэтому реже бросает заказ из-за неожиданной доставки.</p></article>
+      <article class="card"><div class="num">02 · АВТОМАТИЗАЦИЯ</div><h3>Данные без ручного ввода</h3><p>Тариф, ПВЗ, адрес и итоговая стоимость уходят в заказ, CRM, таблицу или Telegram.</p></article>
+      <article class="card"><div class="num">03 · НАДЁЖНОСТЬ</div><h3>API-ключи не попадают в браузер</h3><p>Запросы идут через промежуточный сервис с журналом событий, повторными попытками и диагностикой.</p></article>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="section-head"><h2>Схема работы</h2><p>Архитектура подходит для Tilda Zero Block, стандартных форм и магазинов с дополнительным backend-сервисом.</p></div>
+    <div class="flow">
+      <div class="step"><strong>Форма Tilda</strong><span>Город, вес, корзина и контакты</span></div>
+      <div class="step"><strong>Backend</strong><span>Проверка данных и безопасный запрос</span></div>
+      <div class="step"><strong>API СДЭК</strong><span>Тарифы, сроки, ПВЗ и стоимость</span></div>
+      <div class="step"><strong>Заказ</strong><span>Выбранная доставка сохраняется</span></div>
+      <div class="step"><strong>CRM / Telegram</strong><span>Менеджер получает готовые данные</span></div>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="section-head"><h2>Ориентир результата</h2><p>Финальные показатели зависят от структуры магазина и текущего процесса. Ниже — измеримые цели проекта, а не выдуманная коммерческая статистика.</p></div>
+    <div class="result">
+      <div class="metric"><b>0</b><p>ручных пересчётов доставки для стандартных заказов после настройки сценария</p></div>
+      <div class="metric"><b>1 экран</b><p>от выбора города до понятного тарифа и срока для покупателя</p></div>
+    </div>
+    <div class="notice">Этот материал является демонстрационным концептом портфолио. Числа в интерфейсе приведены для показа механики и не являются реальным ответом API СДЭК.</div>
+  </div></section>
+
+  <footer class="wrap footer"><div>JavaScript / TypeScript · Node.js · REST API · Webhooks</div><a class="contact" href="https://t.me/tahioff">Telegram: @tahioff</a></footer>
+</body>
+</html>
