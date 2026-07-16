@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "QA API Smoke Kit",
+    "description": "Manual smoke and negative checks for the local Orders API demo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "baseUrl", "value": "http://127.0.0.1:8080"},
+    {"key": "orderId", "value": "1"}
+  ],
+  "item": [
+    {
+      "name": "Health contract",
+      "request": {"method": "GET", "url": "{{baseUrl}}/health"},
+      "event": [{"listen": "test", "script": {"exec": [
+        "pm.test('status is 200', () => pm.response.to.have.status(200));",
+        "pm.test('service is ok', () => pm.expect(pm.response.json().status).to.eql('ok'));",
+        "pm.test('request id exists', () => pm.expect(pm.response.headers.get('X-Request-Id')).to.be.ok);"
+      ]}}]
+    },
+    {
+      "name": "Create valid order",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"customer_email\": \"qa@example.com\",\n  \"amount\": 1490.5\n}"},
+        "url": "{{baseUrl}}/api/v1/orders"
+      },
+      "event": [{"listen": "test", "script": {"exec": [
+        "pm.test('status is 201', () => pm.response.to.have.status(201));",
+        "const body = pm.response.json();",
+        "pm.expect(body.status).to.eql('created');",
+        "pm.collectionVariables.set('orderId', body.id);"
+      ]}}]
+    },
+    {
+      "name": "Read created order",
+      "request": {"method": "GET", "url": "{{baseUrl}}/api/v1/orders/{{orderId}}"},
+      "event": [{"listen": "test", "script": {"exec": [
+        "pm.test('status is 200', () => pm.response.to.have.status(200));",
+        "pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get('orderId')));"
+      ]}}]
+    },
+    {
+      "name": "Reject negative amount",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"customer_email\": \"qa@example.com\",\n  \"amount\": -1\n}"},
+        "url": "{{baseUrl}}/api/v1/orders"
+      },
+      "event": [{"listen": "test", "script": {"exec": [
+        "pm.test('status is 422', () => pm.response.to.have.status(422));",
+        "pm.expect(pm.response.json().details[0].field).to.eql('amount');"
+      ]}}]
+    },
+    {
+      "name": "Unknown order",
+      "request": {"method": "GET", "url": "{{baseUrl}}/api/v1/orders/999"},
+      "event": [{"listen": "test", "script": {"exec": [
+        "pm.test('status is 404', () => pm.response.to.have.status(404));",
+        "pm.expect(pm.response.json().error).to.eql('order_not_found');"
+      ]}}]
+    }
+  ]
+}
