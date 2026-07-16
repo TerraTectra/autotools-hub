@@ -1,0 +1,39 @@
+name: Weblancer opportunity scan
+
+on:
+  pull_request:
+    paths:
+      - "scripts/weblancer_opportunity_scan.py"
+      - "scripts/weblancer_opportunity_scan_fast.py"
+      - "tests/test_weblancer_opportunity_scan.py"
+      - ".github/workflows/weblancer-opportunity-scan.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "43 */3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run parser and filter tests
+        run: python -m unittest discover -s tests -p "test_weblancer_opportunity_scan.py" -v
+      - name: Fetch and validate recent projects
+        run: python scripts/weblancer_opportunity_scan_fast.py artifacts/weblancer-opportunity-scan --max-cards 48 --workers 12
+      - name: Show summary
+        run: cat artifacts/weblancer-opportunity-scan/weblancer-opportunities.md
+      - name: Upload project list
+        uses: actions/upload-artifact@v4
+        with:
+          name: weblancer-opportunity-scan
+          path: artifacts/weblancer-opportunity-scan
+          retention-days: 7
