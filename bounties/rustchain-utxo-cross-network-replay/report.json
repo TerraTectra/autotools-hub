@@ -1,0 +1,23 @@
+{
+  "upstream": "Scottcjn/Rustchain@main",
+  "tested_at": "2026-07-17",
+  "signature_domain": "rustchain-utxo-transfer-v1",
+  "signed_payload_contains_chain_id": false,
+  "same_public_key": "60a2df9b92b61f43da4e50084bcd00b76f65b871081c626c82c3aa3c1fa2c15c",
+  "same_signature": "c55b7ab893fa0ea25d3b96a2fa59ca2829877233a6834baba5552b11d2ec3e6bd9768fda593666c3bdc8373698f505f47bd8d51ac86419ce97ad689c37634e03",
+  "same_nonce": 7,
+  "mainnet": {
+    "chain_id": "rustchain-mainnet-v2",
+    "status_code": 200,
+    "accepted": true,
+    "slot": 101
+  },
+  "testnet": {
+    "chain_id": "rustchain-testnet-v2",
+    "status_code": 200,
+    "accepted": true,
+    "slot": 202
+  },
+  "classification": "cross_network_signature_replay",
+  "reproduced": true
+}
