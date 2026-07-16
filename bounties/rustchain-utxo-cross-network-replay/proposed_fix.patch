@@ -1,7 +1,8 @@
 diff --git a/node/utxo_endpoints.py b/node/utxo_endpoints.py
+index 0f221dd..4e38b3e 100644
 --- a/node/utxo_endpoints.py
 +++ b/node/utxo_endpoints.py
-@@ -18,6 +18,7 @@ Endpoints:
+@@ -17,6 +17,7 @@ Endpoints:
  """
  
  import json
@@ -9,19 +10,25 @@ diff --git a/node/utxo_endpoints.py b/node/utxo_endpoints.py
  import sqlite3
  import time
  from decimal import Decimal, InvalidOperation
-@@ -151,7 +152,8 @@ def _ensure_signed_float_preserves_nrtc(amount: Decimal, nrtc: int,
+@@ -149,7 +150,8 @@ def _ensure_signed_float_preserves_nrtc(amount: Decimal, nrtc: int,
  # This MUST match the multiplier used in rustchain_v2_integrated_v2.2.1_rip200.py
  # (e.g. line 2370: amount_i64 = int(amount_decimal * Decimal(1000000))).
  ACCOUNT_UNIT = 1_000_000  # 1 RTC = 1,000,000 uRTC (6 decimals)
 -UTXO_SIGNATURE_DOMAIN = "rustchain-utxo-transfer-v1"
 +UTXO_SIGNATURE_DOMAIN = "rustchain-utxo-transfer-v2"
 +_DEFAULT_CHAIN_ID = "rustchain-mainnet-v2"
-@@ -186,6 +188,7 @@ _verify_sig_fn = None      # verify_rtc_signature(pubkey_hex, message, sig_hex)
+ 
+ 
+ def _decimal_to_account_i64(amount: Decimal, field_name: str) -> int:
+@@ -184,6 +186,7 @@ _verify_sig_fn = None      # verify_rtc_signature(pubkey_hex, message, sig_hex)
  _addr_from_pk_fn = None    # address_from_pubkey(pubkey_hex) -> str
  _current_slot_fn = None    # current_slot() -> int
  _dual_write: bool = False
 +_chain_id: str = _DEFAULT_CHAIN_ID
-@@ -270,18 +273,26 @@ def _transfer_string_field(data: dict, field: str):
+ 
+ 
+ def _ensure_transfer_nonce_table(conn: sqlite3.Connection) -> None:
+@@ -276,13 +279,18 @@ def _transfer_string_field(data: dict, field: str):
  
  def register_utxo_blueprint(app, utxo_db: UtxoDB, db_path: str,
                              verify_sig_fn, addr_from_pk_fn,
@@ -42,26 +49,33 @@ diff --git a/node/utxo_endpoints.py b/node/utxo_endpoints.py
  
      _utxo_db = utxo_db
      _db_path = db_path
-     _verify_sig_fn = verify_sig_fn
+@@ -290,6 +298,12 @@ def register_utxo_blueprint(app, utxo_db: UtxoDB, db_path: str,
      _addr_from_pk_fn = addr_from_pk_fn
      _current_slot_fn = current_slot_fn
      _dual_write = dual_write
-+    resolved_chain_id = chain_id or os.environ.get('RC_CHAIN_ID', _DEFAULT_CHAIN_ID)
++    resolved_chain_id = chain_id or os.environ.get(
++        'RC_CHAIN_ID', _DEFAULT_CHAIN_ID
++    )
 +    if not isinstance(resolved_chain_id, str) or not resolved_chain_id.strip():
 +        raise ValueError('chain_id must be a non-empty string')
 +    _chain_id = resolved_chain_id.strip()
  
      conn = sqlite3.connect(db_path)
-@@ -294,7 +305,10 @@ def register_utxo_blueprint(app, utxo_db: UtxoDB, db_path: str,
+     try:
+@@ -299,7 +313,11 @@ def register_utxo_blueprint(app, utxo_db: UtxoDB, db_path: str,
          conn.close()
  
      app.register_blueprint(utxo_bp)
 -    print(f"[UTXO] Endpoints registered at /utxo/* (dual_write={'ON' if dual_write else 'OFF'})")
 +    print(
 +        f"[UTXO] Endpoints registered at /utxo/* "
-+        f"(dual_write={'ON' if dual_write else 'OFF'}, chain_id={_chain_id})"
++        f"(dual_write={'ON' if dual_write else 'OFF'}, "
++        f"chain_id={_chain_id})"
 +    )
-@@ -625,6 +639,7 @@ def utxo_transfer():
+ 
+ 
+ # ---------------------------------------------------------------------------
+@@ -625,6 +643,7 @@ def utxo_transfer():
      for nonce_for_sig in _nonce_signature_forms(data.get('nonce'), nonce_int):
          tx_data_v2 = {
              'domain': UTXO_SIGNATURE_DOMAIN,
@@ -69,7 +83,7 @@ diff --git a/node/utxo_endpoints.py b/node/utxo_endpoints.py
              'from': from_address,
              'to': to_address,
              'amount': amount_for_sig,
-@@ -652,6 +667,7 @@ def utxo_transfer():
+@@ -654,6 +673,7 @@ def utxo_transfer():
                  'error': 'UTXO transfer signature must include UTXO domain',
                  'code': 'UTXO_SIGNATURE_DOMAIN_REQUIRED',
                  'domain': UTXO_SIGNATURE_DOMAIN,
