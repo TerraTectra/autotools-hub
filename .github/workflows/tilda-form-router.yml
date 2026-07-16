@@ -1,0 +1,28 @@
+name: Tilda Form Router CI
+
+on:
+  push:
+    paths:
+      - "prototypes/tilda-form-router/**"
+      - ".github/workflows/tilda-form-router.yml"
+  pull_request:
+    paths:
+      - "prototypes/tilda-form-router/**"
+      - ".github/workflows/tilda-form-router.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prototypes/tilda-form-router
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+      - run: docker build -t tilda-form-router:test .
