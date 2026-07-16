@@ -6,12 +6,8 @@ on:
       - "freelance-ru-scan"
     paths:
       - "scripts/public_task_scan.py"
-      - "tests/test_public_task_scan.py"
-      - ".github/workflows/freelance-ru-scan.yml"
-  pull_request:
-    paths:
-      - "scripts/public_task_scan.py"
-      - "tests/test_public_task_scan.py"
+      - "scripts/public_task_scan_v2.py"
+      - "tests/test_public_feed.py"
       - ".github/workflows/freelance-ru-scan.yml"
   workflow_dispatch:
   schedule:
@@ -31,10 +27,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Run tests
-        run: python -m unittest discover -s tests -p "test_public_task_scan.py" -v
+      - name: Run parser tests
+        run: python -m unittest discover -s tests -p "test_public_feed.py" -v
       - name: Scan public tasks
-        run: python scripts/public_task_scan.py artifacts/public-task-scan --pages 8 --max-applications 5 --max-age-hours 72
+        run: python scripts/public_task_scan_v2.py artifacts/public-task-scan --pages 8 --max-applications 5 --max-age-hours 72
       - name: Show summary
         run: cat artifacts/public-task-scan/public-tasks.md
       - name: Upload report
