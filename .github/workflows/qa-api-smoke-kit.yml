@@ -1,0 +1,25 @@
+name: QA API Smoke Kit
+
+on:
+  push:
+    paths:
+      - "prototypes/qa-api-smoke-kit/**"
+      - ".github/workflows/qa-api-smoke-kit.yml"
+  pull_request:
+    paths:
+      - "prototypes/qa-api-smoke-kit/**"
+      - ".github/workflows/qa-api-smoke-kit.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run API smoke tests
+        run: python -m unittest discover -s prototypes/qa-api-smoke-kit -p "test_*.py" -v
+      - name: Validate Postman collection JSON
+        run: python -m json.tool prototypes/qa-api-smoke-kit/postman_collection.json > /dev/null
