@@ -1,6 +1,13 @@
 name: Freelance.ru task scan
 
 on:
+  push:
+    branches:
+      - "freelance-ru-scan"
+    paths:
+      - "scripts/freelance_ru_scan.py"
+      - "tests/test_freelance_ru_scan.py"
+      - ".github/workflows/freelance-ru-scan.yml"
   pull_request:
     paths:
       - "scripts/freelance_ru_scan.py"
