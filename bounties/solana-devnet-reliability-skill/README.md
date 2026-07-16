@@ -34,13 +34,13 @@ The procedures were developed against real 2026 failure modes:
 ```bash
 git clone https://github.com/TerraTectra/autotools-hub
 cd autotools-hub/bounties/solana-devnet-reliability-skill
-./install.sh
+bash install.sh
 ```
 
 Project-local install:
 
 ```bash
-./install.sh --project
+bash install.sh --project
 ```
 
 Windows PowerShell:
@@ -49,7 +49,7 @@ Windows PowerShell:
 ./install.ps1 -Scope Project
 ```
 
-The installer copies only the `skill/`, `commands/`, and `agents/` directories. It does not install executables, create wallets, request funds, or modify Solana configuration.
+The installer copies only the `skill/`, `commands/`, `agents/`, and `scripts/` directories. It does not install executables, create wallets, request funds, or modify Solana configuration.
 
 ## Diagnostic CLI
 
