@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "scripts/weblancer_opportunity_scan.py"
+      - "scripts/weblancer_opportunity_scan_fast.py"
       - "tests/test_weblancer_opportunity_scan.py"
       - ".github/workflows/weblancer-opportunity-scan.yml"
   workflow_dispatch:
@@ -16,7 +17,7 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -26,8 +27,8 @@ jobs:
           python-version: "3.11"
       - name: Run parser and filter tests
         run: python -m unittest discover -s tests -p "test_weblancer_opportunity_scan.py" -v
-      - name: Fetch and validate current projects
-        run: python scripts/weblancer_opportunity_scan.py artifacts/weblancer-opportunity-scan --max-cards 120 --workers 8
+      - name: Fetch and validate recent projects
+        run: python scripts/weblancer_opportunity_scan_fast.py artifacts/weblancer-opportunity-scan --max-cards 48 --workers 12
       - name: Show summary
         run: cat artifacts/weblancer-opportunity-scan/weblancer-opportunities.md
       - name: Upload project list
