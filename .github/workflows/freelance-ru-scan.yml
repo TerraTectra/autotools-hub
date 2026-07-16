@@ -1,17 +1,17 @@
-name: Freelance.ru task scan
+name: Public task scan
 
 on:
   push:
     branches:
       - "freelance-ru-scan"
     paths:
-      - "scripts/freelance_ru_scan.py"
-      - "tests/test_freelance_ru_scan.py"
+      - "scripts/public_task_scan.py"
+      - "tests/test_public_task_scan.py"
       - ".github/workflows/freelance-ru-scan.yml"
   pull_request:
     paths:
-      - "scripts/freelance_ru_scan.py"
-      - "tests/test_freelance_ru_scan.py"
+      - "scripts/public_task_scan.py"
+      - "tests/test_public_task_scan.py"
       - ".github/workflows/freelance-ru-scan.yml"
   workflow_dispatch:
   schedule:
@@ -32,14 +32,14 @@ jobs:
         with:
           python-version: "3.11"
       - name: Run tests
-        run: python -m unittest discover -s tests -p "test_freelance_ru_scan.py" -v
+        run: python -m unittest discover -s tests -p "test_public_task_scan.py" -v
       - name: Scan public tasks
-        run: python scripts/freelance_ru_scan.py artifacts/freelance-ru-scan --pages 8 --max-applications 5 --max-age-hours 72
+        run: python scripts/public_task_scan.py artifacts/public-task-scan --pages 8 --max-applications 5 --max-age-hours 72
       - name: Show summary
-        run: cat artifacts/freelance-ru-scan/freelance-ru.md
+        run: cat artifacts/public-task-scan/public-tasks.md
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
-          name: freelance-ru-scan
-          path: artifacts/freelance-ru-scan
+          name: public-task-scan
+          path: artifacts/public-task-scan
           retention-days: 7
