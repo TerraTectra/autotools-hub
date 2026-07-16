@@ -1,0 +1,33 @@
+name: Public task scan
+
+on:
+  push:
+    branches:
+      - "public-task-scan-clean"
+  workflow_dispatch:
+  schedule:
+    - cron: "11 */3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run parser tests
+        run: python -m unittest discover -s tests -p "test_task_scan_entry.py" -v
+      - name: Scan public tasks
+        run: python scripts/task_scan_entry.py artifacts/public-task-scan --pages 8 --max-applications 5 --max-age-hours 72
+      - name: Show summary
+        run: cat artifacts/public-task-scan/public-tasks.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-task-scan
+          path: artifacts/public-task-scan
+          retention-days: 7
