@@ -1,0 +1,52 @@
+{
+  "target": "SPV9K21TBFAK4KNRJXF5DFP8N7W46G4V9RCJDC22.jing-mm-safe",
+  "source": "Rapha-btc/jing-contracts-v3/contracts/rfq/deployed/jing-mm-safe.clar",
+  "test_only_change": "INACTIVITY-PERIOD shortened from 52560 to 3 burn blocks",
+  "unchanged_security_logic": [
+    "is-inactive",
+    "update-activity",
+    "is-rfq-authorized",
+    "fix-rfq"
+  ],
+  "rfq_ids": [
+    "1",
+    "2"
+  ],
+  "observed": {
+    "deploy-safe": "(ok true)",
+    "fund-safe-stx": "(ok true)",
+    "fund-client-sbtc": "(ok true)",
+    "owner": "(ok SP000000000000000000002Q6VF78)",
+    "rfq-operator-is-admin": "(err u4001)",
+    "pubkey-initialized": "false",
+    "rfq-operator": "SPV9K21TBFAK4KNRJXF5DFP8N7W46G4V9RCJDC22",
+    "inactive-initial": "false",
+    "advance-4": "advanced",
+    "inactive-before-first-reset": "true",
+    "open-first-rfq": "(ok u1)",
+    "hot-key-fix-first-rfq": "(ok u1)",
+    "inactive-after-first-reset": "false",
+    "inactive-before-second-reset": "true",
+    "open-second-rfq": "(ok u2)",
+    "hot-key-fix-second-rfq": "(ok u2)",
+    "inactive-after-second-reset": "false"
+  },
+  "checks": {
+    "owner_is_not_hot_key": true,
+    "hot_key_is_not_admin": true,
+    "no_passkey_initialized": true,
+    "hot_key_is_rfq_operator": true,
+    "starts_active": true,
+    "becomes_inactive_first": true,
+    "first_fix_succeeds": true,
+    "first_fix_resets_timer": true,
+    "becomes_inactive_again": true,
+    "second_fix_succeeds": true,
+    "second_fix_resets_timer": true
+  },
+  "classification": "rfq_operator_recovery_timer_suppression",
+  "reproduced": true,
+  "simulation_url": "https://stxer.xyz/simulations/mainnet/cb7cc63cdaacc5bf8d3b413fb340422b",
+  "ci_run_id": 29543348849,
+  "fork_block_height": 8568880
+}
