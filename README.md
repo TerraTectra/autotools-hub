@@ -30,7 +30,9 @@
 
 [Открыть демонстрацию очистки CRM-базы и аудита воронки](site/data-quality/)
 
-Статические страницы подготовлены к публикации в GitHub Pages. После однократного включения источника GitHub Actions используется workflow `Deploy public site to GitHub Pages`.
+Публичные страницы работают в GitHub Pages из ветки `main`, корень репозитория.
+
+[Очистка базы — 3 000 ₽, аудит воронки — 5 000 ₽, комплект — 7 000 ₽](https://terratectra.github.io/autotools-hub/site/services/crm/) · [Реальный пример отчёта на синтетических данных](https://terratectra.github.io/autotools-hub/site/services/crm/audit-demo.html). Бесплатная первичная проверка — до 100 обезличенных строк. Клиентские данные в репозитории не размещаются.
 
 ## Tilda Form Router
 
