@@ -47,7 +47,27 @@
   }
   for(const [path,value]of translation)if(typeof value==='string'&&!source.has(path))issues.push({path,type:'extra-key',severity:'warning',message:'Ключ отсутствует в оригинале. Проверьте, нужен ли он.'});
   const errors=issues.filter(i=>i.severity==='error').length;
-  return {version:'1.0',sourceStrings,comparedStrings,errors,warnings:issues.length-errors,issues};
+  return {version:'1.1',mode:'translation',sourceStrings,comparedStrings,errors,warnings:issues.length-errors,issues};
  }
- const api={compare,readJSON,tokens,LIMIT};if(typeof module==='object'&&module.exports)module.exports=api;else root.TerraLocalization=api;
+ function compareUpdate(previousText,sourceText,translationText){
+  const previous=readJSON(previousText,'Предыдущий оригинал');
+  const source=readJSON(sourceText,'Текущий оригинал'),translation=readJSON(translationText,'Перевод');
+  const result=compare(sourceText,translationText),added=[],changed=[],removed=[];
+  let previousStrings=0,unchangedStrings=0;
+  // Compare exact text at an exact JSON Pointer. Array moves and renames are not inferred.
+  for(const [path,value]of previous)if(typeof value==='string'){
+   previousStrings++;
+   if(typeof source.get(path)!=='string')removed.push({path,before:value,translation:typeof translation.get(path)==='string'?translation.get(path):null});
+  }
+  for(const [path,value]of source)if(typeof value==='string'){
+   const translated=typeof translation.get(path)==='string'?translation.get(path):null;
+   if(typeof previous.get(path)!=='string')added.push({path,after:value,translation:translated});
+   else if(previous.get(path)!==value)changed.push({path,before:previous.get(path),after:value,translation:translated});
+   else unchangedStrings++;
+  }
+  return {...result,mode:'release-update',previousStrings,unchangedStrings,added,changed,removed,
+   reviewRequired:added.length+changed.length,
+   reviewScope:'Changed source text requires manual review even if placeholders match. Translations are not automatically certified, replaced or deleted.'};
+ }
+ const api={compare,compareUpdate,readJSON,tokens,LIMIT};if(typeof module==='object'&&module.exports)module.exports=api;else root.TerraLocalization=api;
 })(typeof globalThis==='object'?globalThis:this);
