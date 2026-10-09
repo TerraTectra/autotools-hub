@@ -1,0 +1,64 @@
+{
+  "version": "1.1",
+  "mode": "release-update",
+  "sourceStrings": 25,
+  "comparedStrings": 25,
+  "errors": 0,
+  "warnings": 0,
+  "issues": [],
+  "previousStrings": 23,
+  "unchangedStrings": 18,
+  "added": [
+    {
+      "path": "/ui/autosave",
+      "after": "Next autosave in %d seconds",
+      "translation": "Следующее автосохранение через %d сек."
+    },
+    {
+      "path": "/settings/textSize",
+      "after": "Text size",
+      "translation": "Размер текста"
+    },
+    {
+      "path": "/save/slot",
+      "after": "Slot {slot}",
+      "translation": "Ячейка {slot}"
+    }
+  ],
+  "changed": [
+    {
+      "path": "/ui/greeting",
+      "before": "Hello, {player}",
+      "after": "Welcome back, {player}",
+      "translation": "С возвращением, {player}"
+    },
+    {
+      "path": "/ui/inspect",
+      "before": "Hold {key} to inspect",
+      "after": "Press {key} to inspect",
+      "translation": "Нажмите {key}, чтобы осмотреть"
+    },
+    {
+      "path": "/quests/objective",
+      "before": "Deliver {amount} supplies to {station}",
+      "after": "Deliver {amount} medical supplies to {station}",
+      "translation": "Доставьте медицинские припасы ({amount}) на станцию {station}"
+    },
+    {
+      "path": "/save/overwrite",
+      "before": "Overwrite saved game?",
+      "after": "Overwrite slot {slot}?",
+      "translation": "Перезаписать ячейку {slot}?"
+    }
+  ],
+  "removed": [
+    {
+      "path": "/ui/help",
+      "before": "Help",
+      "translation": null
+    }
+  ],
+  "reviewRequired": 7,
+  "reviewScope": "Changed source text requires manual review even if placeholders match. Translations are not automatically certified, replaced or deleted.",
+  "example": "Own synthetic fixture; no game runtime, customer delivery or professional editorial certification."
+}

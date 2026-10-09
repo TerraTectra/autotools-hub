@@ -1,0 +1,95 @@
+{
+  "version": "1.1",
+  "mode": "release-update",
+  "sourceStrings": 25,
+  "comparedStrings": 22,
+  "errors": 4,
+  "warnings": 1,
+  "issues": [
+    {
+      "path": "/ui/autosave",
+      "type": "missing-key",
+      "severity": "error",
+      "message": "Нет ключа в переводе."
+    },
+    {
+      "path": "/settings/textSize",
+      "type": "missing-key",
+      "severity": "error",
+      "message": "Нет ключа в переводе."
+    },
+    {
+      "path": "/save/overwrite",
+      "type": "brace",
+      "severity": "error",
+      "message": "Подстановки отличаются: {slot} → нет"
+    },
+    {
+      "path": "/save/slot",
+      "type": "missing-key",
+      "severity": "error",
+      "message": "Нет ключа в переводе."
+    },
+    {
+      "path": "/ui/help",
+      "type": "extra-key",
+      "severity": "warning",
+      "message": "Ключ отсутствует в оригинале. Проверьте, нужен ли он."
+    }
+  ],
+  "previousStrings": 23,
+  "unchangedStrings": 18,
+  "added": [
+    {
+      "path": "/ui/autosave",
+      "after": "Next autosave in %d seconds",
+      "translation": null
+    },
+    {
+      "path": "/settings/textSize",
+      "after": "Text size",
+      "translation": null
+    },
+    {
+      "path": "/save/slot",
+      "after": "Slot {slot}",
+      "translation": null
+    }
+  ],
+  "changed": [
+    {
+      "path": "/ui/greeting",
+      "before": "Hello, {player}",
+      "after": "Welcome back, {player}",
+      "translation": "Привет, {player}"
+    },
+    {
+      "path": "/ui/inspect",
+      "before": "Hold {key} to inspect",
+      "after": "Press {key} to inspect",
+      "translation": "Удерживайте {key}, чтобы осмотреть"
+    },
+    {
+      "path": "/quests/objective",
+      "before": "Deliver {amount} supplies to {station}",
+      "after": "Deliver {amount} medical supplies to {station}",
+      "translation": "Доставьте припасы ({amount}) на станцию {station}"
+    },
+    {
+      "path": "/save/overwrite",
+      "before": "Overwrite saved game?",
+      "after": "Overwrite slot {slot}?",
+      "translation": "Перезаписать сохранение?"
+    }
+  ],
+  "removed": [
+    {
+      "path": "/ui/help",
+      "before": "Help",
+      "translation": "Помощь"
+    }
+  ],
+  "reviewRequired": 7,
+  "reviewScope": "Changed source text requires manual review even if placeholders match. Translations are not automatically certified, replaced or deleted.",
+  "example": "Own synthetic fixture; no game runtime, customer delivery or professional editorial certification."
+}

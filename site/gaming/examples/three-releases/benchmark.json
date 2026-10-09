@@ -1,0 +1,9 @@
+{
+  "measuredAt": "2026-10-09T08:13:53.359Z",
+  "node": "v24.19.0",
+  "platform": "win32",
+  "architecture": "x64",
+  "elapsedMs": 38.196,
+  "scope": "One process: read six small JSON files; run three structural checks and four release comparisons; assert expected paths and recorded decisions. Excludes process startup, writing reports, human translation/editorial work, packaging, browser QA and in-game verification.",
+  "singleSample": true
+}

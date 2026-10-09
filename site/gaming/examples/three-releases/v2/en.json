@@ -1,0 +1,39 @@
+{
+  "menu": {
+    "continue": "Continue",
+    "newGame": "New game",
+    "save": "Save game",
+    "exit": "Exit game"
+  },
+  "ui": {
+    "greeting": "Welcome back, {player}",
+    "coins": "Coins: %d",
+    "repair": "Repair {item}",
+    "capacity": "Storage: {used}/{max}",
+    "warning": "<b>Warning</b>",
+    "inspect": "Press {key} to inspect",
+    "autosave": "Next autosave in %d seconds"
+  },
+  "quests": {
+    "objective": "Deliver {amount} medical supplies to {station}",
+    "complete": "Task completed",
+    "abandon": "Abandon task",
+    "progress": "Supplies: %d/%d"
+  },
+  "settings": {
+    "sound": "Sound volume",
+    "language": "Language",
+    "fullscreen": "Fullscreen",
+    "apply": "Apply",
+    "textSize": "Text size"
+  },
+  "loading": [
+    "Loading",
+    "Preparing station"
+  ],
+  "save": {
+    "overwrite": "Overwrite slot {slot}?",
+    "saved": "Game saved",
+    "slot": "Slot {slot}"
+  }
+}

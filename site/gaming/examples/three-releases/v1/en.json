@@ -1,0 +1,37 @@
+{
+  "menu": {
+    "continue": "Continue",
+    "newGame": "New game",
+    "save": "Save game",
+    "exit": "Exit game"
+  },
+  "ui": {
+    "greeting": "Hello, {player}",
+    "coins": "Coins: %d",
+    "repair": "Repair {item}",
+    "capacity": "Storage: {used}/{max}",
+    "warning": "<b>Warning</b>",
+    "inspect": "Hold {key} to inspect",
+    "help": "Help"
+  },
+  "quests": {
+    "objective": "Deliver {amount} supplies to {station}",
+    "complete": "Task completed",
+    "abandon": "Abandon task",
+    "progress": "Supplies: %d/%d"
+  },
+  "settings": {
+    "sound": "Sound volume",
+    "language": "Language",
+    "fullscreen": "Fullscreen",
+    "apply": "Apply"
+  },
+  "loading": [
+    "Loading",
+    "Preparing station"
+  ],
+  "save": {
+    "overwrite": "Overwrite saved game?",
+    "saved": "Game saved"
+  }
+}

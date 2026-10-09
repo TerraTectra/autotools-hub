@@ -1,0 +1,89 @@
+{
+  "version": "1.1",
+  "mode": "release-update",
+  "sourceStrings": 25,
+  "comparedStrings": 23,
+  "errors": 2,
+  "warnings": 2,
+  "issues": [
+    {
+      "path": "/ui/refund",
+      "type": "missing-key",
+      "severity": "error",
+      "message": "Нет ключа в переводе."
+    },
+    {
+      "path": "/quests/deadline",
+      "type": "missing-key",
+      "severity": "error",
+      "message": "Нет ключа в переводе."
+    },
+    {
+      "path": "/quests/progress",
+      "type": "extra-key",
+      "severity": "warning",
+      "message": "Ключ отсутствует в оригинале. Проверьте, нужен ли он."
+    },
+    {
+      "path": "/settings/fullscreen",
+      "type": "extra-key",
+      "severity": "warning",
+      "message": "Ключ отсутствует в оригинале. Проверьте, нужен ли он."
+    }
+  ],
+  "previousStrings": 25,
+  "unchangedStrings": 19,
+  "added": [
+    {
+      "path": "/ui/refund",
+      "after": "Refund: %d credits",
+      "translation": null
+    },
+    {
+      "path": "/quests/deadline",
+      "after": "Deadline: {days} days",
+      "translation": null
+    }
+  ],
+  "changed": [
+    {
+      "path": "/menu/continue",
+      "before": "Continue",
+      "after": "Load last save",
+      "translation": "Продолжить"
+    },
+    {
+      "path": "/ui/coins",
+      "before": "Coins: %d",
+      "after": "Credits: %d",
+      "translation": "Монеты: %d"
+    },
+    {
+      "path": "/ui/capacity",
+      "before": "Storage: {used}/{max}",
+      "after": "Storage used: {used}/{max}",
+      "translation": "Склад: {used}/{max}"
+    },
+    {
+      "path": "/quests/complete",
+      "before": "Task completed",
+      "after": "Contract completed",
+      "translation": "Задание выполнено"
+    }
+  ],
+  "removed": [
+    {
+      "path": "/quests/progress",
+      "before": "Supplies: %d/%d",
+      "translation": "Припасы: %d/%d"
+    },
+    {
+      "path": "/settings/fullscreen",
+      "before": "Fullscreen",
+      "translation": "Полный экран"
+    }
+  ],
+  "reviewRequired": 6,
+  "reviewScope": "Changed source text requires manual review even if placeholders match. Translations are not automatically certified, replaced or deleted.",
+  "example": "Own synthetic fixture; no game runtime, customer delivery or professional editorial certification."
+}

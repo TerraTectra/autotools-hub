@@ -1,0 +1,64 @@
+{
+  "version": "1.1",
+  "mode": "release-update",
+  "sourceStrings": 25,
+  "comparedStrings": 25,
+  "errors": 0,
+  "warnings": 0,
+  "issues": [],
+  "previousStrings": 25,
+  "unchangedStrings": 19,
+  "added": [
+    {
+      "path": "/ui/refund",
+      "after": "Refund: %d credits",
+      "translation": "Возврат: %d кредитов"
+    },
+    {
+      "path": "/quests/deadline",
+      "after": "Deadline: {days} days",
+      "translation": "Срок: {days} дн."
+    }
+  ],
+  "changed": [
+    {
+      "path": "/menu/continue",
+      "before": "Continue",
+      "after": "Load last save",
+      "translation": "Загрузить последнее сохранение"
+    },
+    {
+      "path": "/ui/coins",
+      "before": "Coins: %d",
+      "after": "Credits: %d",
+      "translation": "Кредиты: %d"
+    },
+    {
+      "path": "/ui/capacity",
+      "before": "Storage: {used}/{max}",
+      "after": "Storage used: {used}/{max}",
+      "translation": "Занято на складе: {used}/{max}"
+    },
+    {
+      "path": "/quests/complete",
+      "before": "Task completed",
+      "after": "Contract completed",
+      "translation": "Контракт завершён"
+    }
+  ],
+  "removed": [
+    {
+      "path": "/quests/progress",
+      "before": "Supplies: %d/%d",
+      "translation": null
+    },
+    {
+      "path": "/settings/fullscreen",
+      "before": "Fullscreen",
+      "translation": null
+    }
+  ],
+  "reviewRequired": 6,
+  "reviewScope": "Changed source text requires manual review even if placeholders match. Translations are not automatically certified, replaced or deleted.",
+  "example": "Own synthetic fixture; no game runtime, customer delivery or professional editorial certification."
+}
