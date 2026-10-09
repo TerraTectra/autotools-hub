@@ -94,6 +94,7 @@
     }
   ],
   "archiveOnlyFiles": [
+    ".gitattributes",
     "checker-core.js",
     "LICENSE.txt"
   ]
