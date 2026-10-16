@@ -1,4 +1,8 @@
 'use strict';
+const checkerControls=document.getElementById('checker-controls'),startupStatus=document.getElementById('startup-status');
+if(typeof TerraLocalization==='undefined'){
+ if(startupStatus)startupStatus.textContent='Не удалось загрузить проверщик. Обновите страницу и проверьте подключение; поля пока недоступны.';
+}else{
 const source=document.getElementById('source'),translation=document.getElementById('translation'),previous=document.getElementById('previous');
 const result=document.getElementById('result'),error=document.getElementById('error'),report=document.getElementById('report');let current=null;
 const revisions=new Map([[source,0],[translation,0],[previous,0]]);
@@ -60,3 +64,5 @@ report.addEventListener('click',()=>{
  if(!current)return;const content=JSON.stringify({...current,checkedAt:new Date().toISOString(),scope:'Structural JSON comparison and exact source-text changes; translation quality, custom syntax and in-game rendering are not validated.'},null,2);
  const url=URL.createObjectURL(new Blob([content],{type:'application/json;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download=current.mode==='release-update'?'TerraTectra-localization-update.json':'TerraTectra-localization-report.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
+if(checkerControls)checkerControls.disabled=false;if(startupStatus)startupStatus.hidden=true;
+}
