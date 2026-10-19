@@ -6,6 +6,8 @@
 
 Открытая лаборатория: собственный JSON-проверщик локализации, сравнение строк после обновления, инструкции и внутренние примеры моддинга. Инструменты и статьи бесплатны; файлы игр в этом разделе не распространяются.
 
+**Localization Check 1.1** is a free browser-based JSON localization checker with a Russian interface. Compare previous and current source files with a translation to find added, changed and removed strings, placeholder mismatches and tag mismatches. Files are processed locally in your browser. Structural checks do not replace translation review or testing in the game. [Try the checker](https://terratectra.github.io/autotools-hub/site/gaming/localization-check/) · [Reproduce the three-release example](https://terratectra.github.io/autotools-hub/site/gaming/guides/localization-three-releases/).
+
 [Документация сравнения версий и файловой приёмки](https://github.com/TerraTectra/autotools-hub/blob/main/_workshop/localization/README.md) — входные файлы, воспроизводимый пример и границы сопровождения авторского проекта.
 
 Готовые прототипы интеграций и операционной автоматизации для CRM, маркетинга, интернет-магазинов и отделов продаж.
