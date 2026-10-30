@@ -1,0 +1,64 @@
+name: Ошибка Localization Check
+description: Сообщить о технической ошибке бесплатного JSON-проверщика TerraTectra.
+title: "[Localization Check] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Эта форма создаёт **публичное** сообщение об ошибке Localization Check. Разбор может выполняться с помощью ИИ.
+        Используйте собственный вымышленный пример. Не размещайте закрытые переводы, игровые файлы, полный отчёт с исходными строками, личные сведения, пароли или токены.
+        Форма предназначена для ошибок бесплатного инструмента; отправка сообщения не создаёт заказ, договор или обязательство по срокам.
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Где возникает ошибка?
+      options:
+        - Сравнение оригинала и перевода — два файла
+        - Локализация после обновления — три файла
+        - Загрузка страницы или подготовка файлов
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Версия проверщика, браузер и система
+      description: Если версия проверщика не видна, напишите об этом.
+      placeholder: "Например: Localization Check 1.1, Edge 141, Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как повторить ошибку?
+      description: Укажите выбранный режим и последовательность действий.
+      placeholder: |
+        1. Открыть проверщик.
+        2. Выбрать режим ...
+        3. Загрузить собственный пример и нажать ...
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Ожидаемый и фактический результат
+      description: Какого результата вы ожидали и что получилось? Если видна ошибка, приведите её текст без закрытых данных.
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Минимальный вымышленный пример JSON
+      description: Необязательно. Для двух файлов подпишите оригинал и перевод, для трёх — старый оригинал, новый оригинал и перевод. Публикуйте только собственные строки, которые можно раскрыть всем.
+      placeholder: |
+        Оригинал: {"button":"Open {key}"}
+        Перевод: {"button":"Открыть {key}"}
+      render: text
+    validations:
+      required: false
+  - type: checkboxes
+    id: public-data
+    attributes:
+      label: Проверка перед публикацией
+      options:
+        - label: Я понимаю, что сообщение будет публичным; закрытых файлов, личных сведений, паролей и токенов в нём нет, а пример можно публиковать.
+          required: true
